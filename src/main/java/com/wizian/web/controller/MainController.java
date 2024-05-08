@@ -16,4 +16,9 @@ public class MainController {
 		return "pfCounRequest";
 	}
 
+	@GetMapping("/maintest")
+	public String maintest(){
+		return "maintest";
+	}
+
 }
