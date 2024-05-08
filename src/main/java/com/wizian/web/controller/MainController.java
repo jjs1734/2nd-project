@@ -10,5 +10,10 @@ public class MainController {
 	public String main(){
 		return "main";
 	}
+	
+	@GetMapping("/pfCounRequest")
+	public String pfCounRequest(){
+		return "pfCounRequest";
+	}
 
 }
