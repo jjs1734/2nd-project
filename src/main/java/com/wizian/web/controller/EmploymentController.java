@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class EmploymentController {
 	
-	@GetMapping("/jinsutest")
+	@GetMapping("/employment")
 	public String index() {
 
-		return "jinsutest";
+		return "employment";
 		
 	}
 }
