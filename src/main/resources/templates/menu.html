@@ -1,6 +1,9 @@
 <nav th:fragment="Menu" class="navbar navbar-expand-lg navbar-dark bg-main">
 	<div class="container px-5">
-		<a class="navbar-brand" href="/main">중앙대학교 상담센터</a>
+		<a class="navbar-brand" href="/main">
+			<img src="images/logo.png" alt="Logo" width="40" height="30" class="d-inline-block align-text-top">
+		중앙대학교 상담센터
+		</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
 			data-bs-target="#navbarSupportedContent"
 			aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -16,7 +19,7 @@
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">상담신청</a>
 					<ul class="dropdown-menu">
-			            <li><a class="dropdown-item" href="#">지도교수 상담</a></li>
+			            <li><a class="dropdown-item" href="/pfCounRequest">지도교수 상담</a></li>
 			            <li><a class="dropdown-item" href="#">집단 상담</a></li>
 			            <li><a class="dropdown-item" href="#">취업 상담</a></li>
 			            <li><a class="dropdown-item" href="#">심리 상담</a></li>
