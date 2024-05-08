@@ -1,0 +1,25 @@
+<nav th:fragment="LeftMenu" class="navbar navbar-expand-lg navbar-dark bg-leftnav1">
+    <ul class="leftnav">
+        <h1>취업 상담</h1>
+        <li><a href="#">상담소개</a></li>
+        <li>
+            <a href="#" onclick="toggleDropdown()">상담신청</a>
+            <ul id="dropdownMenu" class="dropdown-menu" style="display: none;">
+                <li><a href="#">상담사소개</a></li>
+                <li><a href="#">일자선택</a></li>
+                <li><a href="#">시간선택</a></li>
+                <li><a href="#">상담신청서</a></li>
+            </ul>
+        </li>
+        <li><a href="#">취업상담</a></li>
+        <li><a href="#">이력서 작성 팁</a></li>
+        <li><a href="#">취업정보</a></li>
+    </ul>
+</nav>
+
+<script>
+	function toggleDropdown() {
+	    var dropdownMenu = document.getElementById("dropdownMenu");
+	    dropdownMenu.classList.toggle("show");
+	}
+</script>
