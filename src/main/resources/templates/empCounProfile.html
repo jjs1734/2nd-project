@@ -20,9 +20,10 @@
 	    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 	    
 <style>
-    .d-flex.flex-row {
-	    justify-content: center;
-	}
+.leftnavapply {
+    text-align: center; /* 텍스트를 가운데 정렬합니다. */
+	background-color: gray;
+}
 </style>
 	    
 <meta charset="UTF-8">
@@ -31,86 +32,37 @@
 <body>
 	<!-- 메뉴-->
         <div th:replace="menu :: Menu"></div>
-		
-		<!-- 좌측 nav바 선택 -->
+
 		<div class="leftnavapply">
 			<h1>상담사 소개</h1>
 		</div>
 		
+		<div class="d-flex flex-row" style="padding:0 420px;">
+	        <!-- 좌측 메뉴 nav -->
+	        <div th:replace="leftmenu :: LeftMenu"></div>
         <!-- Page Content-->
         <!-- 좌측 메뉴 nav와 container 클래스를 가로로 배열하기 위해서 div설정 -->
-        <div class="row row-cols-1 row-cols-md-2 g-4">
-	        <!-- 좌측 메뉴 nav -->
-	        <!-- <div th:replace="leftmenu :: LeftMenu"></div> -->
+        <div>
 	        
 	        <!-- 메인 내용 -->
 	        <!-- 1번 상담사 -->
-			<div class="card mb-3 col-md-4" style="max-width: 540px;" th:each="counselor : ${empCounProfile}">
+			 <div th:each="row, iterStat : ${empCounProfile}" th:if="${iterStat.index < 9}"
+         id="cardCss" class="card mb-3 col-md-4" style="max-width: 300px;height: 32vh; display: inline-block;">
 			    <div class="row g-0">
-			        <div class="col-md-4">
-			            <img src="images/godkarina4.jpg" class="img-fluid rounded-start" alt="...">
+			        <div class="col-md-5" style="padding: 0px;">
+			            <img src="images/godkarina4.jpg" class="img-fluid rounded-start" alt="..." style="height: 250px;">
 			        </div>
-			        <div class="col-md-8">
-			            <div th:each="row : ${empCounProfile}">
-			                <div class="card-body">
-			                    <h5 class="card-title">상담사 이름 : [[${row.EMP_COUN_NM}]]</h5>
-			                    <p class="card-text">이메일 : [[${row.EMP_COUN_EM}]]</p>
-			                    <p class="card-text">내선번호 : [[${row.EMP_COUN_TELNO}]]</p>
-			                    <p class="card-text">담당학과 : [[${row.SCSBJT_NM}]]</p>
-			                    <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+			        <div class="col-md-7" style="padding: 15px;">
+			                <div class="card-body" style="padding: 5px;">
+			                    <p class="card-title">[[${row.EMP_COUN_NM}]]</p>
+			                    <p class="card-text">[[${row.EMP_COUN_EM}]]</p>
+			                    <p class="card-text">[[${row.EMP_COUN_TELNO}]]</p>
+			                    <p class="card-text">[[${row.SCSBJT_NM}]]</p>
 			                </div>
-			            </div>
 			        </div>
 			    </div>
 			</div>
-
-			<!-- 2번 상담사 -->
-			<div class="card mb-3 col-md-4" style="max-width: 540px;">
-			  <div class="row g-0">
-			    <div class="col-md-4">
-			      <img src="images/godkarina3.jpg" class="img-fluid rounded-start" alt="...">
-			    </div>
-			    <div class="col-md-8">
-			      <div class="card-body">
-			        <h5 class="card-title">Card title</h5>
-			        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-			        <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
-			      </div>
-			    </div>
-			  </div>
-			</div>
-			
-			<!-- 3번 상담사 -->
-			<div class="card mb-3 col-md-4" style="max-width: 540px;">
-			  <div class="row g-0">
-			    <div class="col-md-4">
-			      <img src="images/godkarina2.jpg" class="img-fluid rounded-start" alt="...">
-			    </div>
-			    <div class="col-md-8">
-			      <div class="card-body">
-			        <h5 class="card-title">Card title</h5>
-			        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-			        <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
-			      </div>
-			    </div>
-			  </div>
-			</div>
-			
-			<!-- 4번 상담사 -->
-			<div class="card mb-3 col-md-4" style="max-width: 540px;">
-			  <div class="row g-0">
-			    <div class="col-md-4">
-			      <img src="images/godkarina1.jpg" class="img-fluid rounded-start" alt="...">
-			    </div>
-			    <div class="col-md-8">
-			      <div class="card-body">
-			        <h5 class="card-title">Card title</h5>
-			        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-			        <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
-			      </div>
-			    </div>
-			  </div>
-			</div>
+		</div>
 		</div>
   
         <!-- 푸터-->
