@@ -16,17 +16,28 @@ public class EmploymentController {
 	@Autowired
 	private EmploymentService employmentService;
 	
+	/*
+	 * @GetMapping("/employment") public String index() {
+	 * 
+	 * return "employment";
+	 * 
+	 * }
+	 */
+	
 	@GetMapping("/employment")
-	public String index() {
-
-		return "employment";
+	public String empApply(Model model) {
 		
+		List<Map<String, Object>> list = employmentService.boardList();
+		model.addAttribute("boardList", list);
+		return "employment";
 	}
 	
-	@GetMapping("/empApply")
-	public String empApply(Model model) {
-		List<Map<String, Object>> list = employmentService.boardList();
-		return "empApply";
+	@GetMapping("/empCounProfile")
+	public String empCounProfile(Model model) {
+		
+		List<Map<String, Object>> list = employmentService.empCounProfile();
+		model.addAttribute("empCounProfile", list);
+		return "empCounProfile";
 	}
 	
 }
