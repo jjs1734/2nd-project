@@ -11,13 +11,60 @@
      <!-- Core theme CSS (includes Bootstrap)-->
      <link href="css/styles.css" rel="stylesheet" />
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
  	<!-- 메뉴-->
 	<div th:replace="menu :: Menu"></div>
-	<!-- Page Content-->
-	<div class="container px-4 px-lg-5">
-	</div>
-	<!-- 푸터-->
+	<main>
+		<!-- Page Content-->
+		<div class="container px-4 px-lg-5">
+			<!-- 지도교수 상담에 대하여 -->
+			<div>
+			
+			</div>
+			<!-- 신청폼 -->
+			<form class="w-75 mx-auto" style="border-style:solid; border-color:#B6B6B6;">
+				<!-- 상담사 선택, 지도교수로 기본 선택이 되어 있어야함-->
+				<div class="mb-3 w-75 mx-auto">
+					<label for="coun-request" class="form-label">상담 신청</label>
+					<div class="input-group mb-3">
+						<span class="input-group-text" id="professor">지도교수이름</span>
+						<button class="input-group-button">교수 선택</button>
+					</div>
+				</div>
+				<!-- 날짜 선택 -->
+				<div class="mb-3 w-75 mx-auto">
+					<label for="coun-request" class="form-label">날짜 선택</label>
+					<div class="input-group mb-3">
+						<span class="input-group-text" id="">선택한 날짜와 시간 여기 표시</span>
+						<input type="date" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+					</div>
+				</div>
+				<!-- 상담 내용 작성 -->
+				<div class="mb-3 w-75 mx-auto">
+					<label for="Counseling-content" class="form-label">상담 내용 작성</label>
+					<div class="input-group mb-3">
+					   <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+					</div>
+				</div>
+				<!-- 첨부 파일 -->
+				<div class="mb-3 w-75 mx-auto">
+				<label for="" class="form-label">첨부파일</label>
+					<div class="input-group mb-3">
+						<input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+						<button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04" disabled>업로드</button>
+					</div>	
+				</div>
+				<!-- 상담신청 버튼 -->
+				<div class="input-group justify-content-center w-10 mx-auto">
+					<button class="btn mb-3" style="background-color: #A41034">상담신청</button>
+				</div>
+			</form>
+			<!-- 상담사 선택 모달창 -->
+			<!-- 날짜 및 시간 선택 모달창 API 찾아보기 -->
+			<!-- 상담 신청 확인 모달창 -->
+		</div>
+	</main>
+	<!-- footer-->
 	<div class="container px-4 px-lg-5" th:replace="footer :: Footer">
 	</div>
 	<!-- Bootstrap core JS-->
