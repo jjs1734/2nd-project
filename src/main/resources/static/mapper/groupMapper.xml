@@ -3,10 +3,16 @@
 <mapper	namespace="com.wizian.web.dao.GroupDAO">
 
 	<select id="groupList" resultType="Map">
-		select * 
+		SELECT * 
 		FROM GROUP_COUN_INFO
 		ORDER BY GCOUN_DT
 	</select>
-
+	
+	<select id="mainGroupImg" resultType="String">
+		SELECT GCOUN_CONTS_CN
+		FROM GROUP_COUN_INFO
+		WHERE GCOUN_PROG_STA_NM = '모집중'
+		
+	</select>
 
 </mapper>
