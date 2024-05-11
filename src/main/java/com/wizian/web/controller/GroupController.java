@@ -18,8 +18,11 @@ public class GroupController {
 	
 	@GetMapping("/group")
 	public String group(Model model){
-		List<Map<String, String>> gcList = groupService.geList();
+		
+		List<Map<String, String>> groupList = groupService.groupList(); 
+		
+		model.addAttribute("groupList", groupList);
+		
 		return "group";
 	}
-
 }

@@ -21,46 +21,20 @@
 		
     
     <div class="row row-cols-1 row-cols-md-2 g-4">
-  <div class="col">
-    <div class="card text-white bg-main mb-3">
-      <img src="images/banner1.png" class="card-img-top" alt="...">
+    
+  <div class="col" th:each="gl : ${groupList}">
+    <div class="card border-dark bg-secondary text-white mb-3">
+      <img th:src="@{'images/'+ ${gl.GCOUN_CONTS_CN}}" class="card-img-top" alt="...">
       <div class="card-body">
-        <h5 class="card-title">나의 감정 만나기</h5>
-        <p class="card-text">일시 : 일시는 컨트롤러에서, 이미지는 저장 경로 가져오기<br>신청 현황 : {신청인원} / {모집정원}</p>
+        <h5 class="card-title">[[${gl.GCOUN_NM}]] <span class="badge text-bg-dark">[[${gl.GCOUN_PROG_STA_NM}]]</span></h5>
+        <p class="card-text">일시 : <span th:text="${#dates.format(gl.GCOUN_DT, 'yyyy년 MM월 dd일(EE) HH시 mm분')}"></span>
+        <br>모집 기간 : <span th:text="${#dates.format(gl.GCOUN_BGNG_DT, 'yyyy년 MM월 dd일(EE)')}"></span> ~ <span th:text="${#dates.format(gl.GCOUN_DDLN_DT, 'yyyy년 MM월 dd일(EE)')}"></span>
+        <br>신청 현황 : [[${gl.GCOUN_REG_COUNT}]] / [[${gl.GCOUN_LMT_COUNT}]]</p>
         <a href="/group/detail" class="btn btn-primary" style="width: 100%;">신청 하기</a>
       </div>
     </div>
   </div>
-  <div class="col">
-    <div class="card text-white bg-main mb-3">
-      <img src="images/testbanner1.png" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">집에 가기</h5>
-		<p class="card-text">일시 : 일시는 컨트롤러에서, 이미지는 저장 경로 가져오기<br>신청 현황 : {신청인원} / {모집정원}</p>
-		<a href="/group/detail" class="btn btn-primary" style="width: 100%;">신청 하기</a>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card text-white bg-main mb-3">
-      <img src="images/banner1.png" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">야근 하기</h5>
-		<p class="card-text">일시 : 일시는 컨트롤러에서, 이미지는 저장 경로 가져오기<br>신청 현황 : {신청인원} / {모집정원}</p>
-		<a href="/group/detail" class="btn btn-primary" style="width: 100%;">신청 하기</a>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card text-white bg-main mb-3">
-      <img src="images/banner1.png" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">컨트롤러에서 제목 가져오기</h5>
-		<p class="card-text">일시 : 일시는 컨트롤러에서, 이미지는 저장 경로 가져오기<br>신청 현황 : {신청인원} / {모집정원}</p>
-		<a href="/group/detail" class="btn btn-primary" style="width: 100%;">신청 하기</a>
-	</div>        
-      </div>
-    </div>
+  
   </div>
 </div>
     

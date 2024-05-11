@@ -8,9 +8,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Mapper
-public interface GroupDAO {
-
-	List<Map<String, String>> groupList();
+public interface EmploymentDAO {
 	
+	public List<Map<String, Object>> boardList();
+
+	public List<Map<String, Object>> empCounProfile();
 
 }

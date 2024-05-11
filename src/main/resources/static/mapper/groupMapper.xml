@@ -2,5 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper	namespace="com.wizian.web.dao.GroupDAO">
 
+	<select id="groupList" resultType="Map">
+		select * 
+		FROM GROUP_COUN_INFO
+		ORDER BY GCOUN_DT
+	</select>
+
 
 </mapper>

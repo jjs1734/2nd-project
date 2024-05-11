@@ -8,14 +8,15 @@ import org.springframework.stereotype.Service;
 
 import com.wizian.web.dao.GroupDAO;
 
+
 @Service
 public class GroupService {
-
+	
 	@Autowired
 	private GroupDAO groupDAO;
-	
-	public List<Map<String, String>> geList() {
-		return groupDAO.geList();
-	}
 
+	public List<Map<String, String>> groupList() {
+		return groupDAO.groupList();
+	}
+	
 }

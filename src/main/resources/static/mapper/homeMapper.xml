@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper	namespace="com.wizian.web.dao.HomeDAO">
+<mapper	namespace="com.wizian.web.dao.EmploymentDAO">
 
-	<select id="">
+	<select id="boardList" resultType="Map">
+		select * 
+		FROM JINSU_TESTTABLE
+		LIMIT 0, 9
+	</select>
 	
+	<select id="empCounProfile" resultType="Map">
+		select * 
+		FROM EMP_COUN_PRO
 	</select>
 
 </mapper>
