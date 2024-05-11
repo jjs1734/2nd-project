@@ -5,6 +5,7 @@
 	<select id="groupList" resultType="Map">
 		select * 
 		FROM GROUP_COUN_INFO
+		ORDER BY GCOUN_DT
 	</select>
 
 

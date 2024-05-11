@@ -27,7 +27,8 @@
       <img th:src="@{'images/'+ ${gl.GCOUN_CONTS_CN}}" class="card-img-top" alt="...">
       <div class="card-body">
         <h5 class="card-title">[[${gl.GCOUN_NM}]] <span class="badge text-bg-dark">[[${gl.GCOUN_PROG_STA_NM}]]</span></h5>
-        <p class="card-text">일시 : <span th:text="${#dates.format(gl.GCOUN_DT, 'yyyy년 MM월 dd일 HH시 mm분')}"></span>
+        <p class="card-text">일시 : <span th:text="${#dates.format(gl.GCOUN_DT, 'yyyy년 MM월 dd일(EE) HH시 mm분')}"></span>
+        <br>모집 기간 : <span th:text="${#dates.format(gl.GCOUN_BGNG_DT, 'yyyy년 MM월 dd일(EE)')}"></span> ~ <span th:text="${#dates.format(gl.GCOUN_DDLN_DT, 'yyyy년 MM월 dd일(EE)')}"></span>
         <br>신청 현황 : [[${gl.GCOUN_REG_COUNT}]] / [[${gl.GCOUN_LMT_COUNT}]]</p>
         <a href="/group/detail" class="btn btn-primary" style="width: 100%;">신청 하기</a>
       </div>
