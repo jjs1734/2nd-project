@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 public interface GroupDAO {
 
 	List<Map<String, String>> groupList();
+
+	List<String> mainGroupImg();
 	
 
 }

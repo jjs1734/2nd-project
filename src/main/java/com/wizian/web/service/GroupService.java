@@ -18,5 +18,9 @@ public class GroupService {
 	public List<Map<String, String>> groupList() {
 		return groupDAO.groupList();
 	}
+
+	public List<String> mainGroupImg() {
+		return groupDAO.mainGroupImg();
+	}
 	
 }
