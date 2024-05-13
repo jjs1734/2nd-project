@@ -10,6 +10,14 @@
 <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 <!-- Core theme CSS (includes Bootstrap)-->
 <link href="css/styles.css" rel="stylesheet" />
+<script defer src="js/scripts.js">
+const myModal = document.getElementById('myModal');
+const myInput = document.getElementById('myInput');
+
+myModal.addEventListener('shown.bs.modal', () => {
+	myInput.focus();
+});
+</script>
 </head>
 <body>
 	<!-- 메뉴-->
@@ -30,7 +38,7 @@
         <p class="card-text">일시 : <span th:text="${#dates.format(gl.GCOUN_DT, 'yyyy년 MM월 dd일(EE) HH시 mm분')}"></span>
         <br>모집 기간 : <span th:text="${#dates.format(gl.GCOUN_BGNG_DT, 'yyyy년 MM월 dd일(EE)')}"></span> ~ <span th:text="${#dates.format(gl.GCOUN_DDLN_DT, 'yyyy년 MM월 dd일(EE)')}"></span>
         <br>신청 현황 : [[${gl.GCOUN_REG_COUNT}]] / [[${gl.GCOUN_LMT_COUNT}]]</p>
-        <a href="/group/detail" class="btn btn-primary" style="width: 100%;">신청 하기</a>
+        <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="exampleModal" style="width: 100%;">신청 하기</button>
       </div>
     </div>
   </div>
