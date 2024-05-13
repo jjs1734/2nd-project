@@ -2,7 +2,8 @@
 <html lang="ko" xmlns:th="http://thymeleaf.org">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta name="description" content="" />
 <meta name="author" content="" />
 <title>집단상담</title>
@@ -10,49 +11,132 @@
 <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 <!-- Core theme CSS (includes Bootstrap)-->
 <link href="css/styles.css" rel="stylesheet" />
-<script defer src="js/scripts.js">
-const myModal = document.getElementById('myModal');
-const myInput = document.getElementById('myInput');
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="js/scripts.js">
 
-myModal.addEventListener('shown.bs.modal', () => {
-	myInput.focus();
-});
 </script>
 </head>
 <body>
 	<!-- 메뉴-->
 	<div th:replace="menu :: Menu"></div>
-        
+
 	<!-- Page Content-->
 	<div class="container px-4 px-lg-5">
 		<h1 class="text-center">집단 상담</h1>
-		
-    
-    <div class="row row-cols-1 row-cols-md-2 g-4">
-    
-  <div class="col" th:each="gl : ${groupList}">
-    <div class="card border-dark bg-secondary text-white mb-3">
-      <img th:src="@{'images/'+ ${gl.GCOUN_CONTS_CN}}" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">[[${gl.GCOUN_NM}]] <span class="badge text-bg-dark">[[${gl.GCOUN_PROG_STA_NM}]]</span></h5>
-        <p class="card-text">일시 : <span th:text="${#dates.format(gl.GCOUN_DT, 'yyyy년 MM월 dd일(EE) HH시 mm분')}"></span>
-        <br>모집 기간 : <span th:text="${#dates.format(gl.GCOUN_BGNG_DT, 'yyyy년 MM월 dd일(EE)')}"></span> ~ <span th:text="${#dates.format(gl.GCOUN_DDLN_DT, 'yyyy년 MM월 dd일(EE)')}"></span>
-        <br>신청 현황 : [[${gl.GCOUN_REG_COUNT}]] / [[${gl.GCOUN_LMT_COUNT}]]</p>
-        <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="exampleModal" style="width: 100%;">신청 하기</button>
-      </div>
-    </div>
-  </div>
-  
-  </div>
-</div>
-    
+
+
+		<div class="row row-cols-1 row-cols-md-2 g-4">
+
+			<div class="col" th:each="gl : ${groupList}">
+				<div class="card border-dark bg-secondary text-white mb-3">
+					<img th:src="@{'images/'+ ${gl.GCOUN_CONTS_CN}}"
+						class="card-img-top" alt="...">
+					<div class="card-body">
+						<h5 class="card-title">
+							[[${gl.GCOUN_NM}]] <span class="badge text-bg-dark">[[${gl.GCOUN_PROG_STA_NM}]]</span>
+						</h5>
+						<p class="card-text">
+							일시 : <span
+								th:text="${#dates.format(gl.GCOUN_DT, 'yyyy년 MM월 dd일(EE) HH시 mm분')}"></span>
+							<br>장소 : <span>[[${gl.GCOUN_DTL_CN}]]</span>	
+							<br>모집 기간 : <span
+								th:text="${#dates.format(gl.GCOUN_BGNG_DT, 'yyyy년 MM월 dd일(EE)')}"></span>
+							~ <span
+								th:text="${#dates.format(gl.GCOUN_DDLN_DT, 'yyyy년 MM월 dd일(EE)')}"></span>
+							<br>신청 현황 : [[${gl.GCOUN_REG_COUNT}]] /
+							[[${gl.GCOUN_LMT_COUNT}]]
+						</p>
+						<button type="button" class="btn btn-light" data-bs-toggle="modal"
+							data-bs-target="#gcounModal" th:data-gcounName="${gl.GCOUN_NM}"
+							th:data-gcounDTL="${gl.GCOUN_DTL_CN}" th:data-gcounDT="${#dates.format(gl.GCOUN_DT, 'yyyy년 MM월 dd일(EE) HH시 mm분')}" 
+							th:data-gcounCD="${gl.GCOUN_CD}" style="width: 100%;">신청 하기</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
 	<!-- 푸터-->
-	<div th:replace="footer :: Footer">
-	 </div>
-        
+	<div th:replace="footer :: Footer"></div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="gcounModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+		aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-xl modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="gcounModalHeader">제목</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body" id="gcoun-date">모달 내용</div>
+				<div class="modal-body" id="gcoun-dtl">모달 내용</div>
+				<div>이름<input id="studName" type="text" placeholder="학생 이름" disabled></div>
+				<div>학번<input id="studNum" type="text" placeholder="학번" disabled></div>
+				<div>학과<input id="scsbjt" type="text" placeholder="학과" disabled></div>
+				<div>연락처<input id="telNo" type="text" placeholder="번호" disabled></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+					<button type="button" id="enroll" class="btn btn-primary">신청</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- Bootstrap core JS-->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js">
+	</script>
 	<!-- Core theme JS-->
-	<script src="js/scripts.js"></script>
+	<script>
+	$(document).ready(function(){
+		$('#gcounModal').on('show.bs.modal', function(event) {
+			var button = $(event.relatedTarget); // 모달을 트리거한 버튼
+	    	var gcounName = button.attr('data-gcounName'); // 집단상담 이름
+	    	var gcounDTL = button.attr('data-gcounDTL'); // 집단상담 개요
+	    	var gcounDT = button.attr('data-gcounDT');
+	    	var gcounCD = button.attr('data-gcounCD');
+	    	var studName = '신진수';
+	    	var studNum = '100011011';
+	    	var telNo = '010-1111-2222';
+	    	var scsbjt = '컴퓨터공학과';
+			var modal = $(this); 
+			modal.find('.modal-title').text(gcounName);
+			modal.find('#gcoun-date').text('일시 : ' + gcounDT);
+			modal.find('#gcoun-dtl').text('장소 : ' + gcounDTL);
+			modal.find('#studName').attr('placeholder', studName);
+			modal.find('#studNum').attr('placeholder', studNum);
+			modal.find('#telNo').attr('placeholder', telNo);
+			modal.find('#scsbjt').attr('placeholder', scsbjt);
+			
+				$('#enroll').click(function() {
+					enroll(gcounCD, studNum);
+				});
+			});
+			
+			function enroll(gcounCD, studNum) {
+				alert('신청 버튼 클릭 :' + gcounCD + studNum);
+				$.ajax({
+				    type: "POST",
+				    url: "/groupEnroll",
+				    contentType: "application/json",  // 중요: 서버에 JSON 형식임을 명시
+				    data: JSON.stringify({
+				        gcounCD: gcounCD,
+				        studNum: studNum
+				    }),
+				    dataType: "json",  // 서버로부터 JSON 응답을 기대합니다 (필요에 따라 변경)
+				    success: function(response) {
+				        console.log('Success:', response);
+				        alert('통신 성공');
+				    },
+				    error: function(xhr, status, error) {
+				        console.error('Error', error);
+				        alert('통신 실패: ' + error);
+				    }
+				});
+			} 
+			
+	});
+	</script>
 </body>
 </html>

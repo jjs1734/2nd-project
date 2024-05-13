@@ -22,5 +22,9 @@ public class GroupService {
 	public List<String> mainGroupImg() {
 		return groupDAO.mainGroupImg();
 	}
+
+	public List<Map<String, Object>> groupEnroll(String gcounCD, String studNum) {
+		return groupDAO.groupEnroll(gcounCD, studNum);
+	}
 	
 }
