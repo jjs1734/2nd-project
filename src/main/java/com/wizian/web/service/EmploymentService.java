@@ -19,7 +19,11 @@ public class EmploymentService {
 	}
 
 	public List<Map<String, Object>> empCounProfile() {
-		System.out.println("2222222222222222222222222");
 		return employmentDAO.empCounProfile();
+	}
+
+	public List<Map<String, Object>> selectEmpCoun(String cslNo) {
+		System.out.println("22222");
+		return employmentDAO.selectEmpCoun(cslNo);
 	}
 }
