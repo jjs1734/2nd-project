@@ -7,8 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wizian.web.service.EmploymentService;
+
 
 @Controller
 public class EmploymentController {
@@ -25,7 +29,7 @@ public class EmploymentController {
 	 */
 	
 	@GetMapping("/employment")
-	public String empApply(Model model) {
+	public String employment(Model model) {
 		
 		List<Map<String, Object>> list = employmentService.boardList();
 		model.addAttribute("boardList", list);
@@ -39,5 +43,25 @@ public class EmploymentController {
 		model.addAttribute("empCounProfile", list);
 		return "empCounProfile";
 	}
+			
+	@PostMapping("/employApply")
+	public String selectEmpCoun(@RequestParam("CSL_NO") String cslNo, Model model) {
+	    System.out.println(cslNo);
+	    List<Map<String, Object>> list = employmentService.selectEmpCoun(cslNo);
+	    System.out.println(list);
+	    model.addAttribute("selectEmpCoun", list);
+	    return "empApply"; // 절대 경로로 수정
+	}
 	
+	@GetMapping("/empCal")
+	public String empCal() {
+		return "empCal";
+	}
+	
+	@PostMapping("/fullcalendar")
+	@ResponseBody
+	public String fullCal() {
+		return "fullcalendar";
+	}
+
 }

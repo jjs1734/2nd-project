@@ -4,13 +4,19 @@
 
 	<select id="boardList" resultType="Map">
 		select * 
-		FROM JINSU_TESTTABLE
+		FROM EMP_COUN_PRO 
 		LIMIT 0, 9
 	</select>
 	
 	<select id="empCounProfile" resultType="Map">
 		select * 
-		FROM EMP_COUN_PRO
+		FROM EMP_COUN_PRO 
+	</select>
+	
+	<select id="selectEmpCoun" resultType="Map" parameterType="String">
+		select * 
+		FROM EMP_COUN_PRO 
+		WHERE CSL_NO = #{cslNo}
 	</select>
 
 </mapper>

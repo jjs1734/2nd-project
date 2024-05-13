@@ -14,4 +14,6 @@ public interface EmploymentDAO {
 
 	public List<Map<String, Object>> empCounProfile();
 
+	public List<Map<String, Object>> selectEmpCoun(String cslNo);
+
 }
