@@ -12,7 +12,7 @@
 		SELECT GCOUN_CONTS_CN
 		FROM GROUP_COUN_INFO
 		WHERE GCOUN_PROG_STA_NM = '모집중'
-		
+		ORDER BY GCOUN_DT
 	</select>
 
 </mapper>
