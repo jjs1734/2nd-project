@@ -13,6 +13,8 @@ public interface GroupDAO {
 	List<Map<String, String>> groupList();
 
 	List<String> mainGroupImg();
+
+	List<Map<String, Object>> groupEnroll(String gcounCD, String studNum);
 	
 
 }

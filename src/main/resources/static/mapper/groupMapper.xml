@@ -14,5 +14,10 @@
 		WHERE GCOUN_PROG_STA_NM = '모집중'
 		ORDER BY GCOUN_DT
 	</select>
-
+	
+	<insert id="groupEnroll" parameterType="String">
+		INSERT INTO GROUP_COUN_APPLICANT (STUD_NO, GCOUN_CD)
+		VALUES(#{studNum}, #{gcounCD});
+		
+	</insert>
 </mapper>
