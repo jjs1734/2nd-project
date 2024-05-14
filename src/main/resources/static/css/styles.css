@@ -10289,6 +10289,27 @@ textarea.form-control-lg {
     text-align: center !important;
   }
 }
+
+
+
+.sidebar {
+    background-color: #E5E4E2; /* Platinum-like color */
+    padding: 20px;
+}
+
+
+.footer {
+    padding: 20px 0;
+    background-color: #2c3e50; /* 다크 테마 배경색 */
+    color: #ffffff;
+    text-align: center;
+    border-top: 1px solid #4b4b4b; /* 상단에 경계선 추가 */
+    margin-top: 40px; /* 내용과 푸터 사이에 여백 추가 */
+}
+
+
+
+
 @media (min-width: 1400px) {
   .float-xxl-start {
     float: left !important;
