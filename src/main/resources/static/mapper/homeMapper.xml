@@ -4,13 +4,39 @@
 
 	<select id="boardList" resultType="Map">
 		select * 
-		FROM JINSU_TESTTABLE
+		FROM EMP_COUN_PRO 
 		LIMIT 0, 9
 	</select>
 	
 	<select id="empCounProfile" resultType="Map">
 		select * 
-		FROM EMP_COUN_PRO
+		FROM EMP_COUN_PRO 
 	</select>
+	
+	<select id="selectEmpCoun" resultType="Map" parameterType="String">
+		select * 
+		FROM EMP_COUN_PRO 
+		WHERE CSL_NO = #{cslNo}
+	</select>
+	
+	<!-- 로그인 기능 구현되어야 지 사용 가능 -->
+	<!-- 
+	<insert id="insertEmpCal" parameterType="com.wizian.web.dto.EventData">
+    	INSERT INTO EMP_COUN_TAB (EMP_COUN_CD, STUD_NM)
+    	VALUES (#{start}, '더미값')
+	</insert>
+	 -->
+	
+	<!-- 
+	<insert id="insertEmpCal" parameterType="String">
+    	INSERT INTO JINSU_TESTTABLE (EMP_COUN_CD, DATE)
+    	VALUES (#{empCounCd}, #{dateOnly})
+	</insert>
+	-->
+	
+	<insert id="insertEmpCal" parameterType="EventData">
+    	INSERT INTO JINSU_TESTTABLE (EMP_COUN_CD, DATE)
+    	VALUES (#{empCounCd}, #{dateOnly})
+	</insert>
 
 </mapper>

@@ -1,62 +1,288 @@
-<!DOCTYPE html>
-<html lang="ko" xmlns:th="http://thymeleaf.org">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Small Business - Start Bootstrap Template</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="./css/styles.css" rel="stylesheet" />
-        <link href="./css/shinjin.css" rel="stylesheet" />
-        
-        <!-- Bootstrap CSS -->
-	    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-	    <!-- Bootstrap JS -->
-	    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-	    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-	    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-	    
-<style>
-    .d-flex.flex-row {
-	    justify-content: center;
+	<!DOCTYPE html>
+	<html lang="ko" xmlns:th="http://thymeleaf.org">
+	    <head>
+	        <meta charset="utf-8" />
+	        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	        <meta name="description" content="" />
+	        <meta name="author" content="" />
+	        <title>Small Business - Start Bootstrap Template</title>
+	        <!-- Favicon-->
+	        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+	        <!-- Core theme CSS (includes Bootstrap)-->
+	        <link href="./css/styles.css" rel="stylesheet" />
+	        <link href="./css/shinjin.css" rel="stylesheet" />
+	        
+	        <!-- Bootstrap CSS -->
+		    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+		    <!-- Bootstrap JS -->
+		    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+		    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+		    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+		    <script src="./dist/index.global.js"></script>
+		    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+			<script>
+			  document.addEventListener('DOMContentLoaded', function() {
+			    var calendarEl = document.getElementById('calendar');
+			    var calendar = new FullCalendar.Calendar(calendarEl, {
+			      initialView: 'weekGridMonth'
+			    });
+			    calendar.render();
+			  });
+			
+			</script>
+	<style>
+	.leftnavapply{
+	    text-align: center; /* 텍스트를 가운데 정렬합니다. */
+		background-color: gray;
 	}
-</style>
-	    
-<meta charset="UTF-8">
-<title>상담 신청</title>
-</head>
-<body>
-	<!-- 메뉴-->
-        <div th:replace="menu :: Menu"></div>
+	.modal-header{
+	    text-align: center; /* 텍스트를 가운데 정렬합니다. */
 		
-		<!-- 좌측 nav바 선택 -->
-		<div class="leftnavapply">
-			<h1>상담사 소개</h1>
-		</div>
+	}
+	.profileMain{
+		background-color: #f4f4f4;
+	}
+	</style>
+		    
+	<meta charset="UTF-8">
+	<title>상담 신청</title>
+	</head>
+	<body>
+		<!-- 메뉴-->
+	        <div th:replace="menu :: Menu"></div>
+	
+			<div class="leftnavapply">
+				<h1>신청서 작성</h1>
+			</div>
+			
+			<div class="d-flex justify-content-center" style="margin: 0 400px;">
+		        <!-- 좌측 메뉴 nav -->
+		        <div th:replace="leftmenu :: LeftMenu"></div>
+		        <!-- Page Content-->
+		        
+		        <!--상담 신청서 main 부분 -->
+		        <div class="profileMain">
+					<div class="modal-header">
+	        			<h3 class="modal-title" id="formModalLabel">신 청 서</h3>
+	      			</div>
+					<form id="formAwesome">
+						<div class="modal-body">
+						 <div class="form-group row">
+						    <label for="empName" class="col-sm-3 col-form-label">
+						        이 름
+						    </label>
+						    <div class="col-sm-3">
+						        <input type="text" class="form-control" id="empName" placeholder="John" required>
+						        <!-- 로그인한 session값 가져오기
+						        <input type="text" class="form-control" id="empName" placeholder="John" value="${session.user.name}" required>
+						         -->
+						    </div>
+						    <label for="empCounName" class="col-sm-3 col-form-label">
+						        상 담 사
+						    </label>
+						    <div class="col-sm-3">
+						        <input type="text" class="form-control" id="empCounName" th:value="${selectEmpCoun[0]['EMP_COUN_NM']}" readonly>
+						    </div>
+						</div>
+						
+						<div class="form-group row">
+						    <label for="empDate" class="col-sm-3 col-form-label">
+						        상담 가능 날짜
+						    </label>
+						    <div class="col-sm-3">
+						    <!-- CSL_NO 값 보내기 전 코드   <a href="/empCal?CSL_NO=${selectEmpCoun[0]['CSL_NO']}">날짜 선택하기</a> -->
+						    
+						    <!-- CSLNO 보내기 -->
+						    <a id="empCalLinkK" data-csl-no="${selectEmpCoun[0]['CSL_NO']}" th:href="@{'/empCal?CSL_NO=' + ${selectEmpCoun[0]['CSL_NO']}}">날짜 선택하기</a>
+						        <input type="text" class="form-control" id="empDate" placeholder="Doe" required>
+						    </div>
+						    <label for="empTime" class="col-sm-3 col-form-label">
+						        상담 가능 시간
+						    </label>
+						    <div class="col-sm-3">
+						        <input type="text" class="form-control" id="empTime" placeholder="Doe" required>
+						    </div>
+					    </div>
+						<div class="form-group row">
+						    <label for="phoneNum" class="col-sm-3 col-form-label">
+						        연 락 처
+						    </label>
+						    <div class="col-sm-3">
+						        <input type="text" class="form-control" id="phoneNum" placeholder="John" required>
+						    </div>
+						    <label for="lastName" class="col-sm-3 col-form-label">
+						        학 과
+						    </label>
+						    <div class="col-sm-3">
+						        <input type="text" class="form-control" id="lastName" placeholder="Doe" required>
+						    </div>
+						</div>
+						<div class="form-group row">
+						    <label for="email" class="col-sm-3 col-form-label">
+						        E-mail
+						    </label>
+						    <div class="col-sm-3">
+						        <input type="text" class="form-control" id="email" placeholder="John" required>
+						    </div>
+						    
+						    <label for="colleageNum" class="col-sm-3 col-form-label">
+						        학 번
+						    </label>
+						    <div class="col-sm-3">
+						        <input type="text" class="form-control" id="colleageNum" placeholder="Doe" required>
+						    </div>
+						</div>
+						<div class="form-group row">
+						    <label for="empContent" class="col-sm-3 col-form-label">
+						        상 담 내 용
+						    </label>
+						    <div class="col-sm-12">
+						        <textarea class="form-control" id="empContent" placeholder="상담 내용을 입력해주세요." required rows="5" style="background-color: lightgray;"></textarea>
+						    </div>
+						</div>
+						<div class="form-group row">
+							<h3>첨 부 파 일</h3>
+						    <label for="empResume" class="col-sm-3 col-form-label">
+						        이 력 서
+						    </label>
+						    <div class="col-sm-12">
+						        <input type="file" class="form-control" id="empResume" style="background-color: lightgray;">
+						    </div>
+						    
+						    <label for="portfolio" class="col-sm-3 col-form-label">
+						        포 트 폴 리 오
+						    </label>
+						    <div class="col-sm-12">
+						        <input type="file" class="form-control" id="portfolio" style="background-color: lightgray;">
+						    </div>
+						    
+						    <label for="empEtc" class="col-sm-3 col-form-label">
+						        기 타
+						    </label>
+						    <div class="col-sm-12">
+						        <input type="file" class="form-control" id="empEtc" style="background-color: lightgray;">
+						    </div>
+						</div>
+						  <div class="form-group row">
+						    <label for="awesomeness" class="col-sm-6 col-form-label">
+						      귀하께서 작성한게 맞습니까?</label>
+						    <div class="col-sm-6">
+						      <select class="form-control" id="awesomeness">
+						        <option>No</option>
+						        <option>Yes</option>
+						      </select>
+						    </div>
+						  </div>
+						  <div class="form-check">
+						    <input class="form-check-input" type="checkbox" value="" id="awesomeCheck" required>
+						    <label class="form-check-label" for="awesomeCheck">
+						      I confirm that I am an awesome person.
+						    </label>
+						  </div>
+						</div>
+						
+						<div class="modal-footer">
+						  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						  <button type="submit" class="btn btn-primary">Submit</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			
+	        <!-- 푸터-->
+	        <div th:replace="footer :: Footer"></div>
+	        
+	        <!-- Bootstrap core JS-->
+	        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	        <!-- Core theme JS-->
+	        <script src="./js/scripts.js"></script>
+	        <!-- jQuery -->
+			<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	        
+	        
+	        <!-- 연락처 및 이메일은 로그인한 정보와 실제 유저와 다를 수 있으니 변경이 가능하도록 설정 -->
+	        <script>
+	        
+	        /* $(document).ready(function() {
+	            $('#calModal').click(function() {
+	                $('#calendarModal').modal('show');
+	                // FullCalendar initialization and configuration
+	                var calendarEl = document.getElementById('calendar');
+	                var calendar = new FullCalendar.Calendar(calendarEl, {
+	                    initialView: 'dayGridMonth'
+	                    // Add more configuration options as needed
+	                });
+	                calendar.render();
+	            });
+	        }); */
+	        
+	        // 서버에서 받은 로그인한 사용자의 연락처
+		    var loggedInUserContact = "010-1234-5678"; // 이 부분은 서버에서 실제 값으로 대체되어야 합니다.
 		
-        <!-- Page Content-->
-        <!-- 좌측 메뉴 nav와 container 클래스를 가로로 배열하기 위해서 div설정 -->
-        <div class="d-flex flex-row">
-        
-        <!-- 좌측 메뉴 nav -->
-        <div th:replace="leftmenu :: LeftMenu"></div>
-        
-        <div class="container px-4 px-lg-5"></div>
-        
-        
-        </div>
-        
-        
-        <!-- 푸터-->
-        <div th:replace="footer :: Footer">
-        </div>
-        
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="./js/scripts.js"></script>
-</body>
-</html>
+		    // 이메일 주소의 유효성을 정규 표현식을 사용하여 검사하는 함수
+		    function validateEmail(email) {
+		        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		        return emailPattern.test(email);
+		    }
+		
+		    // 페이지 로드 시 실행되는 함수
+		    window.onload = function() {
+		        // 입력 필드 요소를 가져옵니다.
+		        var inputField = document.getElementById('phoneNum');
+		
+		        // 로그인한 사용자의 연락처를 입력 필드의 기본값으로 설정합니다.
+		        inputField.value = loggedInUserContact;
+		
+		        // 입력 필드에 숫자만 입력되도록 이벤트 리스너를 추가합니다.
+		        inputField.addEventListener('input', function(event) {
+		            // 입력된 값에서 숫자가 아닌 문자를 제거합니다.
+		            var cleanedValue = event.target.value.replace(/\D/g, '');
+		
+		            // 입력 필드의 값을 업데이트합니다.
+		            event.target.value = cleanedValue;
+		        });
+		
+		        // 입력 필드 요소를 가져옵니다.
+		        var emailInput = document.getElementById('email');
+		
+		        // 입력 필드에 포커스를 잃을 때마다 이메일 유효성을 검사하는 이벤트 리스너를 추가합니다.
+		        emailInput.addEventListener('blur', function(event) {
+		            var email = event.target.value;
+		
+		            // 이메일 유효성을 검사합니다.
+		            if (!validateEmail(email)) {
+		                // 이메일이 유효하지 않을 경우 사용자에게 경고 메시지를 표시합니다.
+		
+		                // 입력 필드의 값을 초기화합니다.
+		                event.target.value = '';
+		                // 입력 필드에 포커스를 맞춥니다.
+		                event.target.focus();
+		            }
+		        });
+		        
+		        var form = document.getElementById('formAwesome');
+		        
+		        form.addEventListener('submit', function(event) {
+		            // 선택된 옵션을 가져옵니다.
+		            var awesomeness = document.getElementById('awesomeness').value;
+
+		            // 선택된 옵션이 "Yes"인지 확인합니다.
+		            if (awesomeness === "Yes") {
+		                // Yes를 선택한 경우에는 폼을 제출합니다.
+		                // 여기서는 폼을 제출하는 대신 간단히 로그를 출력합니다.
+		                console.log("폼이 제출되었습니다.");
+		                alert("제출되셨습니다. 예약이 확정되었는지 마이페이지에서 확인하시기 바랍니다.")
+		            } else {
+		                // No를 선택한 경우에는 폼 제출을 취소합니다.
+		                console.log("폼 제출이 실패했습니다.");
+		                alert("폼 제출이 실패했습니다. 위 양식중 잘못 작성한 부분이 없는지 확인하시기 바랍니다.")
+		                event.preventDefault(); // 폼 제출을 취소합니다.
+		            }
+		        });
+		        
+		    };
+		</script>
+
+	        
+	</body>
+	</html>
