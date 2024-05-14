@@ -27,7 +27,14 @@
 	</insert>
 	 -->
 	
+	<!-- 
 	<insert id="insertEmpCal" parameterType="String">
+    	INSERT INTO JINSU_TESTTABLE (EMP_COUN_CD, DATE)
+    	VALUES (#{empCounCd}, #{dateOnly})
+	</insert>
+	-->
+	
+	<insert id="insertEmpCal" parameterType="EventData">
     	INSERT INTO JINSU_TESTTABLE (EMP_COUN_CD, DATE)
     	VALUES (#{empCounCd}, #{dateOnly})
 	</insert>

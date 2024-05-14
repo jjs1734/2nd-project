@@ -20,7 +20,8 @@ public interface EmploymentDAO {
 	public List<Map<String, Object>> selectEmpCoun(String cslNo);
 
 	/* public ResponseEntity<String> insertEmpCal(String empCounCd); */
-	void insertEmpCal(String empCounCd, String dateOnly);
+	/* void insertEmpCal(String empCounCd, String dateOnly); */
+	void insertEmpCal(EventData evenData);
 
 
 }
