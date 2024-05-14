@@ -33,10 +33,14 @@ public class EmploymentService {
 		System.out.println(empCounCd);
 		return employmentDAO.insertEmpCal(empCounCd);
 	}*/
-	
-    public void insertEmpCal(String empCounCd, String dateOnly) {
-    	System.out.println(empCounCd);
-    	System.out.println(dateOnly);
-        employmentDAO.insertEmpCal(empCounCd, dateOnly);
-    }
+	/*
+	    public void insertEmpCal(String empCounCd, String dateOnly) {
+	    	System.out.println(empCounCd);
+	    	System.out.println(dateOnly);
+	        employmentDAO.insertEmpCal(empCounCd, dateOnly);
+	    }*/
+
+		public void insertEmpCal(EventData evenData) {
+			employmentDAO.insertEmpCal(evenData);
+		}
 }

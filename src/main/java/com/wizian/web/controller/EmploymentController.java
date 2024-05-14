@@ -1,9 +1,6 @@
 package com.wizian.web.controller;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.wizian.web.User;
 import com.wizian.web.dto.EventData;
-import com.wizian.web.dto.ScheduleDto;
-import com.wizian.web.dto.UserDTO;
 import com.wizian.web.service.EmploymentService;
 
 
@@ -73,10 +67,14 @@ public class EmploymentController {
 	    System.out.println("ajax작동" + eventData);
 	    String empCounCd = eventData.getEmpCounCd();
 	    String start = eventData.getStart(); // start 값을 추가
-	    
 	    String dateOnly = start.substring(0, 10); // "2024-05-15"만 추출
+	    
+	    EventData evenData = new EventData();
+	    evenData.setEmpCounCd(empCounCd); // empCounCd 설정
+	    evenData.setDateOnly(dateOnly);// start 설정
+	    
 	    //System.out.println(empCounCd);
-	    employmentService.insertEmpCal(empCounCd, dateOnly);
+	    employmentService.insertEmpCal(evenData);
 	    //System.out.println(employmentService.insertEmpCal(empCounCd));
 	    return ResponseEntity.ok("{\"status\": \"success\"}");   // response에 success를 보내준다.
 	}
