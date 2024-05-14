@@ -17,13 +17,9 @@
 #content{background: #B6B6B6; float:left; padding:10px; margin-top:10px; margin-bottom:10px; width:1000px; height:780px;}
 .card{width:15rem; margin-left:20px; margin-right:20px; height:150px;}
 .card-header{font-size:13pt; color:white; text-align:center; background-color:#808285;}
-
-
 </style>
-     
 </head>
      
-
       
 <body class="d-flex flex-column" style="height:100%">
 	
@@ -38,10 +34,18 @@
 		
 		<div id="sidenav">
 			<p style="margin-top:20px; margin-bottom:80px; font-weight:bold; font-size:30pt;">심리상담</p>
-			<button class="button" type="submit">이용절차</button><br>
-			<button class="button" type="submit">검사종류</button><br>
-			<button class="button" type="submit">상담신청</button>
+			<button class="button" type="submit" onclick="openPage('/psycoun_proc')">이용절차</button><br>
+			<button class="button" type="submit" onclick="openPage('/psycoun_type')">검사종류</button><br>
+			<button class="button" type="submit" onclick="openPage('/psycoun_app')">상담신청</button>
 		</div>
+		
+		<script>
+			//페이지 열기 위한 함수
+			function openPage(url){
+				//페이지 이름에 해당하는 URL로 이동
+				location.href = url;
+			}
+		</script>
 		
 		<div id="content">
 		<section id="top"><br>
@@ -89,10 +93,6 @@
 	
 	
 	</div>
-	
-  
-
-	
 	
 	
 	<!-- 푸터-->
