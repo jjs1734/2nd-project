@@ -22,41 +22,48 @@
 			
 			</div>
 			<!-- 신청폼 -->
-			<form class="w-75 mx-auto" style="border-style:solid; border-color:#B6B6B6;">
+			<form class="w-80 mx-auto" style="border-style:solid; border-color:#B6B6B6;">
 				<!-- 상담사 선택, 지도교수로 기본 선택이 되어 있어야함-->
-				<div class="mb-3 w-75 mx-auto">
-					<label for="coun-request" class="form-label">상담 신청</label>
-					<div class="input-group mb-3">
+				<div class="row mb-3 w-80 mx-auto">
+					<label for="coun-request" class="col-sm-2 col-form-label">상담 신청</label>
+					<div class="col-sm-10 d-flex align-items-center">
 						<span class="input-group-text" id="professor">지도교수이름</span>
-						<button class="input-group-button">교수 선택</button>
+						<button class="btn" style="background-color: #B6B6B6">교수 선택</button>
 					</div>
 				</div>
 				<!-- 날짜 선택 -->
-				<div class="mb-3 w-75 mx-auto">
-					<label for="coun-request" class="form-label">날짜 선택</label>
-					<div class="input-group mb-3">
+				<div class="row mb-3 w-80 mx-auto">
+					<label for="coun-request" class="col-sm-2 col-form-label">날짜 선택</label>
+					<div class="col-sm-10 d-flex align-items-center">
 						<span class="input-group-text" id="">선택한 날짜와 시간 여기 표시</span>
-						<input type="date" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+						<button class="btn" style="background-color: #B6B6B6">일정 선택</button>
+					</div>
+				</div>
+				<div class="row mb-3 w-80 mx-auto">
+					<label for="coun-request" class="col-sm-2 col-form-label">학생정보</label>
+					<div class="col-sm-10 d-flex align-items-center">
+						<span class="input-group-text" id="professor">학생 학번</span>
 					</div>
 				</div>
 				<!-- 상담 내용 작성 -->
-				<div class="mb-3 w-75 mx-auto">
-					<label for="Counseling-content" class="form-label">상담 내용 작성</label>
-					<div class="input-group mb-3">
+				<div class="row mb-3 w-80 mx-auto">
+					<label for="Counseling-content" class="col-sm-2 col-form-label">상담 내용</label>
+					<div class="col-sm-10">
 					   <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
 					</div>
 				</div>
 				<!-- 첨부 파일 -->
-				<div class="mb-3 w-75 mx-auto">
-				<label for="" class="form-label">첨부파일</label>
-					<div class="input-group mb-3">
+				<div class="row mb-3 w-80 mx-auto">
+				<label for="" class="col-sm-2 col-form-label">첨부파일</label>
+					<div class="col-sm-10 d-flex align-items-center">
 						<input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
-						<button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04" disabled>업로드</button>
+						<!-- 업로드 버튼은 삭제할지도..? -->
+						<button class="btn btn-outline-secondary col-2" type="button" id="inputGroupFileAddon04">업로드</button>
 					</div>	
 				</div>
 				<!-- 상담신청 버튼 -->
 				<div class="input-group justify-content-center w-10 mx-auto">
-					<button class="btn mb-3" style="background-color: #A41034">상담신청</button>
+					<button type="button" class="btn mb-3" style="background-color: #A41034">상담신청</button>
 				</div>
 			</form>
 			<!-- 상담사 선택 모달창 -->
