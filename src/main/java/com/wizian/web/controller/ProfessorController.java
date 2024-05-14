@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ProfessorController {
 
-	@GetMapping("/pfCounRequest")
+	@GetMapping("/pfCoun")
 	public String pfCounRequest(){
-		return "pfCounRequest";
+		return "pfCoun";
 	}
 }
