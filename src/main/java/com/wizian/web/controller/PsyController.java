@@ -6,10 +6,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class PsyController {
 	
-	@GetMapping("/PsyCoun")
+	@GetMapping("/psycoun_proc")
 	public String index() {
 
-		return "PsyCoun";
+		return "psycoun_proc";
 		
 	}
+	
+	@GetMapping("/psycoun_type")
+	public String showPsycounTypePage() {
+		return "psycoun_type";
+	}
+	
+	@GetMapping("/psycoun_app")
+	public String showPsycounAppPage() {
+		return "psycoun_app";
+	}
+	
 }
