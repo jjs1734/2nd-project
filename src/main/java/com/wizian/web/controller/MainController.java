@@ -25,9 +25,9 @@ public class MainController {
 		return "main";
 	}
 
-	@GetMapping("/maintest")
-	public String maintest(){
-		return "maintest";
+	@GetMapping("/login")
+	public String login(){
+		return "login";
 	}
 
 }

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<title>심리 상담 신청</title>
+	 <!-- Favicon-->
+     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+     <!-- Core theme CSS (includes Bootstrap)-->
+     <link href="css/styles.css" rel="stylesheet" />
+     
+<style>
+#sidenav{background: #B6B6B6; float:left; margin-right:20px; padding:10px; margin-top:10px; margin-bottom:10px; width:200px; height:780px; text-align:center;}
+.button{margin-bottom:30px; color:white; font-size:15pt; width:140px; height:35px; background-color:#A41034; border: none;}
+#content{background: #B6B6B6; float:left; padding:10px; margin-top:10px; margin-bottom:10px; width:1000px; height:780px;}
+
+.question{width:900px; border-top:2px solid black; border-bottom:2px solid black; margin-left:20px; margin-top:50px;}
+.question tr{border-top:1px solid black;}
+.question tr:first-child{border-top:0;}
+.question th{background:#808285; width:50px; text-align:left;}
+.question td{text-align:left; background:#B6B6B6; font-size:15px; line-height:26px; padding-left:5px;}
+.question input[type="text"]
+
+
+/* 모달 스타일 */
+.modal {
+  display: none; /* 모달 숨김 */
+  position: fixed; /* 고정 위치 */
+  z-index: 1; /* 위로 */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* 스크롤 가능 */
+  background-color: rgba(0,0,0,0.5); /* 배경 색 */
+}
+
+.modal-content {
+  background-color: white;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* 닫기 버튼 스타일 */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+</style>
+</head>
+     
+      
+<body class="d-flex flex-column" style="height:100%;">
+	
+ 	
+ 	<!-- 메뉴-->
+	<div th:replace="menu :: Menu"></div>
+	
+	
+	<!-- Page Content-->
+	<div class="container px-4 px-lg-5" style="height:100%">
+	
+		
+		<div id="sidenav">
+			<p style="margin-top:20px; margin-bottom:80px; font-weight:bold; font-size:30pt;">심리상담</p>
+			<button class="button" type="submit" onclick="openPage('/psycoun_proc')">이용절차</button><br>
+			<button class="button" type="submit" onclick="openPage('/psycoun_type')">검사종류</button><br>
+			<button class="button" type="submit" onclick="openPage('/psycoun_app')">상담신청</button>
+		</div>
+		
+		<script>
+			//페이지 열기 위한 함수
+			function openPage(url){
+				//페이지 이름에 해당하는 URL로 이동
+				location.href = url;
+			}
+		</script>
+		
+		<div id="content">
+		<section id="application"><br>
+			<p style="margin-top:20px; margin-bottom:20px; font-size:23pt; font-weight:bold;">&nbsp| 심리상담센터 방문신청</p>
+			
+		<!-- Form -->
+		<table class="question">
+			<tr>
+				<th class="th" scope="row"><img src="images/sub_cs_text1.png" alt="학생정보" style="width:135px; height:25px; margin:0;"></th>
+				<td><input type="text" title="이름" class="wid20" placeholder="이름을 입력하세요"/></td>
+			</tr>
+			<tr>
+				<th class="th" scope="row"><img src="images/sub_cs_text2.png" alt="휴대전화번호" style="width:135px; height:25px;"></th>
+				<td>
+					<select class="wid10" title="핸드폰 앞 자리 선택">
+					<option value="010">010</option>
+					</select>
+					<input type="text" title="전화번호 앞" maxlength="4" class="wid20"/>
+					<input type="text" title="전화번호 뒤" maxlength="4" class="wid20"/>
+				</td>
+			</tr>
+			<tr>
+				<th class="th" scope="row"><img src="images/sub_cs_text3.png" alt="이메일" style="width:135px; height:25px;"></th>
+				<td><input type="text" class="wid53" title="이메일" placeholder="예) abc123@naver.com"></td>
+			</tr>
+				<th class="th" scope="row"><img src="images/sub_cs_text4.png" alt="상담가능날짜" style="width:135px; height:25px;"></th>
+				<td style="position:relative;">
+					<div style="position:relative; display:inline-block;">
+						<input type="text" class="wid53" title="상담가능날짜" placeholder="YYYY-MM-DD">
+						<img src="images/calendar_icon.png" alt="Calendar" style="position:absolute; right:5px; top: 50%; transform: translateY(-50%);">
+					</div>
+				</td>
+			<tr>
+				<th class="th" scope="row"><img src="images/sub_cs_text6.png" alt="개인정보활용동의" style="width:135px; height:25px;"></th>
+				<td style="position:relative;">
+					<div style="position:relative; display:inline-block;">
+						<p style="font-size:10pt;">
+						법령에 따라 개인을 고유하게 구별하기 위하여 부여된 모든 식별정보(성명, 소속, 휴대폰, 이메일 등)의 수집, 이용에 대한 동의를 받고 있습니다.
+						신청시 기재되는 모든 개인정보는 사업진행을 위하여 수집 및 이용될 수 있습니다. 또한 대학평가관련 자료 요청시 교내 관련부서에 자료가 제공될 수 있으며, 철저하게 관리될 예정입니다.<br> 
+						수집된 개인정보는 5년 경과(대학 평가 관련 자료 요청 기간)후 즉시 파기됩니다.<br>
+						위와 관련하여 본인의 개인고유식별정보 수집, 이용에 관한 내용을 숙지하였고 이에 동의한다면 해당란에 체크해 주십시오.</p>
+						<div class="form-check">
+  							<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style="border:1px solid black; border-radius: 0px;">
+  							<label class="form-check-label" for="flexCheckDefault">개인정보활용에 동의합니다</label>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<button class="Btn" style="margin-top:50px; margin-left:400px; text-align:center; font-size:15pt; width:120px; height:35px; color:white; background-color:#A41034; border:none;">신청하기</button>
+        </section>
+		</div>
+		
+		<!-- 모달 창 -->
+		<div id="myModal" class="modal">
+  			<div class="modal-content">
+    			<span class="close">&times;</span>
+    			<p>방문신청<br>
+    			아래의 내용으로 방문을 신청하시겠습니까?<br>
+    			상담자: 협의 후 배정 예정<br>
+    			상담일시: 협의 후 배정 예정</p>
+  			</div>
+		</div>
+		
+		
+		<script>
+		// 버튼 요소 가져오기
+		var btn = document.getElementById("myBtn");
+
+		// 모달 창 가져오기
+		var modal = document.getElementById("myModal");
+
+		// 모달 창 닫기 버튼 가져오기
+		var span = document.getElementsByClassName("close")[0];
+
+		// 버튼 클릭 시 모달 창 열기
+		btn.onclick = function() {
+		  modal.style.display = "block";
+		}
+
+		// 모달 창 닫기 버튼 클릭 시 모달 닫기
+		span.onclick = function() {
+		  modal.style.display = "none";
+		}
+
+		// 모달 창 외부 클릭 시 모달 닫기
+		window.onclick = function(event) {
+		  if (event.target == modal) {
+		    modal.style.display = "none";
+		  }
+		}
+		
+		
+		
+		
+		</script>
+		
+		
+		
+		
+		
+	
+	
+	
+	</div>
+	
+	
+	<!-- 푸터-->
+	<div class="container px-4 px-lg-5 fixed-bottom" th:replace="footer :: Footer">
+	</div>
+	<!-- Bootstrap core JS-->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- Core theme JS-->
+	<script src="js/scripts.js"></script>
+
+</body>
+</html>
