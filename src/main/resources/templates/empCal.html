@@ -63,14 +63,28 @@
 			  if (confirm(arg.start.toLocaleString() + '부터 ' + arg.end.toLocaleString() + '까지 해당 시간대로 예약하시겠습니까?')) {
 				  var startHour = arg.start.getHours();
 			      var empCounCd = startHour.toString().padStart(2, '0'); // 2자리로 만들기 위해 0으로 패딩
+				  
+			      // 이전 empApply.html에서 <a>로 보낸 CSL_NO를 받기 위함.			      
+			      //var CSL_NO = document.getElementById('empCalLinkk').getAttribute('data-csl-no');
+			      var empCalLink = document.getElementById('empCalLinkK');
+			      if (empCalLink) {
+			    	    var CSL_NO = empCalLink.getAttribute('data-csl-no');
+			    	    console.log(CSL_NO);
+			      } else {
+			    	    console.error("empCalLink element not found.");
+			      }
+			      
+			      alert(CSL_NO);
+			      console.log(CSL_NO);
 			      var events = new Array(); // Json 데이터를 받기 위한 배열 선언
-			       var obj = new Object();
+			      var obj = new Object();
 			      events.push(obj);
 			      
 				  var eventData = {
 							start: arg.start,
 							end: arg.end,
-							empCounCd: empCounCd
+							empCounCd: empCounCd,
+							CSL_NO: CSL_NO
 			   	  };
 			   		$.ajax({
 			   		    url: 'insertEmpCal',
