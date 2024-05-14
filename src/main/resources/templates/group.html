@@ -109,7 +109,7 @@
 			modal.find('#telNo').attr('placeholder', telNo);
 			modal.find('#scsbjt').attr('placeholder', scsbjt);
 			
-				$('#enroll').click(function() {
+				$('#enroll').off('click').click(function() {
 					enroll(gcounCD, studNum);
 				});
 			});
@@ -121,12 +121,11 @@
 				    url: "/groupEnroll",
 				    contentType: "application/json",  // 중요: 서버에 JSON 형식임을 명시
 				    data: JSON.stringify({
-				        gcounCD: gcounCD,
-				        studNum: studNum
+				    	GCOUN_CD: gcounCD,
+				    	STUD_NO: studNum
 				    }),
-				    dataType: "json",  // 서버로부터 JSON 응답을 기대합니다 (필요에 따라 변경)
-				    success: function(response) {
-				        console.log('Success:', response);
+				    success: function(data) {
+				        console.log('Success:', data);
 				        alert('통신 성공');
 				    },
 				    error: function(xhr, status, error) {

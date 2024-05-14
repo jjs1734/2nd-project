@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wizian.web.dao.GroupDAO;
+import com.wizian.web.dto.GroupDTO;
 
 
 @Service
@@ -23,8 +24,9 @@ public class GroupService {
 		return groupDAO.mainGroupImg();
 	}
 
-	public List<Map<String, Object>> groupEnroll(String gcounCD, String studNum) {
-		return groupDAO.groupEnroll(gcounCD, studNum);
+	public Object groupEnroll(GroupDTO groupDto) {
+		return groupDAO.groupEnroll(groupDto);
 	}
+
 	
 }

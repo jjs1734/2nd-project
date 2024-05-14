@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -32,11 +34,10 @@ public class GroupController {
 	
 	@ResponseBody
 	@PostMapping("/groupEnroll")
-	public List<Map<String, Object>> groupEnroll(@RequestParam("gcounCD") String gcounCD, @RequestParam("studNum") String studNum) {
+	public ResponseEntity<String> groupEnroll(@RequestBody GroupDTO groupDto) {
 		
-		System.out.println("엔롤 컨트롤러 실행");
-		List<Map<String, Object>> groupEnroll = groupService.groupEnroll(gcounCD, studNum);
+		groupService.groupEnroll(groupDto);
 		
-		return groupEnroll;
+		return ResponseEntity.ok("컨트롤러 성공");
 	}
 }

@@ -6,6 +6,8 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import com.wizian.web.dto.GroupDTO;
+
 @Repository
 @Mapper
 public interface GroupDAO {
@@ -14,7 +16,7 @@ public interface GroupDAO {
 
 	List<String> mainGroupImg();
 
-	List<Map<String, Object>> groupEnroll(String gcounCD, String studNum);
+	int groupEnroll(GroupDTO groupDto);
 	
 
 }
