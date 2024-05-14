@@ -2,174 +2,217 @@
 <html>
 <head>
 <script src="../dist/index.global.js"></script>
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+<script
+	src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link href="./css/styles.css" rel="stylesheet" />
 <link href="./css/shinjin.css" rel="stylesheet" />
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-	  
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'timeGridWeek',
-   	  slotMinTime: '08:00:00',
-	  slotMaxTime: '20:00:00', // 오후 8시까지
-	  slotDuration: '01:00:00', // 시간 단위를 1시간으로 설정
-		  navLinks: true,
-          editable: true,
-          selectable: true,
-          droppable: true, // this allows things to be dropped onto the calendar
+	document.addEventListener('DOMContentLoaded', function() {
 
-          // eventAdd: function () { // 이벤트가 추가되면 발생하는 이벤트
-          //     // console.log()
-          // },
+		var calendarEl = document.getElementById('calendar');
+		var calendar = new FullCalendar.Calendar(calendarEl, {
+			initialView : 'timeGridWeek',
+			slotMinTime : '08:00:00',
+			slotMaxTime : '20:00:00', // 오후 8시까지
+			slotDuration : '01:00:00', // 시간 단위를 1시간으로 설정
+			navLinks : true,
+			editable : true,
+			selectable : true,
+			droppable : true, // this allows things to be dropped onto the calendar
 
-          /**
-           * 드래그로 이벤트 수정하기
-           */
-          eventDrop: function (info){
-              console.log(info);
-              if(confirm("'"+ info.event.title +"' 매니저의 일정을 수정하시겠습니까 ?")){
-              }
-              var events = new Array(); // Json 데이터를 받기 위한 배열 선언
-              var obj = new Object();
+			// eventAdd: function () { // 이벤트가 추가되면 발생하는 이벤트
+			//     // console.log()
+			// },
 
-              obj.title = info.event._def.title;
-              obj.start = info.event._instance.range.start;
-              obj.end = info.event._instance.range.end;
-              events.push(obj);
+			/**
+			 * 드래그로 이벤트 수정하기
+			 */
+			/* 원본
+			 eventDrop: function (info){
+			    console.log(info);
+			    if(confirm("'"+ info.event.title +"' 매니저의 일정을 수정하시겠습니까 ?")){
+			    }
+			    var events = new Array(); // Json 데이터를 받기 위한 배열 선언
+			    var obj = new Object();
 
-              console.log(events);
-              $(function deleteData() {
-                  $.ajax({
-                      url: "/full-calendar/calendar-admin-update",
-                      method: "PATCH",
-                      dataType: "json",
-                      data: JSON.stringify(events),
-                      contentType: 'application/json',
-                  })
-              })
-          },
+			    obj.title = info.event._def.title;
+			    obj.start = info.event._instance.range.start;
+			    obj.end = info.event._instance.range.end;
 
-          /**
-           * 드래그로 이벤트 추가하기
-           */
-          select: function (arg) { // 캘린더에서 이벤트를 생성할 수 있다.
+			    console.log(events);
+			    $(function deleteData() {
+			        $.ajax({
+			            url: "/full-calendar/calendar-admin-update",
+			            method: "PATCH",
+			            dataType: "json",
+			            data: JSON.stringify(events),
+			            contentType: 'application/json',
+			        })
+			    })
+			},
+			
+			/**
+			 * 드래그로 이벤트 추가하기 신진수가 한거
+			 */
+			
+			select: function (arg) { // 캘린더에서 이벤트를 생성할 수 있다.
 
-              var title = prompt('일정을 입력해주세요.');
-              if (title) {
-                  calendar.addEvent({
-                      title: title,
-                      start: arg.start,
-                      end: arg.end,
-                      allDay: arg.allDay,
-                  })
-              }
+			   //var title = prompt('일정을 입력해주세요.');
+			  if (confirm(arg.start.toLocaleString() + '부터 ' + arg.end.toLocaleString() + '까지 해당 시간대로 예약하시겠습니까?')) {
+				  var startHour = arg.start.getHours();
+			      var empCounCd = startHour.toString().padStart(2, '0'); // 2자리로 만들기 위해 0으로 패딩
+			      var events = new Array(); // Json 데이터를 받기 위한 배열 선언
+			       var obj = new Object();
+			      events.push(obj);
+			      
+				  var eventData = {
+							start: arg.start,
+							end: arg.end,
+							empCounCd: empCounCd
+			   	  };
+			   		$.ajax({
+			   		    url: 'insertEmpCal',
+			   		    method: 'POST',
+			   		    dataType: 'json', // 'json'으로 수정
+			   		    contentType: 'application/json',
+			   		    data: JSON.stringify(eventData),
+			   		    success: function(response){
+			   		        alert("예약 성공!");
+			   		        console.log('예약이 완료되었습니다.');
+			   		    },
+			   		    error: function(xhr, status, error){
+			   		        alert("예약 실패", error);
+			   		        console.error('예약 중 오류가 발생했습니다:', error);
+			   		    }
+			   		});
+			   	}
+			},
 
-              var allEvent = calendar.getEvents(); // .getEvents() 함수로 모든 이벤트를 Array 형식으로 가져온다. (FullCalendar 기능 참조)
+			 /**
+              * 드래그로 이벤트 추가하기
+              */
+              /*
+             select: function (arg) { // 캘린더에서 드래그로 이벤트를 생성할 수 있다.
 
-              var events = new Array(); // Json 데이터를 받기 위한 배열 선언
-              for (var i = 0; i < allEvent.length; i++) {
-                  var obj = new Object();     // Json 을 담기 위해 Object 선언
-                  // alert(allEvent[i]._def.title); // 이벤트 명칭 알람
-                  obj.title = allEvent[i]._def.title; // 이벤트 명칭  ConsoleLog 로 확인 가능.
-                  obj.start = allEvent[i]._instance.range.start; // 시작
-                  obj.end = allEvent[i]._instance.range.end; // 끝
 
-                  events.push(obj);
-              }
-              var jsondata = JSON.stringify(events);
-              console.log(jsondata);
-              // saveData(jsondata);
+                 var title = prompt('일정을 입력해주세요.');
+                 if (title) {
+                     calendar.addEvent({
+                         title: title,
+                         start: arg.start,
+                         end: arg.end,
+                         allDay: arg.allDay,
+                     })
+                 }
+                 var allEvent = calendar.getEvents(); // .getEvents() 함수로 모든 이벤트를 Array 형식으로 가져온다. (FullCalendar 기능 참조)
 
-              $(function saveData(jsondata) {
-                  $.ajax({
-                      url: "/full-calendar/calendar-admin-update",
-                      method: "POST",
-                      dataType: "json",
-                      data: JSON.stringify(events),
-                      contentType: 'application/json',
-                  })
-                      .done(function (result) {
-                          // alert(result);
-                      })
-                      .fail(function (request, status, error) {
-                           // alert("에러 발생" + error);
-                      });
-                  calendar.unselect()
-              });
-          },
+                 var events = new Array(); // Json 데이터를 받기 위한 배열 선언
+                 for (var i = 0; i < allEvent.length; i++) {
+                     var obj = new Object();     // Json 을 담기 위해 Object 선언
+                     // alert(allEvent[i]._def.title); // 이벤트 명칭 알람
+                     obj.title = allEvent[i]._def.title; // 이벤트 명칭  ConsoleLog 로 확인 가능.
+                     obj.start = allEvent[i]._instance.range.start; // 시작
+                     obj.end = allEvent[i]._instance.range.end; // 끝
 
-          /**
-           * 이벤트 선택해서 삭제하기
-           */
-          eventClick: function (info){
-              if(confirm("'"+ info.event.title +"' 매니저의 일정을 삭제하시겠습니까 ?")){
-                  // 확인 클릭 시
-                  info.event.remove();
-              }
+                     events.push(obj);
+                 }
+                 var jsondata = JSON.stringify(events);
+                 console.log(jsondata);
+                 // saveData(jsondata);
 
-              console.log(info.event);
-              var events = new Array(); // Json 데이터를 받기 위한 배열 선언
-              var obj = new Object();
-                  obj.title = info.event._def.title;
-                  obj.start = info.event._instance.range.start;
-                  events.push(obj);
+                 $(function saveData(jsondata) {
+                     $.ajax({
+                         url: "/insertEmpCal",
+                         method: "POST",
+                         dataType: "json",
+                         data: JSON.stringify(events),
+                         contentType: 'application/json',
+                     })
+                         .done(function (result) {
+                             // alert(result);
+                         })
+                         .fail(function (request, status, error) {
+                              alert("에러 발생" + error);
+                         });
+                     calendar.unselect()
+                 });
+             },
+			*/
+			/**
+			 * 이벤트 선택해서 삭제하기
+			 */
+			eventClick : function(info) {
+				if (confirm("'" + info.event.title + "' 님의 일정을 삭제하시겠습니까 ?")) {
+					// 확인 클릭 시
+					info.event.remove();
+				}
 
-              console.log(events);
-              $(function deleteData(){
-                  $.ajax({
-                      url: "/full-calendar/calendar-admin-update",
-                      method: "DELETE",
-                      dataType: "json",
-                      data: JSON.stringify(events),
-                      contentType: 'application/json',
-                  })
-              })
-          },
-          // eventRemove: function (obj) { // 이벤트가 삭제되면 발생하는 이벤트
-          //
-          // },
-          
-      });
-    calendar.render();
-    });
+				console.log(info.event);
+				var events = new Array(); // Json 데이터를 받기 위한 배열 선언
+				var obj = new Object();
+				obj.title = info.event._def.title;
+				obj.start = info.event._instance.range.start;
+				events.push(obj);
+
+				console.log(events);
+				$(function deleteData() {
+					$.ajax({
+						url : "/full-calendar/calendar-admin-update",
+						method : "DELETE",
+						dataType : "json",
+						data : JSON.stringify(events),
+						contentType : 'application/json',
+					})
+				})
+			},
+		// eventRemove: function (obj) { // 이벤트가 삭제되면 발생하는 이벤트
+		//
+		// },
+
+		});
+		calendar.render();
+	});
 </script>
 <style>
-	.leftnavapply{
-	    text-align: center; /* 텍스트를 가운데 정렬합니다. */
-		background-color: gray;
-	}
-	.modal-header{
-	    text-align: center; /* 텍스트를 가운데 정렬합니다. */
-		
-	}
-	.profileMain{
-		background-color: #f4f4f4;
-	}
-	.fc-timegrid-slot {
-		height: 200px; /* 슬롯의 너비를 100px로 조정 */
-	}
+.leftnavapply {
+	text-align: center; /* 텍스트를 가운데 정렬합니다. */
+	background-color: gray;
+}
+
+.modal-header {
+	text-align: center; /* 텍스트를 가운데 정렬합니다. */
+}
+
+.profileMain {
+	background-color: #f4f4f4;
+}
+
+.fc .fc-timegrid-slot {
+	height: 3.0em !important; /* 슬롯의 너비를 100px로 조정 */
+}
 </style>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
-<!-- 메뉴-->
-	        <div th:replace="menu :: Menu"></div>
-	
-			<div class="leftnavapply">
-				<h1>상담 날짜 선택</h1>
-			</div>
-			
-			<div class="d-flex justify-content-center" style="margin: 0 320px;">
-		        <!-- 좌측 메뉴 nav -->
-		        <div th:replace="leftmenu :: LeftMenu"></div>
-		        <!-- Page Content-->
-				<div id='calendar' style="width: 1100px; height: 40vh;"></div>
-		        
-	        </div>
-	        <!-- 푸터-->
-	        <div th:replace="footer :: Footer"></div>
+	<!-- 메뉴-->
+	<div th:replace="menu :: Menu"></div>
+
+	<div class="leftnavapply">
+		<h1>상담 날짜 선택</h1>
+	</div>
+
+	<div class="d-flex justify-content-center" style="margin: 0 320px;">
+		<!-- 좌측 메뉴 nav -->
+		<div th:replace="leftmenu :: LeftMenu"></div>
+		<!-- Page Content-->
+		<div id='calendar' style="width: 1100px; height: 40vh;"></div>
+
+	</div>
+	<!-- 푸터-->
+	<div th:replace="footer :: Footer"></div>
 
 </body>
 </html>
