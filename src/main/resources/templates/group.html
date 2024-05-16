@@ -16,7 +16,7 @@
 
 </script>
 </head>
-<body>
+<body class="d-flex flex-column" style="height: 100vh;">
 	<!-- 메뉴-->
 	<div th:replace="menu :: Menu"></div>
 
@@ -115,7 +115,6 @@
 			});
 			
 			function enroll(gcounCD, studNum) {
-				alert('신청 버튼 클릭 :' + gcounCD + studNum);
 				$.ajax({
 				    type: "POST",
 				    url: "/groupEnroll",
@@ -130,7 +129,7 @@
 				    },
 				    error: function(xhr, status, error) {
 				        console.error('Error', error);
-				        alert('통신 실패: ' + error);
+				        alert('이미 신청이 되어 있습니다.' + error);
 				    }
 				});
 			} 
