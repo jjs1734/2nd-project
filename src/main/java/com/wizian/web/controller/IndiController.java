@@ -27,6 +27,11 @@ public class IndiController {
 		return "indicoun";
 		
 	}
+	@GetMapping("/indicoun_apply")
+	public String indiCounApply() {
+		return "indicoun_apply";
+		
+	}
 	
 	
 	@GetMapping("/indiboard")

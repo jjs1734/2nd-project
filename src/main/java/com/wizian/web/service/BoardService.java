@@ -27,8 +27,8 @@ public class BoardService {
 		return boardDAO.detail(no);
 	}
 
-	public List<BoardDTO> board(int cate){
-		return boardDAO.board(cate);
+	public List<BoardDTO> board(int boardNo){
+		return boardDAO.board(boardNo);
 	}
 	
 	public int write(Map<String, Object> map) {

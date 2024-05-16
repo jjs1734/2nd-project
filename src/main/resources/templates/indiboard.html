@@ -23,8 +23,9 @@
             <div class="sidebar col-md-3">
                 <h3>개인상담신청</h3>
                 <ul class="nav flex-column">
-                    <li class="nav-item"><a class="nav-link" href="#">온라인상담신청</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">진행중 상담</a></li>
+                    <li class="nav=item"><a class ="nav-link" href="/indicoun">상담사소개</a>
+                    <li class="nav-item"><a class="nav-link" href="/indicoun_apply">온라인상담신청</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/indiboard">진행중 상담</a></li>
                 </ul>
             </div>
 
@@ -50,13 +51,14 @@
                         </thead>
                         <tbody>
                             <tr th:each="board : ${board}">
-                                <td th:text="${board.no}"></td>
-                                <td th:text="${board.cat}"></td>
-                                <td><a th:href="@{/postDetail(pstSn=${board.no})}" th:text="${board.title}"></a></td>
-                                <td th:text="${board.writer}"></td>
-                                <td th:text="${board.postDate}"></td>
-                                <td th:text="${board.isComplete ? '완료' : '진행 중'}"></td>
-                                <td th:text="${board.boardSn}"></td>
+                                <td th:text="${board.PST_SN}"></td>
+                                <td th:text="${board.PST_CAT}"></td>
+                            
+                                <td><a th:href="@{/postDetail(pstSn=${board.PST_SN})}" th:text="${board.PST_TTL}"></a></td> 
+                                <td th:text="${board.WRITER}"></td>
+                                <td th:text="${board.PSTG_YMD}"></td>
+                                <td th:text="${board.PST_COMP}"></td>
+                                <td th:text="${board.BBS_SN}"></td>
                             </tr>
                         </tbody>
                     </table>
