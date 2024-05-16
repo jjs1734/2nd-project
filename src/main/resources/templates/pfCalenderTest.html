@@ -14,16 +14,11 @@
      <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
      <!-- jquery  -->
      <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-     
      <style type="text/css">
      	#sidenav{background: #B6B6B6; float:left; margin-right:20px; padding:10px; margin-top:10px; margin-bottom:10px; width:200px; height:780px; text-align:center;}
      	#sidemenu{background-color:#A41034; color: white;}
      </style>
-     <script type="text/javascript">
-     	$(function(){
-     		
-     	});
-     </script>
+
 </head>
 <body class="" style="">
  	<!-- 메뉴-->
@@ -133,6 +128,7 @@
 			</div>
 		</div>
 	</div>
+
 	<!-- 날짜 및 시간 선택 모달창 API 찾아보기 -->
 <div id="pfscdmodal" class="modal fade" tabindex="-1">
   <div class="modal-dialog modal-xl">
@@ -142,7 +138,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p>넣는다 풀캘린더</p>
+        <div id='calendar'></div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -151,6 +147,27 @@
     </div>
   </div>
 </div>
+     <script type="text/javascript">
+		document.addEventListener('DOMContentLoaded', function() {
+	        var calendarEl = document.getElementById('calendar');
+	        var calendar = new FullCalendar.Calendar(calendarEl, {
+	        	headerToolbar:{//헤더에 표시할 툴바
+	        		left:'prev',
+	        		center: 'title',
+	        		right:'next',
+	        	},
+				initialView: 'timeGridWeek',
+				locale: 'kr',
+				slotMinTime: '09:00',
+				slotMaxTime: '18:00'
+			});
+			calendar.render();
+		});
+     
+     	$(function(){
+     		
+     	});
+     </script>
 	<!-- footer-->
 	<div class="container px-4 px-lg-5" th:replace="footer :: Footer">
 	</div>

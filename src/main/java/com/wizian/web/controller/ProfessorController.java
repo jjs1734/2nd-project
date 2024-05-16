@@ -10,4 +10,9 @@ public class ProfessorController {
 	public String pfCounRequest(){
 		return "pfCoun";
 	}
+	
+	@GetMapping("/pfCalenderTest")
+	public String pfCalenderTest() {
+		return "pfCalenderTest";
+	}
 }
