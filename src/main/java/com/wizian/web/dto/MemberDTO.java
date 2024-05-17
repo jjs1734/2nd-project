@@ -1,13 +1,17 @@
 package com.wizian.web.dto;
 
-
 import java.time.LocalDateTime;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class MemberDTO {
-	private String USER_NO, LOGIN_ID, PW, FIR_YN, ADMIN_YN;
-	private int PW_ERR_CNT;
-	private LocalDateTime RCT_ACC_DT;
+	
+	public String USER_NO, LOGIN_ID, PW, FIR_YN, ADMIN_YN; 
+	public int PW_ERR_CNT;
+	public LocalDateTime RCT_ACC_DT;
+	
 }
