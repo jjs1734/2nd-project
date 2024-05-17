@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wizian.web.dto.EventData;
 import com.wizian.web.service.EmploymentService;
+
+import jakarta.servlet.http.HttpSession;
+
 import com.google.gson.JsonObject; // Gson의 JsonObject를 import합니다.
 
 
@@ -38,11 +41,20 @@ public class EmploymentController {
 	 */
 	
 	@GetMapping("/employment")
-	public String employment(Model model) {
+	public String employment(HttpSession session, Model model) {
 		
-		List<Map<String, Object>> list = employmentService.boardList();
-		model.addAttribute("boardList", list);
-		return "employment";
+		String userId = (String) session.getAttribute("userId");
+		
+		if(userId != null) {
+			model.addAttribute("userId", userId);
+			//System.out.println("로그인되어있음");
+			List<Map<String, Object>> list = employmentService.boardList();
+			model.addAttribute("boardList", list);
+			return "employment";
+		} else {
+			System.out.println("세션이 존재하지 않음");
+			return "main";
+		}
 	}
 	
 	@GetMapping("/empCounProfile")
@@ -56,8 +68,9 @@ public class EmploymentController {
 	@PostMapping("/employApply")
 	public String selectEmpCoun(@RequestParam("CSL_NO") String cslNo, Model model) {
 	    System.out.println(cslNo);
+	    System.out.println("첫번째 employApply");
 	    List<Map<String, Object>> list = employmentService.selectEmpCoun(cslNo);
-	    System.out.println(list);
+	    System.out.println("employApply 에러나는 부분" + list);
 	    model.addAttribute("selectEmpCoun", list);
 	    return "empApply"; // 절대 경로로 수정
 	}
@@ -66,9 +79,11 @@ public class EmploymentController {
 	public String selectEmpCal(@RequestParam("CSL_NO") String cslNo, Model model) {
 		System.out.println("두번째 employApply");
 		System.out.println("두번째 CSL_NO : " + cslNo);
+		List<Map<String, Object>> list = employmentService.selectEmpCoun(cslNo);
 		Map<String, Object> list12 = employmentService.calSelectApply(cslNo);
 		System.out.println(list12);
-		model.addAttribute("selectEmpCoun", list12);
+		model.addAttribute("selectEmpCoun", list);
+		model.addAttribute("selectEmpCoun1", list12);
 		return "empApply"; // 절대 경로로 수정
 	}
 	

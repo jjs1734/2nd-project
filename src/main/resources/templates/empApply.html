@@ -50,7 +50,7 @@
 	<body>
 		<!-- 메뉴-->
 	        <div th:replace="menu :: Menu"></div>
-	
+				
 			<div class="leftnavapply">
 				<h1>신청서 작성</h1>
 			</div>
@@ -94,7 +94,8 @@
 						    
 						    <!-- CSLNO 보내기 -->
 						    <a id="empCalLinkK" th:data-csl-no="@{${selectEmpCoun[0]['CSL_NO']}}" th:href="@{'/empCal?CSL_NO=' + ${selectEmpCoun[0]['CSL_NO']}}">날짜 선택하기</a>
-						        <input type="text" class="form-control" id="empDate" placeholder="Doe" required>
+						        <input type="text" class="form-control" id="empDate" placeholder="예약 날짜" th:value="${selectEmpCoun1['DATE_PART'] + ' ' + selectEmpCoun1['Selected_DATE']}" required>
+						        <!-- <input type="text" class="form-control" id="empDate" placeholder="예약 날짜" required> -->
 						    </div>
 						    <label for="empTime" class="col-sm-3 col-form-label">
 						        상담 가능 시간
