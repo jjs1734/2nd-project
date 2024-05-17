@@ -93,7 +93,7 @@
 						    <!-- CSL_NO 값 보내기 전 코드   <a href="/empCal?CSL_NO=${selectEmpCoun[0]['CSL_NO']}">날짜 선택하기</a> -->
 						    
 						    <!-- CSLNO 보내기 -->
-						    <a id="empCalLinkK" data-csl-no="${selectEmpCoun[0]['CSL_NO']}" th:href="@{'/empCal?CSL_NO=' + ${selectEmpCoun[0]['CSL_NO']}}">날짜 선택하기</a>
+						    <a id="empCalLinkK" th:data-csl-no="@{${selectEmpCoun[0]['CSL_NO']}}" th:href="@{'/empCal?CSL_NO=' + ${selectEmpCoun[0]['CSL_NO']}}">날짜 선택하기</a>
 						        <input type="text" class="form-control" id="empDate" placeholder="Doe" required>
 						    </div>
 						    <label for="empTime" class="col-sm-3 col-form-label">

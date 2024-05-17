@@ -1,5 +1,10 @@
 package com.wizian.web.controller;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wizian.web.dto.EventData;
 import com.wizian.web.service.EmploymentService;
+import com.google.gson.JsonObject; // Gson의 JsonObject를 import합니다.
 
 
 @Controller
@@ -56,11 +62,134 @@ public class EmploymentController {
 	    return "empApply"; // 절대 경로로 수정
 	}
 	
-	@GetMapping("/empCal")
-	public String empCal() {
-		return "empCal";
+	@GetMapping("/employApply")
+	public String selectEmpCal(@RequestParam("CSL_NO") String cslNo, Model model) {
+		System.out.println("두번째 employApply");
+		System.out.println("두번째 CSL_NO : " + cslNo);
+		Map<String, Object> list12 = employmentService.calSelectApply(cslNo);
+		System.out.println(list12);
+		model.addAttribute("selectEmpCoun", list12);
+		return "empApply"; // 절대 경로로 수정
 	}
 	
+	// 처음 empCal웹 페이지 열 때, 상담사 스케줄 띄우기 or empApply.html의 <a>태그에서 href할때 오는 곳  원본
+	/*
+	@GetMapping("/empCal")
+	public String empCal(@RequestParam("CSL_NO") String cslNo, Model model) {
+		System.out.println(cslNo);
+		//String cslNoo = employmentService.updateCal(cslNo);
+		List<Map<String, Object>> cslNoo = employmentService.updateCal(cslNo);
+		System.out.println(cslNoo);
+		model.addAttribute("cslNoo", cslNoo);
+		return "empCal";
+	}
+	*/
+	
+	@GetMapping("/empCal")
+	public String empCal(@RequestParam("CSL_NO") String cslNo, Model model) {
+		System.out.println(cslNo);
+		//String cslNoo = employmentService.updateCal(cslNo);
+		List<Map<String, Object>> cslNoo = employmentService.updateCal(cslNo);
+		System.out.println(cslNoo);
+		model.addAttribute("cslNoo", cslNoo);
+		return "empCal";
+	}
+	/* 원본
+	@PostMapping("/empCalList")
+	public String empCalList(@RequestParam("cslNum") String cslNo1, Model model) {
+	    List<Map<String, Object>> cslNum1 = employmentService.empCalList(cslNo1);
+
+	    System.out.println(cslNum1);
+	    model.addAttribute("cslNum1", cslNum1);
+
+	    return "empCal";
+	}
+	*/
+	
+	@PostMapping("/empCalList")
+	@ResponseBody // JSON 형식으로 데이터를 반환하기 위해 사용
+	public List<Map<String, Object>> empCalList(@RequestParam("cslNum") String cslNo1) {
+		System.out.println("/empCalList는" + employmentService.empCalList(cslNo1));
+	    return employmentService.empCalList(cslNo1);
+	}
+
+
+	
+	
+	// 처음 empCal웹 페이지 열 때, 상담사 스케줄 띄우기 or empApply.html의 <a>태그에서 href할때 오는 곳   수정중 (DB에서 DATE가 DATE타입일경우)
+	/*
+	@GetMapping("/empCal")
+	public String empCal(@RequestParam("CSL_NO") String cslNo, Model model) {
+	    System.out.println(cslNo);
+	    List<Map<String, Object>> cslNoo = employmentService.updateCal(cslNo);
+
+	    // DB에서 가져온 날짜 형식을 FullCalendar에서 사용하는 ISO 8601 형식으로 변환하고 empCounCd를 반영하여 start와 end 값을 생성합니다.
+	    List<Map<String, Object>> convertedDates = new ArrayList<>();
+	    for (Map<String, Object> date : cslNoo) {
+	        Map<String, Object> convertedDate = new HashMap<>();
+	        String originalDate = (String) date.get("DATE");
+	        String empCounCd = (String) date.get("EMP_COUN_CD");
+
+	        // EMP_COUN_CD를 이용하여 start와 end 값을 생성합니다.
+	        LocalDateTime startDateTime = LocalDateTime.parse(originalDate + "T" + empCounCd + ":00:00");
+	        LocalDateTime endDateTime = startDateTime.plusHours(1); // 예약은 1시간 단위로 설정합니다.
+
+	        // LocalDateTime 객체를 ISO 8601 형식으로 변환합니다.
+	        String startIsoDate = startDateTime.atZone(ZoneId.systemDefault()).toInstant().toString();
+	        String endIsoDate = endDateTime.atZone(ZoneId.systemDefault()).toInstant().toString();
+	        
+	        convertedDate.put("start", startIsoDate);
+	        convertedDate.put("end", endIsoDate);
+	        convertedDates.add(convertedDate);
+	    }
+
+	    System.out.println(convertedDates);
+	    model.addAttribute("cslNoo", convertedDates);
+	    return "empCal";
+	}
+	*/
+	
+	/*
+	// 처음 empCal웹 페이지 열 때, 상담사 스케줄 띄우기 or empApply.html의 <a>태그에서 href할때 오는 곳   수정중 (DB에서 DATE가 CHAR타입일경우_mapper에서 DATE타입으로 변경해서 가져와야됨)
+		@GetMapping("/empCal")
+		public String empCal(@RequestParam("CSL_NO") String cslNo, Model model) {
+		    System.out.println(cslNo);
+		    List<Map<String, Object>> cslNoo = employmentService.updateCal(cslNo);
+	
+		    // DB에서 가져온 날짜 형식을 FullCalendar에서 사용하는 ISO 8601 형식으로 변환하고 empCounCd를 반영하여 start와 end 값을 생성합니다.
+		    List<Map<String, Object>> convertedDates = new ArrayList<>();
+		 // DateTimeFormatter를 생성하여 ISO 8601 형식으로 변환합니다.
+		    DateTimeFormatter isoFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
+		    for (Map<String, Object> date : cslNoo) {
+		        Map<String, Object> convertedDate = new HashMap<>();
+		        String originalDate = (String) date.get("DATE"); // CHAR 타입으로 저장된 날짜 값
+		        String empCounCd = (String) date.get("EMP_COUN_CD");
+
+		        // CHAR 타입으로 저장된 날짜 값을 LocalDateTime으로 변환
+		        LocalDateTime startDateTime = LocalDateTime.parse(originalDate, DateTimeFormatter.ofPattern("yyyy-MM-dd")); // 날짜 형식에 맞게 포맷 지정
+		        startDateTime = startDateTime.withHour(Integer.parseInt(empCounCd)); // EMP_COUN_CD를 시간으로 설정
+		        LocalDateTime endDateTime = startDateTime.plusHours(1); // 예약은 1시간 단위로 설정합니다.
+
+		        // LocalDateTime 객체를 ISO 8601 형식으로 변환합니다.
+		        String startIsoDate = startDateTime.format(isoFormatter);
+		        String endIsoDate = endDateTime.format(isoFormatter);
+		        
+		        convertedDate.put("start", startIsoDate);
+		        convertedDate.put("end", endIsoDate);
+		        
+		        convertedDates.add(convertedDate);
+		    }
+
+	
+		    System.out.println("CONVERT : " + convertedDates);
+		    model.addAttribute("cslNoo", convertedDates);
+		    return "empCal";
+		}
+	 */
+
+	
+	/* 이벤트(예약) 후 다시 empApply.html로 보내기  _ 원본*/
 	@PostMapping("/insertEmpCal")
 	@ResponseBody
 	public ResponseEntity<String> fullCal(@RequestBody EventData eventData) {
@@ -68,63 +197,65 @@ public class EmploymentController {
 	    String empCounCd = eventData.getEmpCounCd();
 	    String start = eventData.getStart(); // start 값을 추가
 	    String dateOnly = start.substring(0, 10); // "2024-05-15"만 추출
+	    String title = eventData.getTitle();
+	    String CSL_NO = eventData.getCSL_NO();
+	    System.out.println("CSL_NO" + CSL_NO);
+	    System.out.println("title" + title);
 	    
 	    EventData evenData = new EventData();
 	    evenData.setEmpCounCd(empCounCd); // empCounCd 설정
 	    evenData.setDateOnly(dateOnly);// start 설정
+	    evenData.setTitle(title); // USR_CM 설정 (상담 내용)
+	    evenData.setCSL_NO(CSL_NO); // USR_CM 설정 (상담 내용)
+	    String redirectUrl = "/employApply";
 	    
 	    //System.out.println(empCounCd);
 	    employmentService.insertEmpCal(evenData);
-	    //System.out.println(employmentService.insertEmpCal(empCounCd));
-	    return ResponseEntity.ok("{\"status\": \"success\"}");   // response에 success를 보내준다.
+	    System.out.println(evenData);
+	    //return ResponseEntity.ok("{\"status\": \"success\"}");   // response에 success를 보내준다.
+	    //return ResponseEntity.ok("{\"redirect\": \"/employApply\"}");   // response에 success를 보내준다.
+	    //return ResponseEntity.ok().body("{\"success\": true, \"redirect\": \"" + redirectUrl + "\"}");
+	    return ResponseEntity.ok().body("{\"success\": true, \"redirect\": \"" + redirectUrl + "\", \"dateOnly\": \"" + dateOnly + "\"}");
 	}
 	
+	/* 이벤트(예약) 후 다시 empApply.html로 보내기  _ 원본
+	@PostMapping("/insertEmpCal")
+	@ResponseBody
+	public String fullCal(@RequestBody EventData eventData) {
+		System.out.println("ajax작동" + eventData);
+		String empCounCd = eventData.getEmpCounCd();
+		String start = eventData.getStart(); // start 값을 추가
+		String dateOnly = start.substring(0, 10); // "2024-05-15"만 추출
+		String title = eventData.getTitle();
+		String CSL_NO = eventData.getCSL_NO();
+		System.out.println("CSL_NO" + CSL_NO);
+		System.out.println("title" + title);
+		
+		EventData evenData = new EventData();
+		evenData.setEmpCounCd(empCounCd); // empCounCd 설정
+		evenData.setDateOnly(dateOnly);// start 설정
+		evenData.setTitle(title); // USR_CM 설정 (상담 내용)
+		evenData.setCSL_NO(CSL_NO); // USR_CM 설정 (상담 내용)
+		String redirectUrl = "/employApply";
+		
+		//System.out.println(empCounCd);
+		employmentService.insertEmpCal(evenData);
+		System.out.println(evenData);
+		//return ResponseEntity.ok("{\"status\": \"success\"}");   // response에 success를 보내준다.
+		//return ResponseEntity.ok("{\"redirect\": \"/employApply\"}");   // response에 success를 보내준다.
+		//return ResponseEntity.ok().body("{\"success\": true, \"redirect\": \"" + redirectUrl + "\"}");
+		return "";
+	}
+	*/
+	// 이벤트(예약) 후 다시 empApply.html로 보내기  _ 수정중
 	/*
 	@PostMapping("/insertEmpCal")
 	@ResponseBody
-	public void fullCal(@RequestBody EventData eventData) {
-	    System.out.println("ajax작동" + eventData);
-	    String empCounCd = eventData.getEmpCounCd();
-	    employmentService.insertEmpCal(empCounCd);
-	    // 작업이 성공했음을 나타내는 응답을 보냄
-	}*/
+	public String fullCal(@RequestBody EventData eventData) {
+		System.out.println("Ajax 작동" + eventData);
+		List<Map<String, Object>> resCal = employmentService.resCal(eventData);
+		return "empApply";
+	}
+	*/
 	
-	
-	
-	/*
-	@PostMapping("/insertEmpCal")
-    @ResponseBody
-    public String addEvent(@RequestBody List<Map<String, Object>> param) throws Exception {
-    	 
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",Locale.KOREA);
- 
-        for (int i = 0; i < param.size(); i++) {
- 
-            String username = (String) param.get(i).get("title");
-            String startDateString = (String) param.get(i).get("start");
-            String endDateString = (String) param.get(i).get("end");
- 
-            LocalDateTime startDate = LocalDateTime.parse(startDateString, dateTimeFormatter);
-            LocalDateTime endDate = LocalDateTime.parse(endDateString, dateTimeFormatter);
- 
-            UserDTO userDTO = UserDTO.builder()
-                    .username(username)
-                    .build();
- 
-            String user = employmentService.saveUser(userDTO);
-            User userEntity = userRepository.findById(user).get();
- 
-            ManagerHopeTimeDto managerHopeTimeDto = ManagerHopeTimeDto.builder()
-                    .user(userEntity)
-                    .managerHopeDateStart(startDate)
-                    .managerHopeDateEnd(endDate)
-                    .build();
- 
-            employmentService.saveManagerHopeTime(managerHopeTimeDto);
-        }
-        return "/full-calendar/calendar-admin-update";
-        }
-*/
-
-
 }
