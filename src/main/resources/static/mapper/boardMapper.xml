@@ -13,7 +13,8 @@
 		PST_COMP
 		FROM ICOUN_POSTS
 		WHERE BBS_SN = #{boardNo}
-		AND PST_DEL = '1'
+		AND PST_DEL
+		= '1'
 	</select>
 
 	<!-- 상세 조회 쿼리 -->
@@ -29,10 +30,11 @@
 	<!-- 글쓰기 쿼리 -->
 	<insert id="write" parameterType="java.util.Map">
 		INSERT INTO ICOUN_POSTS
-		(BBS_SN, PST_CAT, PST_TTL, PST_CN,COUNSL)
-		VALUES (#{board_no},
-		#{cat},#{title}, #{content}, #{counselor} )
+		(BBS_SN, PST_CAT, PST_TTL, PST_CN, WRITER, PSTG_YMD, PST_COMP, COUNSL)
+		VALUES (#{board_no}, #{cat}, #{title}, #{content}, #{writer}, #{pstg_ymd},
+		#{pst_comp}, #{counselor})
 	</insert>
+
 
 	<!-- 답글 작성 쿼리 -->
 	<insert id="submitReply" parameterType="java.util.Map">
@@ -51,9 +53,11 @@
 	<!-- 답글 목록 조회 쿼리 -->
 	<select id="getReplies" parameterType="int"
 		resultType="com.wizian.web.dto.BoardDTO">
-		SELECT PST_SN, PST_TTL, PST_CAT, PST_CN, WRITER, PSTG_YMD, PST_COMP, BBS_SN
+		SELECT PST_SN, PST_TTL, PST_CAT, PST_CN, WRITER, PSTG_YMD,
+		PST_COMP, BBS_SN
 		FROM ICOUN_POSTS
-		WHERE PST_SN_OLD = #{postId} AND PST_DEL = '1'
+		WHERE PST_SN_OLD = #{postId} AND
+		PST_DEL = '1'
 		ORDER BY PSTG_YMD DESC
 	</select>
 
