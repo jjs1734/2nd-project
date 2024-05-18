@@ -34,7 +34,7 @@ public class MemberController {
 	public String login(@RequestParam("id") String id, @RequestParam("pw") String pw, HttpSession session) {
 		//System.out.println("아이디 입력값: " + id + " 비밀번호 입력값 : " + pw);
 		String userId = memberService.login(id, pw);
-		if(id == null) {
+		if(userId == null) {
 			//System.out.println("로그인 실패");
 			return "redirect:/login";
 		}
@@ -49,5 +49,10 @@ public class MemberController {
 		session.invalidate();
 		
 		return "redirect:/main";
+	}
+	
+	@GetMapping("/loginreal")
+	public String loginreal() {
+		return "loginreal";
 	}
 }

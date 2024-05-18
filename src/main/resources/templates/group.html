@@ -96,10 +96,10 @@
 	    	var gcounDTL = button.attr('data-gcounDTL'); // 집단상담 개요
 	    	var gcounDT = button.attr('data-gcounDT');
 	    	var gcounCD = button.attr('data-gcounCD');
-	    	var studName = '신진수';
-	    	var studNum = '100011011';
-	    	var telNo = '010-1111-2222';
-	    	var scsbjt = '컴퓨터공학과';
+	    	var studName = '[[${userInfo.STUD_NM}]]';
+	    	var studNum = '[[${userInfo.STUD_NO}]]';
+	    	var telNo = '[[${userInfo.TELNO}]]';
+	    	var scsbjt = '[[${userInfo.SCSBJT_NM}]]';
 			var modal = $(this); 
 			modal.find('.modal-title').text(gcounName);
 			modal.find('#gcoun-date').text('일시 : ' + gcounDT);

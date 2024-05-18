@@ -26,9 +26,9 @@
 			            <li><a class="dropdown-item" href="#">개인 상담</a></li>
 		        	</ul>
 				</li>
-				<li th:if="${userId == null}" class="nav-item"><a class="nav-link" href="/login">로그인</a></li>
-				<li th:if="${userId != null}" class="nav-item"><a class="nav-link" href="/mypage">마이페이지</a></li>
-				<li th:if="${userId != null}" class="nav-item">
+				<li th:if="${session.userId == null}" class="nav-item"><a class="nav-link" href="/login">로그인</a></li>
+				<li th:if="${session.userId != null}" class="nav-item"><a class="nav-link" href="/mypage">마이페이지</a></li>
+				<li th:if="${session.userId != null}" class="nav-item">
 				<form action="/logout" method="post" style="display:inline;">
                             <button type="submit" class="nav-link" style="background:none; border:none; padding:0; color:inherit; cursor:pointer;">로그아웃</button>
                         </form></li>
