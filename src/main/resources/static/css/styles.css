@@ -5345,7 +5345,7 @@ textarea.form-control-lg {
   align-items: center;
   justify-content: space-between;
   padding: var(--bs-modal-header-padding);
-  border-bottom: var(--bs-modal-header-border-width) solid var(--bs-modal-header-border-color);
+  /* border-bottom: var(--bs-modal-header-border-width) solid var(--bs-modal-header-border-color); */
   border-top-left-radius: var(--bs-modal-inner-border-radius);
   border-top-right-radius: var(--bs-modal-inner-border-radius);
 }
@@ -5377,9 +5377,9 @@ textarea.form-control-lg {
   border-bottom-right-radius: var(--bs-modal-inner-border-radius);
   border-bottom-left-radius: var(--bs-modal-inner-border-radius);
 }
-.modal-footer > * {
+/* .modal-footer > * {
   margin: calc(var(--bs-modal-footer-gap) * 0.5);
-}
+} */
 
 @media (min-width: 576px) {
   .modal {

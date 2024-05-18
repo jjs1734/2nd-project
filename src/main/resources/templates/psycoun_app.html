@@ -39,7 +39,7 @@
     padding: 10px 20px;
     background-color: rgb(116, 0, 0);
     border: none;
-    border-radius: 5px;
+    
     color: #fff;
     cursor: pointer;
     transition: box-shadow 0.2s;
@@ -71,22 +71,21 @@
 		</div>
 		
 		<script>
-			//페이지 열기 위한 함수
-			function openPage(url){
-				//페이지 이름에 해당하는 URL로 이동
-				location.href = url;
-			}
+		//모달을 닫고 Alert를 띄우는 함수
+		function CloseModalAndOpenAlert(){
+			//모달닫기
+			var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+			myModal.hide();
 			
-			//모달 팝업
-		const myModal = document.getElementById('myModal')
-		const myInput = document.getElementById('myInput')
-
-		myModal.addEventListener('shown.bs.modal', () => {
- 	 	myInput.focus()
-		})
-			
-			
-			
+			//Alert창 띄우기
+			alert("신청이 완료되었습니다");
+		}
+		
+		//확인 버튼 클릭 이벤트 핸들러 등록
+		document.getElementById("confirmButton").addEventListener("click", CloseModalAndOpenAlert);
+		
+		
+		
 		</script>
 		
 		<div id="content">
@@ -139,30 +138,39 @@
 		</table>
 		
 		<!-- Button trigger modal -->
-		<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="margin-top:50px; margin-left:auto; margin-right:auto; text-align:center; font-size:15pt; width:120px; height:35px; color:white; background-color:#A41034; border:none;">
+		<div style="text-align:center;">
+		<button type="button" class="btn btn-primary" id="openModalButton" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="margin-top:50px; margin-left:auto; margin-right:auto; text-align:center; font-size:15pt; width:120px; color:white; background-color:#A41034; border-radius:0; border:none;">
   		신청하기</button>
-
+		</div>
+		
 		<!-- Modal -->
 		<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  			<div class="modal-dialog">
-    			<div class="modal-content">
-      				<div class="modal-header">
-        				<h1 class="modal-title fs-5" id="staticBackdropLabel">방문신청</h1>
+  			<div class="modal-dialog modal-dialog-centered">
+    			<div class="modal-content" style="border-radius:0; height:270px;">
+      				<div class="modal-header" style="padding-top:30px;">
+        				<h1 class="modal-title fs-5" id="staticBackdropLabel" style="font-weight:bold;">방문신청</h1>
         				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       				</div>
       				<div class="modal-body">
-        			아래의 내용으로 방문을 신청하시겠습니까?<br>
+        			아래의 내용으로 방문을 신청하시겠습니까?<br><br>
         			상담자 : 협의 후 배정 예정<br>
         			상담일시 : 협의 후 배정 예정
       				</div>
-      				<div class="modal-footer">
-        				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-        				<button type="button" class="btn btn-primary">확인</button>
+      				<div class="modal-footer" style="padding:0; height:40px;">
+      				<div class="container text-center">
+      					<div class="row">
+      						<div class="col" style="background-color:#B6B6B6; height:40px;">
+      							<button type="button" data-bs-dismiss="modal" style="font-weight:bold; border:none; background-color:#B6B6B6; margin-top:5px;">닫기</button>
+      						</div>
+        					<div class="col" style="background-color:#808285; height:40px;">
+        						<button type="button" id="confirmButton" data-bs-dismiss="modal" onclick="CloseModalAndOpenAlert()" style="font-weight:bold; border:none; background-color:#808285; margin-top:5px;">확인</button>
+        					</div>
+        				</div>
       				</div>
-    			</div>
-  			</div>
+    				</div>
+  				</div>
+			</div>
 		</div>
-		
 		
         </section>
 		</div>

@@ -23,5 +23,12 @@ public interface EmploymentDAO {
 	/* void insertEmpCal(String empCounCd, String dateOnly); */
 	void insertEmpCal(EventData evenData);
 
+	public List<Map<String, Object>> updateCal(String cslNo);
+
+	public List<Map<String, Object>> resCal(EventData eventData);
+
+	public List<Map<String, Object>> empCalList(String cslNo1);
+
+	public Map<String, Object> calSelectApply(String cslNo);
 
 }

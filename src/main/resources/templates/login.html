@@ -1,69 +1,21 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://thymeleaf.org">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-	<meta name="description" content="" />
-	<meta name="author" content="" />
-	<title>심리 상담 신청</title>
-	 <!-- Favicon-->
-     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-     <!-- Core theme CSS (includes Bootstrap)-->
-     <link href="css/styles.css" rel="stylesheet" />
-     
-<style>
-#content{background: #B6B6B6; padding:10px; margin-top:85px; margin-bottom:85px; margin-left:400px; width:400px; height:600px;}
-.button{margin-bottom:30px; color:white; font-size:14pt; width:300px; height:35px; margin-left:40px; margin-top:5px; margin-bottom:30px; background-color:#A41034; border: none;}
-.links{text-align:center;}
-.links a{font-size:13pt; color:black;}
-</style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>로그인 테스트</title>
+<!-- Favicon-->
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+<!-- Core theme CSS (includes Bootstrap)-->
+<link href="css/styles.css" rel="stylesheet" />
 </head>
-     
-      
-<body class="d-flex flex-column" style="height:100%">
-	
- 	
- 	<!-- 메뉴-->
-	<div th:replace="menu :: Menu"></div>
-	
-	
-	<!-- Page Content-->
-	<div class="container px-4 px-lg-5" style="height:100%">
-	
-		
-		<div id="content">
-		<section id="login">
-			<div class="image-container" style="text-align:center; margin-top:50px; margin-bottom:40px;">
-			<img src="images/logo.png" style="width:100px; height:100px;"><br>
-			</div>
-			
-			<form>
-  			<p style="font-weight:bold; font-size:12pt; margin-bottom:5px; margin-left:40px;">아이디</p>
-  			<input id='userid' type='text' style="background-color:#808285; margin-bottom:30px; margin-left:40px; width:300px; height:50px; border:none;"/><br>
-  			<p style="font-weight:bold; font-size:12pt; margin-bottom:5px; margin-left:40px;">비밀번호</p> 
-  			<input id='pwd' type='password' style="background-color:#808285; margin-bottom:30px; margin-left:40px; width:300px; height:50px; border:none;"/>
-			</form>
-			
-			<button class="button">로그인</button>
-			
-			<div class="links">
-      			<a href="#">비밀번호를 잊어버리셨나요?</a>
-    		</div>
-		</section>
-		</div>
-	
-	
-	
-	</div>
-	
-	
-	<!-- 푸터-->
-	<div class="container px-4 px-lg-5 fixed-bottom" th:replace="footer :: Footer">
-	</div>
-	<!-- Bootstrap core JS-->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-	<!-- Core theme JS-->
-	<script src="js/scripts.js"></script>
-
+<body>
+	<form action="/login" method="post" name="loginForm">
+		<input type="text" name="id" placeholder="학번을 입력하세요.">
+		<input type="password" name="pw" placeholder="비밀번호를 입력하세요.">
+		<button type="submit">로그인</button>
+	</form>
 </body>
 </html>
