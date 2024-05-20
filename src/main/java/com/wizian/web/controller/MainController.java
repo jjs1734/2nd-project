@@ -34,5 +34,18 @@ public class MainController {
 		
 		return "main";
 	}
-
+	
+	
+	@GetMapping("/mypage")
+	public String mypage() {
+		
+		
+		return "mypage";
+	}
+	@GetMapping("/intro")
+	public String intro() {
+		
+		
+		return "intro";
+	}
 }
