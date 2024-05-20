@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper	namespace="com.wizian.web.dao.AdminDAO">
+
+	<select id="studentList" resultType="Map">
+		SELECT s.STUD_NO, s.USER_NO, s.PF_NO, s.NTN_CD, s.SCSBJT_NM, s.STUD_NM, s.TELNO, s.STUD_EML_ADDR, s.COL_REG, s.STUD_BRDT, s.STUD_GEN, n.NTN_NM, p.PF_NM
+		FROM STUD_INFO s
+		JOIN NATIONAL_INFO n ON s.NTN_CD = n.NTN_CD
+		JOIN PF_INFO p on s.PF_NO = p.PF_NO
+	</select>
+	
+</mapper>

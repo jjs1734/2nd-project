@@ -1,10 +1,5 @@
 package com.wizian.web.controller;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,8 +17,6 @@ import com.wizian.web.dto.EventData;
 import com.wizian.web.service.EmploymentService;
 
 import jakarta.servlet.http.HttpSession;
-
-import com.google.gson.JsonObject; // Gson의 JsonObject를 import합니다.
 
 
 @Controller
@@ -66,12 +59,15 @@ public class EmploymentController {
 	}
 			
 	@PostMapping("/employApply")
-	public String selectEmpCoun(@RequestParam("CSL_NO") String cslNo, Model model) {
+	public String selectEmpCoun(HttpSession session, @RequestParam("CSL_NO") String cslNo, Model model) {
+		String userId = (String) session.getAttribute("userId");
+		
 	    System.out.println(cslNo);
-	    System.out.println("첫번째 employApply");
+	    System.out.println("첫번째 employApply" + userId);
 	    List<Map<String, Object>> list = employmentService.selectEmpCoun(cslNo);
 	    System.out.println("employApply 에러나는 부분" + list);
 	    model.addAttribute("selectEmpCoun", list);
+	    model.addAttribute("userId", userId);
 	    return "empApply"; // 절대 경로로 수정
 	}
 	
@@ -99,7 +95,7 @@ public class EmploymentController {
 		return "empCal";
 	}
 	*/
-	
+
 	@GetMapping("/empCal")
 	public String empCal(@RequestParam("CSL_NO") String cslNo, Model model) {
 		System.out.println(cslNo);
@@ -109,6 +105,7 @@ public class EmploymentController {
 		model.addAttribute("cslNoo", cslNoo);
 		return "empCal";
 	}
+	
 	/* 원본
 	@PostMapping("/empCalList")
 	public String empCalList(@RequestParam("cslNum") String cslNo1, Model model) {
@@ -128,9 +125,6 @@ public class EmploymentController {
 	    return employmentService.empCalList(cslNo1);
 	}
 
-
-	
-	
 	// 처음 empCal웹 페이지 열 때, 상담사 스케줄 띄우기 or empApply.html의 <a>태그에서 href할때 오는 곳   수정중 (DB에서 DATE가 DATE타입일경우)
 	/*
 	@GetMapping("/empCal")
@@ -262,6 +256,7 @@ public class EmploymentController {
 		return "";
 	}
 	*/
+	
 	// 이벤트(예약) 후 다시 empApply.html로 보내기  _ 수정중
 	/*
 	@PostMapping("/insertEmpCal")
@@ -272,5 +267,19 @@ public class EmploymentController {
 		return "empApply";
 	}
 	*/
+	
+	/* empApply에서 제출 버튼 누를때 db에 입력 */
+	@PostMapping("/insertApply")
+	public String insertApply(@RequestParam("empDate") String empDate, 
+			@RequestParam("empContent") String empContent, 
+			@RequestParam("empTime") String EMP_COUN_CD, 
+			@RequestParam("CSL_NO") String CSL_NO) {
+		System.out.println("제출 잘 됐니1?" + empDate);
+		System.out.println("제출 잘 됐니1?" + EMP_COUN_CD);
+		System.out.println("제출 잘 됐니2?" + empContent);
+		System.out.println("제출 잘 됐니2?" + CSL_NO);
+		
+		return "main";
+	}
 	
 }

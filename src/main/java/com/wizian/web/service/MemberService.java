@@ -14,9 +14,10 @@ public class MemberService {
 	
 	public String login(String id, String pw) {
 		MemberDTO memberDTO = memberDAO.getMemberById(id);
-		if (memberDTO.PW.equals(pw)) {
-			return memberDTO.LOGIN_ID;
+		if (memberDTO.getPW().equals(pw)) {
+			return memberDTO.getLOGIN_ID();
 		}
+		
 		return null;
 	}
 	
