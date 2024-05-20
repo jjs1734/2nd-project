@@ -6,12 +6,11 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 public class MemberDTO {
 	
-	public String USER_NO, LOGIN_ID, PW, FIR_YN, ADMIN_YN; 
-	public int PW_ERR_CNT;
-	public LocalDateTime RCT_ACC_DT;
+	private String USER_NO, LOGIN_ID, PW, FIR_YN, ADMIN_YN; 
+	private int PW_ERR_CNT;
+	private LocalDateTime RCT_ACC_DT;
 	
 }

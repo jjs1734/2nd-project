@@ -32,7 +32,7 @@ public class MemberController {
 	
 	@PostMapping("/login")
 	public String login(@RequestParam("id") String id, @RequestParam("pw") String pw, HttpSession session) {
-		//System.out.println("아이디 입력값: " + id + " 비밀번호 입력값 : " + pw);
+		System.out.println("아이디 입력값: " + id + " 비밀번호 입력값 : " + pw);
 		String userId = memberService.login(id, pw);
 		if(userId == null) {
 			//System.out.println("로그인 실패");

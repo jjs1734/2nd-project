@@ -12,13 +12,14 @@
 <!-- Core theme CSS (includes Bootstrap)-->
 <link href="css/styles.css" rel="stylesheet" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="js/scripts.js">
 
 </script>
 </head>
 <body class="d-flex flex-column" style="height: 100vh;">
 	<!-- 메뉴-->
-	<div th:replace="menu :: Menu"></div>
+	<div th:replace="~{menu :: Menu}"></div>
 
 	<!-- Page Content-->
 	<div class="container px-4 px-lg-5">
@@ -58,7 +59,7 @@
 	</div>
 
 	<!-- 푸터-->
-	<div th:replace="footer :: Footer"></div>
+	<div th:replace="~{footer :: Footer}"></div>
 
 	<!-- Modal -->
 	<div class="modal fade" id="gcounModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -118,19 +119,25 @@
 				$.ajax({
 				    type: "POST",
 				    url: "/groupEnroll",
-				    contentType: "application/json",  // 중요: 서버에 JSON 형식임을 명시
-				    data: JSON.stringify({
+				    data:{
 				    	GCOUN_CD: gcounCD,
 				    	STUD_NO: studNum
-				    }),
+				    },
 				    success: function(data) {
 				        // console.log('Success:', data);
-				        alert('통신 성공');
 				        $('#gcounModal').modal('hide'); // 모달 창 닫기
+				        Swal.fire({
+				        	  text: "신청이 완료되었습니다",
+				        	  icon: "success",
+				        	  timer: 1500,
+				        	  willClose: () => {
+						        location.reload();
+				        	  }
+				        	});
 				    },
 				    error: function(xhr, status, error) {
 				        console.error('Error', error);
-				        alert('이미 신청이 되어 있습니다.' + error);
+				        alert('이미 신청이 되어 있습니다.');
 				    }
 				});
 			} 
