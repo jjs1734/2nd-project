@@ -1,76 +1,110 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <meta name="description" content=""/>
-    <meta name="author" content=""/>
-    <title>개인상담신청페이지</title>
-    <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico"/>
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles.css" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>개인상담신청페이지</title>
+<!-- Favicon-->
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+<!-- Core theme CSS (includes Bootstrap)-->
+<link href="css/styles.css" rel="stylesheet" />
+<style>
+html, body {
+	height: 100%;
+	margin: 0;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+}
+
+.container {
+	flex: 1;
+}
+</style>
 </head>
 <body>
-    <!-- 메뉴-->
-    <div th:replace="menu :: Menu"></div>
+	<!-- 메뉴-->
+	<div th:replace="menu :: Menu"></div>
 
-    <!-- Page Content-->
-    <div class="container px-4 px-lg-5">
-        <!-- 전체 페이지 컨텐츠를 포함하는 로우 -->
-        <div class="row">
-            <!-- 사이드바 메뉴 -->
-            <div class="sidebar col-md-3">
-                <h3>개인상담신청</h3>
-                <ul class="nav flex-column">
-                    <li class="nav-item"><a class="nav-link" href="#">온라인상담신청</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">진행중 상담</a></li>
-                </ul>
-            </div>
+	<!-- Page Content-->
+	<div class="container px-4 px-lg-5">
+		<!-- 전체 페이지 컨텐츠를 포함하는 로우 -->
+		<div class="row">
+			<!-- 사이드바 메뉴 -->
+			<div class="sidebar col-md-3">
+				<h3>개인상담신청</h3>
+				<ul class="nav flex-column">
+					<li class="nav-item"><a class="nav-link" href="/indicoun">상담사소개</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="/indicoun_apply">온라인상담신청</a></li>
+					<li class="nav-item"><a class="nav-link" href="/indiboard">진행중
+							상담</a></li>
+				</ul>
+			</div>
 
-            <!-- 게시판 부분 -->
-            <div class="col-md-9">
-                <h2>게시판</h2>
-                <div th:if="${#lists.isEmpty(board)}">
-                    <h3>출력할 데이터가 없습니다.</h3>
-                    <p>관리자에게 문의하세요.</p>
-                </div>
-                <div th:unless="${#lists.isEmpty(board)}">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>번호</th>
-                                <th>카테고리</th>
-                                <th>제목</th>
-                                <th>작성자</th>
-                                <th>게시일</th>
-                                <th>완료 여부</th>
-                                <th>게시판 번호</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="board : ${board}">
-                                <td th:text="${board.no}"></td>
-                                <td th:text="${board.cat}"></td>
-                                <td><a th:href="@{/postDetail(pstSn=${board.no})}" th:text="${board.title}"></a></td>
-                                <td th:text="${board.writer}"></td>
-                                <td th:text="${board.postDate}"></td>
-                                <td th:text="${board.isComplete ? '완료' : '진행 중'}"></td>
-                                <td th:text="${board.boardSn}"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+			<!-- 게시판 부분 -->
+			<div class="col-md-9">
+				<h2>게시판</h2>
+				<div th:if="${#lists.isEmpty(board)}">
+					<h3>출력할 데이터가 없습니다.</h3>
+					<p>관리자에게 문의하세요.</p>
+				</div>
+				<div th:unless="${#lists.isEmpty(board)}">
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th>번호</th>
+								<th>카테고리</th>
+								<th>제목</th>
+								<th>작성자</th>
+								<th>게시일</th>
+								<th>완료 여부</th>
+								
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="board : ${board}" th:if="${board.BBS_SN} == 1">
+								<td th:text="${board.PST_SN}"></td>
+								<td th:text="${board.PST_CAT}"></td>
+								<td><a th:href="@{/indiboard_detail(no=${board.PST_SN})}"
+									th:text="${board.PST_TTL}"></a></td>
+								<td th:text="${board.WRITER}"></td>
+								<td th:text="${board.PSTG_YMD}"></td>
+								<td th:text="${board.PST_COMP}"></td>
+								
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <!-- 푸터-->
-    <div th:replace="footer :: Footer"></div>
+	<div class="container px-4 px-lg-5">
+		<!-- 페이지네이션 부분 -->
+		<div class="row">
+			<div class="col-12 d-flex justify-content-center">
+				<ul class="pagination">
+					<li th:each="i : ${#numbers.sequence(0, totalPages-1 )}"
+						class="page-item"><a th:href="@{/indiboard(page=${i+1})}"
+						th:text="${i+1 }" class="page-link">Page number</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
 
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
-    <script src="js/scripts.js"></script>
+	<!-- 푸터-->
+	<div class="container px-4 px-lg-5" th:replace="footer :: Footer"></div>
+
+	<!-- Bootstrap core JS-->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- Core theme JS-->
+	<script src="js/scripts.js"></script>
 </body>
 </html>

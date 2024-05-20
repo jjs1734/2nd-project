@@ -1,32 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper	namespace="com.wizian.web.dao.BoardDAO">
-
-<!-- 	<select id="boardList" resultType="com.wizian.web.dto.BoardDTO">
-        SELECT PST_SN AS no, PST_TTL AS title, WRITER, PSTG_YMD AS postDate, PST_COMP AS isComplete, PST_DEL AS isDeleted, BBS_SN AS boardNo
-        FROM I_COUN_POSTS
-        WHERE BBS_SN=#{boardNo} AND PST_DEL='1'
-        LIMIT 0, 10
-    </select>
- -->
-    <select id="board" parameterType="int" resultType="com.wizian.web.dto.BoardDTO">
-        SELECT  BBS_SN AS boardSn,PST_SN AS no, PST_CAT AS cat, PST_TTL AS title, WRITER, PSTG_YMD AS postDate,MDFCN_YMD AS modiDATE, PST_COMP AS isComplete, BBS_SN AS boardSn
-        FROM I_COUN_POSTS
-        WHERE BBS_SN=#{boardNO} AND PST_DEL='1'
-    </select>
-    
-    
-    
-    <select id="detail" parameterType="int" resultType="com.wizian.web.dto.BoardDTO">
-        SELECT PST_SN AS no,PST_CAT AS cat PST_TTL AS title, PST_CN AS content, WRITER, WRITER_ID, PSTG_YMD AS postDate, MDFCN_YMD AS modiDate, PST_COMP AS isComplete, BBS_SN AS boardSn
-        FROM I_COUN_POSTS
-        WHERE PST_SN=#{no}
-    </select>
+<mapper namespace="com.wizian.web.dao.BoardDAO">
 
 
-    <insert id="write" parameterType="java.util.Map">
-        INSERT INTO I_COUN_POSTS (PST_TTL, PST_CN, WRITER_ID, PST_CAT, BBS_SN)
-        VALUES (#{title}, #{content}, #{writerId}, #{cat}, #{boardNo})
-    </insert>
 
+
+	<!-- Board 조회 쿼리 -->
+	<select id="board" parameterType="int"
+		resultType="com.wizian.web.dto.BoardDTO">
+		SELECT BBS_SN, PST_SN, PST_CAT, PST_TTL, WRITER, PSTG_YMD,
+		MDFCN_YMD,
+		PST_COMP
+		FROM ICOUN_POSTS
+		WHERE BBS_SN = #{boardNo}
+		AND PST_DEL
+		= '1'
+	</select>
+
+	<!-- 상세 조회 쿼리 -->
+	<select id="detail" parameterType="int"
+		resultType="com.wizian.web.dto.BoardDTO">
+		SELECT PST_SN, PST_CAT, PST_TTL, PST_CN, WRITER, PSTG_YMD,
+		MDFCN_YMD,
+		PST_COMP, BBS_SN
+		FROM ICOUN_POSTS
+		WHERE PST_SN = #{no}
+	</select>
+
+	<!-- 글쓰기 쿼리 -->
+	<insert id="write" parameterType="java.util.Map">
+		INSERT INTO ICOUN_POSTS
+		(BBS_SN, PST_CAT, PST_TTL, PST_CN, WRITER, PSTG_YMD, PST_COMP, COUNSL)
+		VALUES (#{board_no}, #{cat}, #{title}, #{content}, #{writer}, #{pstg_ymd},
+		#{pst_comp}, #{counselor})
+	</insert>
+
+
+	<!-- 답글 작성 쿼리 -->
+	<insert id="submitReply" parameterType="java.util.Map">
+		INSERT INTO ICOUN_POSTS
+		(PST_SN_OLD, PST_TTL, PST_CAT, PST_CN, WRITER, PSTG_YMD, MDFCN_YMD,
+		PST_COMP,
+		COUNSL, PST_DEL)
+		VALUES
+		(#{originalPostId}, #{title},
+		#{category}, #{content}, #{writer}, CURRENT_DATE,
+		CURRENT_DATE, '미완료',
+		#{counselor}, '1');
+	</insert>
+
+
+	<!-- 답글 목록 조회 쿼리 -->
+	<select id="getReplies" parameterType="int"
+		resultType="com.wizian.web.dto.BoardDTO">
+		SELECT PST_SN, PST_TTL, PST_CAT, PST_CN, WRITER, PSTG_YMD,
+		PST_COMP, BBS_SN
+		FROM ICOUN_POSTS
+		WHERE PST_SN_OLD = #{postId} AND
+		PST_DEL = '1'
+		ORDER BY PSTG_YMD DESC
+	</select>
+
+
+
+
+
+	<!-- 전체 게시글 수 조회 -->
+	<select id="countAllBoards" resultType="int">
+		SELECT COUNT(*) FROM
+		ICOUN_POSTS WHERE PST_DEL = '1'
+	</select>
+
+
+
+	<!-- 페이징처리 -->
+
+
+	<!-- 페이징 처리를 위한 게시글 조회 -->
+	<select id="selectPagedBoards"
+		resultType="com.wizian.web.dto.BoardDTO">
+		SELECT PST_SN, PST_CAT, PST_TTL, WRITER, PSTG_YMD,
+		PST_COMP, BBS_SN
+		FROM ICOUN_POSTS
+		WHERE PST_DEL = '1'
+		ORDER BY PST_SN
+		DESC
+		LIMIT #{pageSize} OFFSET #{offset}
+	</select>
+
+
+
+	<!-- <select id="selectPagedBoards" resultType="com.wizian.web.dto.BoardDTO"> 
+		SELECT PST_SN, PST_CAT, PST_TTL, WRITER, PSTG_YMD, PST_COMP, BBS_SN FROM 
+		ICOUN_POSTS ORDER BY PST_SN DESC LIMIT #{pageSize} OFFSET #{offset} </select> -->
 </mapper>
+ 	
+ 
+ 
+ 
+ 

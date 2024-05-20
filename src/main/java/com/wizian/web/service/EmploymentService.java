@@ -43,4 +43,20 @@ public class EmploymentService {
 		public void insertEmpCal(EventData evenData) {
 			employmentDAO.insertEmpCal(evenData);
 		}
+
+		public List<Map<String, Object>> updateCal(String cslNo) {
+			return employmentDAO.updateCal(cslNo);
+		}
+
+		public List<Map<String, Object>> resCal(EventData eventData) {
+			return employmentDAO.resCal(eventData);
+		}
+
+		public List<Map<String, Object>> empCalList(String cslNo1) {
+			return employmentDAO.empCalList(cslNo1);
+		}
+
+		public Map<String, Object> calSelectApply(String cslNo) {
+			return employmentDAO.calSelectApply(cslNo);
+		}
 }

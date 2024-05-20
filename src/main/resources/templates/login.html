@@ -65,18 +65,14 @@
 					style="text-align: center; margin-top: 50px; margin-bottom: 40px;">
 					<img src="images/logo.png" style="width: 100px; height: 100px;"><br>
 				</div>
+				<form action="/login" method="post" name="loginForm">
+				<p style="font-weight: bold; font-size: 12pt; margin-bottom: 5px; margin-left: 40px;">아이디</p>
+				<input name='id' type='text' placeholder="학번을 입력하세요." style="background-color: #808285; margin-bottom: 30px; margin-left: 40px; width: 300px; height: 50px; border: none;" /><br>
+				<p style="font-weight: bold; font-size: 12pt; margin-bottom: 5px; margin-left: 40px;">비밀번호</p>
+				<input name='pw' type='password' placeholder="비밀번호를 입력하세요." style="background-color: #808285; margin-bottom: 30px; margin-left: 40px; width: 300px; height: 50px; border: none;" />
 
-				<p
-					style="font-weight: bold; font-size: 12pt; margin-bottom: 5px; margin-left: 40px;">아이디</p>
-				<input id='userid' type='text'
-					style="background-color: #808285; margin-bottom: 30px; margin-left: 40px; width: 300px; height: 50px; border: none;" /><br>
-				<p
-					style="font-weight: bold; font-size: 12pt; margin-bottom: 5px; margin-left: 40px;">비밀번호</p>
-				<input id='pwd' type='password'
-					style="background-color: #808285; margin-bottom: 30px; margin-left: 40px; width: 300px; height: 50px; border: none;" />
-
-				<button type="button" class="button" onclick="login()">로그인</button>
-
+				<button type="submit" class="button">로그인</button>
+				</form>
 
 				<div class="links">
 					<a href="#">비밀번호를 잊어버리셨나요?</a>
@@ -92,17 +88,5 @@
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 	<!-- Core theme JS-->
 	<script src="js/scripts.js"></script>
-	<script>
-		$(document).ready(function() {
-
-			function login() {
-				var userId = document.getElementById('userId');
-				if (userId.value.length === 0) {
-					alert("아이디를 입력하세요.");
-					userId.focus();
-				}
-			}
-		});
-	</script>
 </body>
 </html>
