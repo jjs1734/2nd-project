@@ -22,6 +22,19 @@
      <script type="text/javascript">
      	$(function(){
      		
+     		$(".pfchoice").on('click',function(){
+     			let row = $(this).closest('tr');// 버튼이 속한 행 찾기
+     			let pf_no = row.find('.pf_no').val();
+     			let pf_nm = row.find('.pf_nm').text();
+     			
+     			console.log('교수번호: ', pf_no );
+     			console.log('교수이름: ', pf_nm );
+     			
+     			$('#professor').text(pf_nm);
+     			$('.pf-no').val(pf_no);
+     			
+     			$('#pfchoicemodal').modal('hide');
+     		});
      	});
      </script>
 </head>
@@ -45,15 +58,30 @@
 			<div id="info" class=""><br>
 				<p style="margin-top:20px; margin-bottom:20px; font-size:23pt; font-weight:bold;">&nbsp| 지도교수상담?</p>
            		<p style="font-size:13pt">&nbsp;&nbsp;&nbsp;지도교수, 혹은 희망하는 교수님께 방문 상담 신청을 진행하실 수 있습니다.<br>
-            	&nbsp;&nbsp;&nbsp;심리검사는 무료로 실시됩니다.</p>
+            	&nbsp;&nbsp;&nbsp;</p>
 			</div>
 			<!-- 신청폼 -->
 			<form class="container mx-auto py-3" style="border-style:solid; border-color:#B6B6B6;">
+				<div class="row mb-3 w-80 mx-auto">
+					<label for="coun-request" class="col-sm-2 col-form-label text-center">학생 학번</label>
+					<div class="col-sm-10 d-flex align-items-center">
+						<span class="input-group-text" id="std_no" th:text="${userInfo.STUD_NO}"></span>
+					</div>
+					<label for="coun-request" class="col-sm-2 col-form-label text-center">학생 번호</label>
+					<div class="col-sm-10 d-flex align-items-center">
+						<span class="input-group-text" id="std_tel" th:text="${userInfo.TELNO}"></span>
+					</div>
+					<label for="coun-request" class="col-sm-2 col-form-label text-center">학생 이메일</label>
+					<div class="col-sm-10 d-flex align-items-center">
+						<span class="input-group-text" id="std_email" th:text="${userInfo.STUD_EML_ADDR}">학생 이메일</span>
+					</div>
+				</div>
 				<!-- 상담사 선택, 지도교수로 기본 선택이 되어 있어야함-->
 				<div class="row mb-3 w-80 mt-3 mx-auto">
 					<label for="coun-request" class="col-sm-2 col-form-label text-center">상담 신청</label>
 					<div class="col-sm-10 d-flex align-items-center">
-						<span class="input-group-text" id="professor">지도교수이름</span>
+						<span class="input-group-text" id="professor" th:text="${pfInfo.PF_NM}">교수이름</span>
+						<input type="hidden" th:value="${pfInfo.PF_NO}" class="pf-no">
 						<button type="button" class="btn mx-2" data-bs-toggle="modal" data-bs-target="#pfchoicemodal" style="background-color: #B6B6B6">교수 선택</button>
 					</div>
 				</div>
@@ -65,12 +93,7 @@
 						<img data-bs-toggle="modal" data-bs-target="#pfscdmodal" src="images/calendar_icon.png" alt="Calendar" class="mx-2">
 					</div>
 				</div>
-				<div class="row mb-3 w-80 mx-auto">
-					<label for="coun-request" class="col-sm-2 col-form-label text-center">학생정보</label>
-					<div class="col-sm-10 d-flex align-items-center">
-						<span class="input-group-text" id="professor">학생 학번</span>
-					</div>
-				</div>
+
 				<!-- 상담 내용 작성 -->
 				<div class="row mb-3 w-80 mx-auto">
 					<label for="Counseling-content" class="col-sm-2 col-form-label text-center">상담 내용</label>
@@ -105,23 +128,26 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<table>
+					<table class="table" id="pfList">
 						<thead>
 							<tr>
-								<th>교수 이름</th>
-								<th>학과</th>
-								<th>교수 전화번호</th>
-								<th>교수 이메일</th>
-								<th>선택</th>
+								<th scope="col">교수 이름</th>
+								<th scope="col">학과</th>
+								<th scope="col">전화번호</th>
+								<th scope="col">이메일</th>
+								<th scope="col">선택</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
+							<tr scope="row" th:each="pfList : ${pfList}">
+								<td>
+									<span class="pf_nm" th:text="${pfList.PF_NM}"></span>
+									<input type="hidden" th:value="${pfList.PF_NO}" class="pf_no">
+								</td>
+								<td th:text="${pfList.SCSBJT_NM}"></td>
+								<td th:text="${pfList.PF_TELNO}"></td>
+								<td th:text="${pfList.PF_EMAIL}"></td>
+								<td><button type="button" class="btn pfchoice" style="background-color: #A41034; color: white;">선택</button></td>
 							</tr>
 						</tbody>
 					</table>
@@ -146,7 +172,6 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
       </div>
     </div>
   </div>
