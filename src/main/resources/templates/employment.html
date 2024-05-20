@@ -30,7 +30,7 @@
 </head>
 <body>
 	<!-- 메뉴-->
-        <div th:replace="menu :: Menu"></div>
+        <div th:replace="~{menu :: Menu}"></div>
 
 		<div class="leftnavapply">
 			<h1>취업 상담	</h1>
@@ -38,7 +38,7 @@
 		
 		<div class="d-flex justify-content-center" style="margin: 0 400px;">
 	        <!-- 좌측 메뉴 nav -->
-	        <div th:replace="leftmenu :: LeftMenu"></div>
+	        <div th:replace="~{leftmenu :: LeftMenu}"></div>
 	        
 	        <!-- Page Content-->
 	        <!-- 좌측 메뉴 nav와 container 클래스를 가로로 배열하기 위해서 div설정 -->
@@ -49,7 +49,7 @@
         	</div>
         </div>
         <!-- 푸터-->
-        <div th:replace="footer :: Footer">
+        <div th:replace="~{footer :: Footer}">
         </div>
         
         <!-- Bootstrap core JS-->
