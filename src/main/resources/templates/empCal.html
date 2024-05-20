@@ -96,16 +96,17 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('서버로부터의 응답:', response);
             for (var i = 0; i < response.length; i++) {
                 var res = response[i];
-                var dateTime = res.DATE + 'T' + res.EMP_COUN_CD + ':00';
-                var event = {
+                var dateTime = res.DATE + 'T' + res.EMP_COUN_CD + ':00:00';
+                var eventCal = {
                     title: '예약',   // 예약자 이름을 제목으로 설정
+                    //title: res.USR_CN,   // 예약자 이름을 제목으로 설정
                     start: dateTime,  // 예약 날짜를 시작일로 설정
                     dbEvent: true,  // DB에서 가져온 이벤트임을 나타내는 플래그
                     color: 'green'
                     // 다른 필요한 속성도 추가 가능
                 };
-                console.log(event);
-                events.push(event);
+                console.log(eventCal);
+                events.push(eventCal);
             }
             // FullCalendar를 초기화하고 렌더링합니다.
             initializeFullCalendar(events);
@@ -116,17 +117,17 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('서버로부터 데이터를 불러오는 데 실패했습니다.');
         }
     });
+	return events;
 });
 
 function initializeFullCalendar(events) {
-    var calendarEl = document.getElementById('calendar');
+	console.log("!!!" + events);
+	var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
     	//eventBackgroundColor: 'red',
     	initialView : 'timeGridWeek',
         slotMinTime : '08:00:00',
         slotMaxTime : '18:00:00', // 오후 8시까지
-        //startTime: '08:00:00', // 오전 9시부터
-        //endTime: '17:00:00', // 오후 8시까지
         slotDuration : '01:00:00', // 시간 단위를 1시간으로 설정
         locale: 'ko',
         navLinks : true,
@@ -139,34 +140,7 @@ function initializeFullCalendar(events) {
             right: 'dayGridMonth,timeGridWeek,dayGridDay'
         },
         events: events,
-			/**
-			 * 드래그로 이벤트 수정하기
-			 */
-			/* 원본
-			 eventDrop: function (info){
-			    console.log(info);
-			    if(confirm("'"+ info.event.title +"' 매니저의 일정을 수정하시겠습니까 ?")){
-			    }
-			    var events = new Array(); // Json 데이터를 받기 위한 배열 선언
-			    var obj = new Object();
-
-			    obj.title = info.event._def.title;
-			    obj.start = info.event._instance.range.start;
-			    obj.end = info.event._instance.range.end;
-
-			    console.log(events);
-			    $(function deleteData() {
-			        $.ajax({
-			            url: "/full-calendar/calendar-admin-update",
-			            method: "PATCH",
-			            dataType: "json",
-			            data: JSON.stringify(events),
-			            contentType: 'application/json',
-			        })
-			    })
-			},
-			
-			/**
+			/*
 			 * 드래그로 이벤트 추가하기 신진수가 한거
 			 */
 			 
@@ -195,6 +169,14 @@ function initializeFullCalendar(events) {
 			      console.log(eventData);
 			      //var jsonData = JSON.stringify(eventData);
 			      //console.log(jsonData);
+				  
+			      // ajax 사용안하고 바로 다른 html로 eventData값 가지고 이동하기
+			      // 페이지를 변경하고 이벤트 데이터를 URL 매개변수로 전달합니다.
+		        var redirectUrl = '/empApply.html';
+		        var queryParams = '?title=' + eventData.title + '&start=' + eventData.start + '&end=' + eventData.end + '&CSL_NO=' + eventData.CSL_NO + '&empCounCd=' + eventData.empCounCd;
+		        window.location.href = redirectUrl + queryParams;
+			      
+			      /*
 				  
 			   		$.ajax({
 			   		    url: 'insertEmpCal',
@@ -231,6 +213,7 @@ function initializeFullCalendar(events) {
 			   		        console.error('예약 중 오류가 발생했습니다:', error);
 			   		    }
 			   		});
+			   		*/
 			   	}
 			},
 
@@ -265,19 +248,10 @@ function initializeFullCalendar(events) {
 					})
 				})
 			},
-		// eventRemove: function (obj) { // 이벤트가 삭제되면 발생하는 이벤트
-		//
-		// },
 
 		});
 		calendar.render();
-	// 확인 버튼 클릭 이벤트 핸들러
-    document.getElementById('confirmButton').addEventListener('click', function() {
-        // 여기에 확인 버튼을 눌렀을 때의 동작을 작성합니다.
-        console.log("확인 버튼을 클릭하였습니다.");
-        alert("확인 버튼을 클릭하였습니다.");
-        // 원하는 동작을 작성하세요.
-    });
+		console.log('FullCalendar 초기화 완료:', calendar);
 	}
 </script>
 <style>
@@ -310,7 +284,7 @@ function initializeFullCalendar(events) {
 </head>
 <body>
 	<!-- 메뉴-->
-	<div th:replace="menu :: Menu"></div>
+	<div th:replace="~{menu :: Menu}"></div>
 
 	<div class="leftnavapply">
 		<h1>상담 날짜 선택 :[[${param.CSL_NO}]]</h1>
@@ -318,16 +292,13 @@ function initializeFullCalendar(events) {
 
 	<div class="d-flex justify-content-center" style="margin: 0 320px;">
 		<!-- 좌측 메뉴 nav -->
-		<div th:replace="leftmenu :: LeftMenu"></div>
+		<div th:replace="~{leftmenu :: LeftMenu}"></div>
 		<!-- Page Content-->	
 		<div id='calendar' style="width: 1100px; height: 40vh;"></div>
 
 	</div>
-		<div>
-			<button id="confirmButton">확인</button>
-		</div>
 	<!-- 푸터-->
-	<div th:replace="footer :: Footer"></div>
+	<div th:replace="~{footer :: Footer}"></div>
 
 </body>
 </html>

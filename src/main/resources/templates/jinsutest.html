@@ -110,7 +110,7 @@
 						    </label>
 						    <div class="col-sm-3">
 						    <!-- CSL_NO 값 보내기 전 코드   <a href="/empCal?CSL_NO=${selectEmpCoun[0]['CSL_NO']}">날짜 선택하기</a> -->
-						    <button id="shwoEmpCal" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#empModal">
+						    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#empModal">
 							  날짜 선택
 							</button>
 							<input type="text" class="form-control" id="empDate" placeholder="예약 날짜" required>
@@ -212,75 +212,6 @@
 				</div>
 			</div>
 			
-			<script type="text/javascript">
-			<!-- 연락처 및 이메일은 로그인한 정보와 실제 유저와 다를 수 있으니 변경이 가능하도록 설정 -->
-	        // 서버에서 받은 로그인한 사용자의 연락처
-		    var loggedInUserContact = "010-1234-5678"; // 이 부분은 서버에서 실제 값으로 대체되어야 합니다.
-		
-		    // 이메일 주소의 유효성을 정규 표현식을 사용하여 검사하는 함수
-		    function validateEmail(email) {
-		        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		        return emailPattern.test(email);
-		    }
-		
-		    // 페이지 로드 시 실행되는 함수
-		    window.onload = function() {
-		        // 입력 필드 요소를 가져옵니다.
-		        var inputField = document.getElementById('phoneNum');
-		
-		        // 로그인한 사용자의 연락처를 입력 필드의 기본값으로 설정합니다.
-		        inputField.value = loggedInUserContact;
-		
-		        // 입력 필드에 숫자만 입력되도록 이벤트 리스너를 추가합니다.
-		        inputField.addEventListener('input', function(event) {
-		            // 입력된 값에서 숫자가 아닌 문자를 제거합니다.
-		            var cleanedValue = event.target.value.replace(/\D/g, '');
-		
-		            // 입력 필드의 값을 업데이트합니다.
-		            event.target.value = cleanedValue;
-		        });
-		
-		        // 입력 필드 요소를 가져옵니다.
-		        var emailInput = document.getElementById('email');
-		
-		        // 입력 필드에 포커스를 잃을 때마다 이메일 유효성을 검사하는 이벤트 리스너를 추가합니다.
-		        emailInput.addEventListener('blur', function(event) {
-		            var email = event.target.value;
-		
-		            // 이메일 유효성을 검사합니다.
-		            if (!validateEmail(email)) {
-		                // 이메일이 유효하지 않을 경우 사용자에게 경고 메시지를 표시합니다.
-		
-		                // 입력 필드의 값을 초기화합니다.
-		                event.target.value = '';
-		                // 입력 필드에 포커스를 맞춥니다.
-		                event.target.focus();
-		            }
-		        });
-		        
-		        var form = document.getElementById('formAwesome');
-		        
-		        form.addEventListener('submit', function(event) {
-		            // 선택된 옵션을 가져옵니다.
-		            var awesomeness = document.getElementById('awesomeness').value;
-
-		            // 선택된 옵션이 "Yes"인지 확인합니다.
-		            if (awesomeness === "Yes") {
-		                // Yes를 선택한 경우에는 폼을 제출합니다.
-		                // 여기서는 폼을 제출하는 대신 간단히 로그를 출력합니다.
-		                console.log("폼이 제출되었습니다.");
-		                alert("제출되셨습니다. 예약이 확정되었는지 마이페이지에서 확인하시기 바랍니다.")
-		            } else {
-		                // No를 선택한 경우에는 폼 제출을 취소합니다.
-		                console.log("폼 제출이 실패했습니다.");
-		                alert("폼 제출이 실패했습니다. 위 양식중 잘못 작성한 부분이 없는지 확인하시기 바랍니다.")
-		                event.preventDefault(); // 폼 제출을 취소합니다.
-		            }
-		        });
-		        
-		    };
-			</script>
-			
 			<!-- Modal -->
 			<div class="modal fade" id="empModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			  <div class="modal-dialog modal-xl modal-dialog-scrollable">
@@ -294,66 +225,42 @@
 			      </div>
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-			        <button type="button" class="btn btn-primary" id="saveButton">Save changes</button>
+			        <button type="button" class="btn btn-primary">Save changes</button>
 			      </div>
 			    </div>
 			  </div>
 			</div>
 			
 			<script type="text/javascript">
-			// 모달 요소를 가져옵니다.
-			var myModal = document.getElementById('empModal');
-
-			// 모달 요소에 이벤트 리스너를 추가합니다.
-			myModal.addEventListener('show.bs.modal', function () {
-			    // 모달이 표시될 때 캘린더 크기 업데이트
-			    console.log("updateSize() 작동테스트");
-			    calendar.updateSize();
-			});
-			
-			var saveButton = document.getElementById('saveButton');
-	        
-			var selectedTitle = "";
-			var selectedStart = null;
-			var selectedTime = null;
-			
-			
-	        saveButton.addEventListener('click', function() {
-	            // 필요한 데이터를 저장하는 로직을 여기에 추가할 수 있습니다.
-	            // "상담 내용" 텍스트 에어리어에 title과 start 값을 설정
-			    var empContent = document.getElementById('empContent');
-	            var empDate = document.getElementById('empDate');
-	            var empTime = document.getElementById('empTime');
-			    empContent.value = `${selectedTitle}`;
-			    empDate.value = `${selectedStart}`;
-			    empTime.value = `${selectedTime}`;
-    
-    			// 필요한 데이터를 저장하는 로직을 여기에 추가할 수 있습니다.
-	            
-	            // 모달 닫기
-	            var modal = document.getElementById('empModal');
-	            var bootstrapModal = bootstrap.Modal.getInstance(modal); // 모달 인스턴스를 가져옴
-	            bootstrapModal.hide(); // 모달을 닫음
-	        });
-	        
-	     	//모달이 완전히 닫혔을 때 이벤트 핸들러 추가
-            var empModal = document.getElementById('empModal');
-            empModal.addEventListener('hidden.bs.modal', function () {
-                // 백드롭 요소를 제거
-                var backdrop = document.querySelector('.modal-backdrop');
-                if (backdrop) {
-                    backdrop.parentNode.removeChild(backdrop);
-                }
-            });
-			
 			var date = null;
+		    var queryString = window.location.search;
+		    // URL에서 쿼리 문자열을 가져옵니다.
+		    //var queryString = window.location.search;
+
+		    // URL 쿼리 문자열이 있는지 확인합니다.
+		    if (queryString) {
+		        // URL 쿼리 문자열에서 '?'를 제외한 파라미터 부분을 가져옵니다.
+		        var params = new URLSearchParams(queryString);
+		        
+		        // CSL_NO 매개변수의 값을 가져옵니다.
+		        var CSL_NO = params.get('CSL_NO');
+		        
+		        // 가져온 CSL_NO 값을 출력합니다.
+		        console.log("CSL_NO:", CSL_NO);
+		    } else {
+		        // URL에 쿼리 문자열이 없는 경우, 적절히 처리합니다.
+		        console.log("CSL_NO가 URL에 없습니다.");
+		    }
+		    //console.log(formattedDates[0]);
+			
+		    var date = null;
 		    var CSL_NO = document.getElementById('CSL_NO').value;
 		    alert(CSL_NO);
 			console.lod(CSL_NO);
 			
 			$('#empModal').on('shown.bs.modal', function () {
 	    	    initializeCalendar();
-	    	});
+	    	  });
 			
 			// 풀캘린더 시작.
 		    function initializeFullCalendar(events) {
@@ -387,17 +294,13 @@
 		    				  var startHour = arg.start.getHours();
 		    			      var empCounCd = startHour.toString().padStart(2, '0'); // 2자리로 만들기 위해 0으로 패딩
 		    			      var title = prompt('상담 내용을 입력해주세요.');
+		    			      alert("해당 일정으로 예약하시는게 맞습니까?");
 		    			      //var title = "예약";
 		    			      var events = new Array(); // Json 데이터를 받기 위한 배열 선언
 		    			      var obj = new Object();
 		    			      events.push(obj);
 		    			      //events.push(...generateHourlyEvents(formattedDate, convertedTimes));
 		    			      console.log(CSL_NO);
-		    			      
-		    			      selectedTitle = title;
-		                      selectedStart = arg.start.toLocaleDateString();
-		                      selectedTime = empCounCd.toString().padStart(2, '0') + ':00';
-		    			      
 		    				  var eventData = {
 		    						    title: title,
 		    							start: arg.start,
@@ -406,14 +309,17 @@
 		    							empCounCd: empCounCd
 		    			   	  };
 		    			      console.log(eventData);
+		    			      //var jsonData = JSON.stringify(eventData);
+		    			      //console.log(jsonData);
+		    				  
+		    			      // ajax 사용안하고 바로 다른 html로 eventData값 가지고 이동하기
+		    			      // 페이지를 변경하고 이벤트 데이터를 URL 매개변수로 전달합니다.
+		    		        var redirectUrl = '/empApply.html';
+		    		        var queryParams = '?title=' + eventData.title + '&start=' + eventData.start + '&end=' + eventData.end + '&CSL_NO=' + eventData.CSL_NO + '&empCounCd=' + eventData.empCounCd;
+		    		        window.location.href = redirectUrl + queryParams;
 		    			      
-		    			   	  // 캘린더에 이벤트 추가
-  			                  calendar.addEvent({
-  			                      title: title, // 하드코딩된 "예약" 값을 할당
-  			                      start: arg.start,
-  			                      end: arg.end
-  			                  });
 		    			      /*
+		    				  
 		    			   		$.ajax({
 		    			   		    url: 'insertEmpCal',
 		    			   		    method: 'POST',
@@ -488,7 +394,6 @@
 		    		});
 		    		calendar.render();
 		    	}
-		        
 			</script>
 	        <!-- 푸터-->
 	        <div th:replace="~{footer :: Footer}"></div>
@@ -514,7 +419,7 @@
 		                console.log('서버로부터의 응답:', response);
 		                for (var i = 0; i < response.length; i++) {
 		                    var res = response[i];
-		                    var dateTime = res.DATE + 'T' + res.EMP_COUN_CD + ':00';
+		                    var dateTime = res.DATE + 'T' + res.EMP_COUN_CD + ':00:00';
 		                    var eventCal = {
 		                        title: '예약',   // 예약자 이름을 제목으로 설정
 		                        //title: res.USR_CN,   // 예약자 이름을 제목으로 설정
@@ -537,6 +442,72 @@
 		        });
 		    });
 	        
+	        <!-- 연락처 및 이메일은 로그인한 정보와 실제 유저와 다를 수 있으니 변경이 가능하도록 설정 -->
+	        // 서버에서 받은 로그인한 사용자의 연락처
+		    var loggedInUserContact = "010-1234-5678"; // 이 부분은 서버에서 실제 값으로 대체되어야 합니다.
+		
+		    // 이메일 주소의 유효성을 정규 표현식을 사용하여 검사하는 함수
+		    function validateEmail(email) {
+		        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		        return emailPattern.test(email);
+		    }
+		
+		    // 페이지 로드 시 실행되는 함수
+		    window.onload = function() {
+		        // 입력 필드 요소를 가져옵니다.
+		        var inputField = document.getElementById('phoneNum');
+		
+		        // 로그인한 사용자의 연락처를 입력 필드의 기본값으로 설정합니다.
+		        inputField.value = loggedInUserContact;
+		
+		        // 입력 필드에 숫자만 입력되도록 이벤트 리스너를 추가합니다.
+		        inputField.addEventListener('input', function(event) {
+		            // 입력된 값에서 숫자가 아닌 문자를 제거합니다.
+		            var cleanedValue = event.target.value.replace(/\D/g, '');
+		
+		            // 입력 필드의 값을 업데이트합니다.
+		            event.target.value = cleanedValue;
+		        });
+		
+		        // 입력 필드 요소를 가져옵니다.
+		        var emailInput = document.getElementById('email');
+		
+		        // 입력 필드에 포커스를 잃을 때마다 이메일 유효성을 검사하는 이벤트 리스너를 추가합니다.
+		        emailInput.addEventListener('blur', function(event) {
+		            var email = event.target.value;
+		
+		            // 이메일 유효성을 검사합니다.
+		            if (!validateEmail(email)) {
+		                // 이메일이 유효하지 않을 경우 사용자에게 경고 메시지를 표시합니다.
+		
+		                // 입력 필드의 값을 초기화합니다.
+		                event.target.value = '';
+		                // 입력 필드에 포커스를 맞춥니다.
+		                event.target.focus();
+		            }
+		        });
+		        
+		        var form = document.getElementById('formAwesome');
+		        
+		        form.addEventListener('submit', function(event) {
+		            // 선택된 옵션을 가져옵니다.
+		            var awesomeness = document.getElementById('awesomeness').value;
+
+		            // 선택된 옵션이 "Yes"인지 확인합니다.
+		            if (awesomeness === "Yes") {
+		                // Yes를 선택한 경우에는 폼을 제출합니다.
+		                // 여기서는 폼을 제출하는 대신 간단히 로그를 출력합니다.
+		                console.log("폼이 제출되었습니다.");
+		                alert("제출되셨습니다. 예약이 확정되었는지 마이페이지에서 확인하시기 바랍니다.")
+		            } else {
+		                // No를 선택한 경우에는 폼 제출을 취소합니다.
+		                console.log("폼 제출이 실패했습니다.");
+		                alert("폼 제출이 실패했습니다. 위 양식중 잘못 작성한 부분이 없는지 확인하시기 바랍니다.")
+		                event.preventDefault(); // 폼 제출을 취소합니다.
+		            }
+		        });
+		        
+		    };
 		</script>
 
 	        

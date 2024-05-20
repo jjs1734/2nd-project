@@ -99,7 +99,7 @@ public class EmploymentController {
 		return "empCal";
 	}
 	*/
-	
+
 	@GetMapping("/empCal")
 	public String empCal(@RequestParam("CSL_NO") String cslNo, Model model) {
 		System.out.println(cslNo);
@@ -109,6 +109,7 @@ public class EmploymentController {
 		model.addAttribute("cslNoo", cslNoo);
 		return "empCal";
 	}
+	
 	/* 원본
 	@PostMapping("/empCalList")
 	public String empCalList(@RequestParam("cslNum") String cslNo1, Model model) {
@@ -128,9 +129,6 @@ public class EmploymentController {
 	    return employmentService.empCalList(cslNo1);
 	}
 
-
-	
-	
 	// 처음 empCal웹 페이지 열 때, 상담사 스케줄 띄우기 or empApply.html의 <a>태그에서 href할때 오는 곳   수정중 (DB에서 DATE가 DATE타입일경우)
 	/*
 	@GetMapping("/empCal")
