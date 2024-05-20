@@ -13,23 +13,28 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.wizian.web.dto.BoardDTO;
+import com.wizian.web.dto.UserDTO;
 import com.wizian.web.service.BoardService;
+import com.wizian.web.service.UserService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class IndiController {
 
     @Autowired
     private BoardService boardService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/indicoun")
     public String indiCoun() {
         return "indicoun";
     }
-
-    @GetMapping("/indicoun_apply")
-    public String indiCounApply() {
-        return "indicoun_apply";
-    }
+	/*
+	 * @GetMapping("/indicoun_apply") public String indiCounApply() { return
+	 * "indicoun_apply"; }
+	 */
 
     @GetMapping("/indiboard")
     public String indiboard(@RequestParam(value = "page", defaultValue = "1") int page, Model model) {
@@ -66,7 +71,14 @@ public class IndiController {
     }
 
     @GetMapping("/indiboard_apply")
-    public String showConsultationForm(@RequestParam(name = "counselor", required = false) String counselor, Model model) {
+    public String showConsultationForm(@RequestParam(name = "counselor", required = false) String counselor, Model model, HttpSession session) {
+    	
+    	String userId = (String) session.getAttribute("userId");
+    	if (userId == null) return "redirect:/login";
+    	
+    	UserDTO userInfo = userService.userInfo(userId);
+    	model.addAttribute("userInfo", userInfo);
+    	System.out.println("인디 컨트롤러" + userInfo);
         List<String> counselors = Arrays.asList("김을용", "리키마틴", "세이버", "홍길동");
         model.addAttribute("counselors", counselors);
         if (counselor != null) {
