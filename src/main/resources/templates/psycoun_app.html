@@ -9,9 +9,7 @@
     <link href="css/styles.css" rel="stylesheet" />
      <!-- jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- fullcalendar -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.css">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.js"></script>
+    
     <!-- bootstrap -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> -->
@@ -19,6 +17,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
+	<!-- fullcalendar -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.js"></script>
+    
+    <!-- Bootstrap DateTimePicker CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+	<!-- Bootstrap DateTimePicker JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    
+    
 	<meta name="description" content="" />
 	<meta name="author" content="" />
      
@@ -97,21 +105,25 @@
 		<table class="question">
 			<tr>
 				<th class="th" scope="row"><img src="images/sub_cs_text1.png" alt="학생정보" style="width:135px; height:25px; margin:0;"></th>
-				<td><input type="text" title="이름학번학과" class="wid20" placeholder="정보를 입력하세요"/></td>
+				<td><input type="text" title="이름학번학과" class="user" style="width:250px;" placeholder="정보를 입력하세요" 
+							th:value="${userInfo.STUD_NM + ' / ' + userInfo.STUD_NO + ' / ' + userInfo.SCSBJT_NM}"/></td>
 			</tr>
 			<tr>
 				<th class="th" scope="row"><img src="images/sub_cs_text2.png" alt="휴대전화번호" style="width:135px; height:25px;"></th>
 				<td>
-					<select class="wid10" title="핸드폰 앞 자리 선택">
-					<option value="010">010</option>
+					<select class="telno" title="핸드폰 앞 자리 선택">
+					<option value="010" selected>010</option>
 					</select>
-					<input type="text" title="전화번호 앞" maxlength="4" class="wid20"/>
-					<input type="text" title="전화번호 뒤" maxlength="4" class="wid20"/>
+					<input type="text" title="전화번호 앞" maxlength="4" class="telno" style="width:60px;"
+							th:value="${#strings.substring(userInfo.TELNO, 3, 7)}"/>
+					<input type="text" title="전화번호 뒤" maxlength="4" class="telno" style="width:60px;"
+							th:value="${#strings.substring(userInfo.TELNO, 7, 11)}"/>
 				</td>
 			</tr>
 			<tr>
 				<th class="th" scope="row"><img src="images/sub_cs_text3.png" alt="이메일" style="width:135px; height:25px;"></th>
-				<td><input type="text" class="wid53" title="이메일" placeholder="예) abc123@naver.com"></td>
+				<td><input type="text" class="email" title="이메일" style="width:250px;" placeholder="예) abc123@naver.com" 
+							th:value="${userInfo.STUD_EML_ADDR}" readonly></td>
 			</tr>
 			<tr>
 				<th class="th" scope="row"><img src="images/sub_cs_text4.png" alt="상담가능날짜" style="width:135px; height:25px;"></th>
@@ -191,15 +203,6 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <!-- <div class="modal-body">
-                    <div class="form-group">
-                        <label for="taskId" class="col-form-label">일정 내용</label>
-                        <input type="text" class="form-control" id="calendar_content" name="calendar_content">
-                        <label for="taskId" class="col-form-label">시작 날짜</label>
-                        <input type="date" class="form-control" id="calendar_start_date" name="calendar_start_date">
-                        <label for="taskId" class="col-form-label">종료 날짜</label>
-                        <input type="date" class="form-control" id="calendar_end_date" name="calendar_end_date">
-                    </div> -->
                 <div class="modal-body" id="calendarModalBody">
                 	<div id="calendarModalBody"></div>
                 </div>
@@ -231,6 +234,15 @@
      						<label for="eventDescription">설명</label>
      						<textarea class="form-control" id="eventDescription"></textarea>
      					</div>
+     					<div class="form-group">
+    						<label for="eventTime">시간</label>
+    						<div class="input-group date" id="eventTimePicker" data-target-input="nearest">
+        						<input type="text" class="form-control datetimepicker-input" data-target="#eventTimePicker" id="eventTime" required>
+        						<div class="input-group-append" data-target="#eventTimePicker" data-toggle="datetimepicker">
+            						<div class="input-group-text" style="padding: 0.6rem;"><i class="fa fa-clock-o"></i></div>
+        						</div>
+    						</div>
+						</div>
      				</form>
      			</div>
      			<div class="modal-footer">
@@ -246,6 +258,10 @@
 	<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@5.7.0/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@5.7.0/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@5.7.0/main.min.js"></script>
+    
+    <!-- Bootstrap DateTimePicker JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
 	
 	
 	<script>
@@ -272,13 +288,79 @@
 	//여기서부터 FullCalendar Script
 	
         $(document).ready(function () {
+        	$(function () {
+                $('#eventTimePicker').datetimepicker({
+                	format: 'HH:mm', // 시간 형식 설정
+                    stepping: 50, // 50분 간격으로 선택
+                    icons: {
+                        time: 'fa fa-clock-o',
+                        date: 'fa fa-calendar',
+                        up: 'fa fa-arrow-up',
+                        down: 'fa fa-arrow-down',
+                        previous: 'fa fa-chevron-left',
+                        next: 'fa fa-chevron-right',
+                        today: 'fa fa-calendar-check-o',
+                        clear: 'fa fa-trash',
+                        close: 'fa fa-times'
+                    },
+                    useCurrent: false, // 현재 시간을 기본값으로 설정하지 않음
+                    disabledTimeIntervals: [
+                        [moment({ h: 0 }), moment({ h: 9 })], // 00:00 ~ 09:00
+                        [moment({ h: 17, m: 50 }), moment({ h: 23, m: 59 })] // 15:50 ~ 24:00
+                    ],
+                    widgetPositioning: {
+                    	horizontal: 'left',
+                    	vertical: 'bottom'
+                    }
+                }).on('dp.show', function (e) {
+                	var currentDate = new Date();
+                    var nextHour = currentDate.getHours() + 1;
+                    var hour = nextHour < 10 ? '0' + nextHour : nextHour;
+                    var minute = '00';
+                    var startTime = hour + ':00';
+                    var endTime = hour + ':50';
+                    $('#eventTimePicker').data('DateTimePicker').minDate(moment({ h: nextHour, m: 0 }));
+                    $('#eventTimePicker').data('DateTimePicker').maxDate(moment({ h: nextHour, m: 50 }));
+                    $('#eventTimePicker').data('DateTimePicker').defaultDate(moment({ h: nextHour, m: 0 }));
+                    $('#eventTimePicker').data('DateTimePicker').date(moment({ h: nextHour, m: 0 }));
+                    $('#eventTimePicker').data('DateTimePicker').options({
+                    	minDate: moment({ h: nextHour, m: 0 }),
+                        maxDate: moment({ h: nextHour, m: 50 }),
+                        disabledTimeIntervals: [
+                            [moment({ h: 0 }), moment({ h: 9 })], // 00:00 ~ 09:00
+                            [moment({ h: nextHour, m: 50 }), moment({ h: 23, m: 59 })] // 15:50 ~ 24:00
+                        ]
+                    });
+                }).on('change.datetimepicker', function(e){
+                    var selectedHour = e.date.hour();
+                    var selectedMinute = e.date.minute();
+                    var nextHour = selectedHour + 1;
+                    var hour = nextHour < 10 ? '0' + nextHour : nextHour;
+                    var minute = selectedMinute < 10 ? '0' + selectedMinute : selectedMinute;
+                    var startTime = selectedHour + ':00';
+                    var endTime = nextHour + ':00';
+                    $('#eventTimePicker').data('DateTimePicker').options({
+                        minDate: moment({ h: selectedHour, m: 0 }),
+                        maxDate: moment({ h: selectedHour, m: 50 }),
+                        disabledTimeIntervals: [
+                            [moment({ h: 0 }), moment({ h: 9 })], // 00:00 ~ 09:00
+                            [moment({ h: selectedHour, m: 50 }), moment({ h: 23, m: 59 })] // 17:50 ~ 24:00
+                        ]
+                    });
+                    $('#eventTimePicker').val(startTime + ' - ' + endTime);
+                });
+            });
+        	
+        	
+        	
         	var addedEvents = []; // 추가된 일정을 저장할 배열
         	var deletedDates = []; // 삭제된 일정에 해당하는 날짜를 저장할 배열
-        	    
+        	
+        	// 달력 초기화
             var calendarEl = document.getElementById('calendarModalBody');
             var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                locale: 'ko',
+                initialView: 'dayGridMonth', // 초기 달력 뷰 설정
+                locale: 'ko', // 한국어로 설정
                 editable: true,
                 selectable: true,
                 select: function(info) {
@@ -297,6 +379,18 @@
                 }
             });
             calendar.render();
+            
+            // 날짜 선택 모달(calendarModal)을 static으로 설정
+             $('#calendarModal').modal({
+        		 backdrop: 'static',
+        		 keyboard: false
+    		});
+            
+          	// 일정 추가 모달(calendarModal)을 static으로 설정
+             $('#eventModal').modal({
+        		 backdrop: 'static',
+        		 keyboard: false
+    		});
 
             $('#calendarIcon').on('click', function () {
                 $('#calendarModal').modal('show');
@@ -352,7 +446,7 @@
              });
 
             function removeSavedDate(date) {
-                // 여기에 저장된 날짜 삭제하는 코드 추가
+                // 저장된 날짜 삭제하는 코드 추가
                 console.log('날짜가 삭제되었습니다.:', date);
             }
             
