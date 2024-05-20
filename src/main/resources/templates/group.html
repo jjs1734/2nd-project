@@ -124,8 +124,9 @@
 				    	STUD_NO: studNum
 				    }),
 				    success: function(data) {
-				        console.log('Success:', data);
+				        // console.log('Success:', data);
 				        alert('통신 성공');
+				        $('#gcounModal').modal('hide'); // 모달 창 닫기
 				    },
 				    error: function(xhr, status, error) {
 				        console.error('Error', error);
