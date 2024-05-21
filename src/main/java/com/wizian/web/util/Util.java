@@ -26,7 +26,7 @@ public class Util {
 		return Integer.parseInt(str);
 	}
 
-	// 2024-02-21 psd 웹표준
+	//세션
 	public HttpServletRequest req() {
 		ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 		HttpServletRequest request = sra.getRequest();
