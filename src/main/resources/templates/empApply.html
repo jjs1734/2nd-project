@@ -83,14 +83,15 @@
 					<div class="modal-header">
 	        			<h3 class="modal-title" id="formModalLabel">신 청 서</h3>
 	      			</div>
-					<form id="formAwesome">
+					<form id="formAwesome" action="/insertApply" method="post">
+					<!-- <form id="formAwesome"> -->
 						<div class="modal-body">
 						 <div class="form-group row">
 						    <label for="empName" class="col-sm-3 col-form-label">
 						        이 름
 						    </label>
 						    <div class="col-sm-3">
-						        <input type="text" class="form-control" id="empName" placeholder="John" required>
+						        <input type="text" class="form-control" id="empName" th:value="${userId}" readonly>
 						        <!-- 로그인한 session값 가져오기
 						        <input type="text" class="form-control" id="empName" placeholder="John" value="${session.user.name}" required>
 						         -->
@@ -100,7 +101,7 @@
 						    </label>
 						    <div class="col-sm-3">
 						        <input type="text" class="form-control" id="empCounName" th:value="${selectEmpCoun[0]['EMP_COUN_NM']}" readonly>
-						        <input type="hidden" id="CSL_NO" th:value="${selectEmpCoun[0]['CSL_NO']}"/>
+						        <input type="hidden" id="CSL_NO" name="CSL_NO" th:value="${selectEmpCoun[0]['CSL_NO']}"/>
 						    </div>
 						</div>
 						
@@ -113,7 +114,8 @@
 						    <button id="shwoEmpCal" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#empModal">
 							  날짜 선택
 							</button>
-							<input type="text" class="form-control" id="empDate" placeholder="예약 날짜" required>
+							<input type="text" class="form-control" id="empDate" name="empDate" placeholder="예약 날짜" readonly>
+							<!-- <input type="text" class="form-label" id="empDate" name="empDate" placeholder="예약 날짜 선택" data-bs-toggle="modal" data-bs-target="#empModal" readonly> -->
 						    <!-- CSLNO 보내기 -->
 						    <!-- <a id="empCalLinkK" th:data-csl-no="@{${selectEmpCoun[0]['CSL_NO']}}" th:href="@{'/empCal?CSL_NO=' + ${selectEmpCoun[0]['CSL_NO']}}">날짜 선택하기</a> -->
 						        <!-- <input type="text" class="form-control" id="empDate" placeholder="예약 날짜" th:value="${selectEmpCoun1['DATE_PART'] + ' ' + selectEmpCoun1['Selected_DATE']}" required>-->
@@ -123,7 +125,7 @@
 						        상담 가능 시간
 						    </label>
 						    <div class="col-sm-3">
-						        <input type="text" class="form-control" id="empTime" placeholder="Doe" required>
+						        <input type="text" class="form-control" name="empTime" id="empTime" placeholder="시간" readonly>
 						    </div>
 					    </div>
 						<div class="form-group row">
@@ -137,7 +139,7 @@
 						        학 과
 						    </label>
 						    <div class="col-sm-3">
-						        <input type="text" class="form-control" id="lastName" placeholder="Doe" required>
+						        <input type="text" class="form-control" id="lastName" placeholder="th:value="${userId}"" required>
 						    </div>
 						</div>
 						<div class="form-group row">
@@ -145,14 +147,14 @@
 						        E-mail
 						    </label>
 						    <div class="col-sm-3">
-						        <input type="text" class="form-control" id="email" placeholder="John" required>
+						        <input type="text" class="form-control" id="email" placeholder="th:value="${userId}"" required>
 						    </div>
 						    
 						    <label for="colleageNum" class="col-sm-3 col-form-label">
 						        학 번
 						    </label>
 						    <div class="col-sm-3">
-						        <input type="text" class="form-control" id="colleageNum" placeholder="Doe" required>
+						        <input type="text" class="form-control" id="colleageNum" placeholder="중앙대학교" readonly>
 						    </div>
 						</div>
 						<div class="form-group row">
@@ -160,7 +162,7 @@
 						        상 담 내 용
 						    </label>
 						    <div class="col-sm-12">
-						        <textarea class="form-control" id="empContent" placeholder="상담 내용을 입력해주세요." required rows="5" style="background-color: lightgray;"></textarea>
+						        <textarea class="form-control" id="empContent" name="empContent" placeholder="상담 내용을 입력해주세요." required rows="5" style="background-color: lightgray;"></textarea>
 						    </div>
 						</div>
 						<div class="form-group row">
@@ -171,7 +173,6 @@
 						    <div class="col-sm-12">
 						        <input type="file" class="form-control" id="empResume" style="background-color: lightgray;">
 						    </div>
-						    
 						    <label for="portfolio" class="col-sm-3 col-form-label">
 						        포 트 폴 리 오
 						    </label>
@@ -203,16 +204,18 @@
 						    </label>
 						  </div>
 						</div>
-						
 						<div class="modal-footer">
 						  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-						  <button type="submit" class="btn btn-primary">Submit</button>
+						  <button type="submit" class="btn btn-primary" id="submitApply">Submit</button>
 						</div>
 					</form>
 				</div>
 			</div>
 			
 			<script type="text/javascript">
+			document.getElementById('empDate').addEventListener('click', function() {
+			    document.getElementById('shwoEmpCal').click();
+			});
 			<!-- 연락처 및 이메일은 로그인한 정보와 실제 유저와 다를 수 있으니 변경이 가능하도록 설정 -->
 	        // 서버에서 받은 로그인한 사용자의 연락처
 		    var loggedInUserContact = "010-1234-5678"; // 이 부분은 서버에서 실제 값으로 대체되어야 합니다.
@@ -257,26 +260,72 @@
 		                event.target.focus();
 		            }
 		        });
-		        
-		        var form = document.getElementById('formAwesome');
-		        
-		        form.addEventListener('submit', function(event) {
-		            // 선택된 옵션을 가져옵니다.
-		            var awesomeness = document.getElementById('awesomeness').value;
-
-		            // 선택된 옵션이 "Yes"인지 확인합니다.
-		            if (awesomeness === "Yes") {
-		                // Yes를 선택한 경우에는 폼을 제출합니다.
-		                // 여기서는 폼을 제출하는 대신 간단히 로그를 출력합니다.
-		                console.log("폼이 제출되었습니다.");
-		                alert("제출되셨습니다. 예약이 확정되었는지 마이페이지에서 확인하시기 바랍니다.")
-		            } else {
-		                // No를 선택한 경우에는 폼 제출을 취소합니다.
-		                console.log("폼 제출이 실패했습니다.");
-		                alert("폼 제출이 실패했습니다. 위 양식중 잘못 작성한 부분이 없는지 확인하시기 바랍니다.")
-		                event.preventDefault(); // 폼 제출을 취소합니다.
-		            }
+		        /*
+		        $(document).ready(function(){
+		            // 폼이 제출되었을 때의 이벤트 리스너 추가
+		            $('#formAwesome').submit(function(event) {
+		                // 폼이 기본 제출 동작을 방지
+		                event.preventDefault();
+		                
+		                // 폼 데이터 가져오기
+		                var formData = $(this).serialize();
+		                
+		                // AJAX 요청 보내기
+		                $.ajax({
+		                    type: 'POST', // HTTP 요청 방식 (POST)
+		                    url: 'insertApply', // 서버 엔드포인트 URL
+		                    data: formData, // 전송할 데이터
+		                    success: function(response) {
+		                        // 성공적으로 응답을 받았을 때의 처리
+		                        console.log('서버 응답:', response);
+		                        alert('데이터가 성공적으로 전송되었습니다.');
+		                    },
+		                    error: function(xhr, status, error) {
+		                        // 오류가 발생했을 때의 처리
+		                        console.error('AJAX 오류:', error);
+		                        alert('데이터 전송 중 오류가 발생했습니다.');
+		                    }
+		                });
+		            });
 		        });
+		        */
+		        /*
+		     // 폼 요소를 가져옵니다.
+		        var form = document.getElementById('formAwesome');
+
+		        // 폼이 제출될 때 이벤트 리스너를 추가합니다.
+		        form.addEventListener('submit', function(event) {
+		            // 폼의 기본 동작을 취소합니다.
+		            event.preventDefault();
+
+		            // POST 요청을 보낼 URL을 설정합니다.
+		            var url = '/insertApply';
+
+		            // 폼 데이터를 FormData 객체로 가져옵니다.
+		            var formData = new FormData(form);
+
+		            // fetch API를 사용하여 POST 요청을 보냅니다.
+		            fetch(url, {
+		                method: 'POST',
+		                body: formData
+		            })
+		            .then(function(response) {
+		                // 응답을 처리합니다.
+		                if (response.ok) {
+		                    // 요청이 성공적으로 처리된 경우
+		                    console.log('POST 요청이 성공적으로 완료되었습니다.');
+		                    // 추가적인 처리가 필요한 경우 여기에 작성합니다.
+		                } else {
+		                    // 요청이 실패한 경우
+		                    console.error('POST 요청이 실패하였습니다.');
+		                }
+		            })
+		            .catch(function(error) {
+		                // 오류를 처리합니다.
+		                console.error('POST 요청 중 오류가 발생하였습니다:', error);
+		            });
+		        });
+*/
 		        
 		    };
 			</script>
@@ -286,7 +335,7 @@
 			  <div class="modal-dialog modal-xl modal-dialog-scrollable">
 			    <div class="modal-content">
 			      <div class="modal-header">
-			        <h5 class="modal-title" id="exampleModalLabel">날짜</h5>
+			        <h5 class="modal-title" id="empModalLabel">상담 일정</h5>
 			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			      </div>
 			      <div class="modal-body">
@@ -337,7 +386,8 @@
 	        });
 	        
 	     	//모달이 완전히 닫혔을 때 이벤트 핸들러 추가
-            var empModal = document.getElementById('empModal');
+            /*
+	     	var empModal = document.getElementById('empModal');
             empModal.addEventListener('hidden.bs.modal', function () {
                 // 백드롭 요소를 제거
                 var backdrop = document.querySelector('.modal-backdrop');
@@ -345,12 +395,10 @@
                     backdrop.parentNode.removeChild(backdrop);
                 }
             });
+            */
 			
 			var date = null;
 		    var CSL_NO = document.getElementById('CSL_NO').value;
-		    alert(CSL_NO);
-			console.lod(CSL_NO);
-			
 			$('#empModal').on('shown.bs.modal', function () {
 	    	    initializeCalendar();
 	    	});
