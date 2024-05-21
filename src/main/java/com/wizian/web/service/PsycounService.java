@@ -8,8 +8,7 @@ import com.wizian.web.dao.PsycounDAO;
 @Service
 public class PsycounService {
 
-	@Autowired
-    private PsycounDAO psycounDAO;
+	
 
     
 }

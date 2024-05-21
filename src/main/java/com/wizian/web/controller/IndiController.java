@@ -1,7 +1,6 @@
 package com.wizian.web.controller;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -22,86 +21,136 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class IndiController {
 
-    @Autowired
-    private BoardService boardService;
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private BoardService boardService;
+	@Autowired
+	private UserService userService;
 
-    @GetMapping("/indicoun")
-    public String indiCoun() {
-        return "indicoun";
-    }
-	/*
-	 * @GetMapping("/indicoun_apply") public String indiCounApply() { return
-	 * "indicoun_apply"; }
-	 */
+	@GetMapping("/indicoun")
+	public String indiCoun(Model model) {
 
-    @GetMapping("/indiboard")
-    public String indiboard(@RequestParam(value = "page", defaultValue = "1") int page, Model model) {
-        try {
-            int pageSize = 10; // 페이지당 표시할 데이터 수
-            List<BoardDTO> board = boardService.getBoards(page, pageSize);
-            int totalItems = boardService.getTotalBoardCount(); // 전체 게시물 수
-            int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+		List<Map<String, Object>> list = boardService.counProfile();
+		model.addAttribute("counProfile", list);
 
-            model.addAttribute("board", board);
-            model.addAttribute("totalPages", totalPages);
-            model.addAttribute("currentPage", page);
+		return "indicoun";
+	}
 
-            System.out.println("Total Pages: " + totalPages);
-        } catch (Exception e) {
-            model.addAttribute("error", "서버 오류 발생");
-            return "errorPage"; // 오류 페이지 뷰 이름
-        }
-        return "indiboard";
-    }
+	@GetMapping("/indiboard")
+	public String indiboard(HttpSession session, @RequestParam(value = "bbsSn", required = false) Integer bbsSn,
+			@RequestParam(value = "page", defaultValue = "1") int page, Model model) {
 
-    @GetMapping("/indiboard_detail")
-    public String detail(@RequestParam("no") int no, Model model) {
-        BoardDTO detail = boardService.detail(no);
-        model.addAttribute("detail", detail);
-        return "indiboard_detail";
-    }
+		String userId = (String) session.getAttribute("userId");
 
-    @GetMapping("/notice")
-    public String notice(@RequestParam(value = "boardNo", defaultValue = "2") int boardNo, Model model) {
-        List<BoardDTO> board = boardService.board(boardNo);
-        model.addAttribute("board", board);
-        return "notice";
-    }
+		if (userId == null) {
+			return "redirect:/login"; // 로그인 페이지로 리디렉션
+		}
 
-    @GetMapping("/indiboard_apply")
-    public String showConsultationForm(@RequestParam(name = "counselor", required = false) String counselor, Model model, HttpSession session) {
-    	
-    	String userId = (String) session.getAttribute("userId");
-    	if (userId == null) return "redirect:/login";
-    	
-    	UserDTO userInfo = userService.userInfo(userId);
-    	model.addAttribute("userInfo", userInfo);
-    	System.out.println("인디 컨트롤러" + userInfo);
-        List<String> counselors = Arrays.asList("김을용", "리키마틴", "세이버", "홍길동");
-        model.addAttribute("counselors", counselors);
-        if (counselor != null) {
-            model.addAttribute("selectedCounselor", counselor);
-        }
-        return "indiboard_apply";
-    }
+		if (bbsSn == null) {
+			return "redirect:/indiboard?bbsSn=1&page=" + page; // 기본값으로 리디렉션
+		}
 
-    @PostMapping("/indiboard_apply")
-    public String write(@RequestParam Map<String, Object> map) {
-    	
-    	 map.put("pstg_ymd", LocalDate.now().toString()); // 현재 날짜를 게시일로 설정
-    	 map.put("pst_comp", "미완료"); // 기본값을 '미완료'로 설정
-    	 map.put("writer", "임의작가"); // 작성자를 임의의 값으로 설정 (필요에 따라 변경 가능)
-    	
-        int result = boardService.write(map);
-        System.out.println(result);
-        return "redirect:/indiboard";
-    }
+		int pageSize = 10; // 페이지당 표시할 데이터 수
+		int offset = (page - 1) * pageSize;
+		List<BoardDTO> board = boardService.getBoards(bbsSn, userId, pageSize, offset);
+		int totalItems = boardService.getTotalBoardCount(bbsSn, userId); // 전체 게시물 수
+		int totalPages = (int) Math.ceil((double) totalItems / pageSize);
 
-    @PostMapping("/postDel")
-    public String postDel(@RequestParam("no") int no) {
-        System.out.println(no);
-        return "redirect:/board";
-    }
+		model.addAttribute("board", board);
+		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("currentPage", page);
+		model.addAttribute("bbsSn", bbsSn);
+
+		return "indiboard";
+	}
+
+	@GetMapping("/notice")
+	public String notice(HttpSession session, @RequestParam(value = "bbsSn", required = false) Integer bbsSn,
+			@RequestParam(value = "page", defaultValue = "1") int page, Model model) {
+
+		if (bbsSn == null) {
+			return "redirect:/notice?bbsSn=2&page=" + page; // 기본값으로 리디렉션
+		}
+
+		try {
+			int pageSize = 5; // 페이지당 표시할 데이터 수
+			int offset = (page - 1) * pageSize;
+			List<BoardDTO> board = boardService.getBoards(bbsSn, null, pageSize, offset); // userId를 null로 전달
+
+			int totalItems = boardService.getTotalBoardCount(bbsSn, null); // userId를 null로 전달
+			int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+
+			model.addAttribute("board", board);
+			model.addAttribute("totalPages", totalPages);
+			model.addAttribute("currentPage", page);
+			model.addAttribute("bbsSn", bbsSn);
+
+		} catch (Exception e) {
+			model.addAttribute("error", "서버 오류 발생");
+			e.printStackTrace(); // 전체 예외 스택 트레이스를 출력합니다.
+			return "errorPage"; // 오류 페이지 뷰 이름
+		}
+		return "notice";
+	}
+
+	@GetMapping("/indiboard_apply")
+	public String showConsultationForm(@RequestParam(name = "counselor", required = false) String counselor,
+			Model model, HttpSession session) {
+
+		String userId = (String) session.getAttribute("userId");
+		if (userId == null)
+			return "redirect:/login";
+
+		UserDTO userInfo = userService.userInfo(userId);
+		model.addAttribute("userInfo", userInfo);
+
+		// DB에서 상담사 목록을 가져와서 모델에 추가
+		List<String> counselors = boardService.getCounselors();
+		model.addAttribute("counselors", counselors);
+
+		if (counselor != null) {
+			model.addAttribute("selectedCounselor", counselor);
+		}
+		return "indiboard_apply";
+	}
+
+	@PostMapping("/indiboard_apply")
+	public String write(@RequestParam Map<String, Object> map, HttpSession session) {
+		String userId = (String) session.getAttribute("userId");
+		if (userId == null) {
+			return "redirect:/login"; // 로그인 페이지로 리디렉션
+		}
+		map.put("pstg_ymd", LocalDate.now().toString()); // 현재 날짜를 게시일로 설정
+		map.put("pst_comp", "미완료"); // 기본값을 '미완료'로 설정
+		map.put("writer", userId); // 작성자를 세션에서 가져온 값으로 설정
+
+		int result = boardService.write(map);
+		return "redirect:/indiboard";
+	}
+
+	@GetMapping("/indiboard_detail")
+	public String detail(@RequestParam("no") int no, Model model) {
+		BoardDTO detail = boardService.detail(no);
+		model.addAttribute("detail", detail);
+		List<BoardDTO> replies = boardService.getReplies(no);
+		model.addAttribute("replies", replies);
+		return "indiboard_detail";
+	}
+
+	@PostMapping("/submitReply")
+	public String submitReply(@RequestParam Map<String, Object> map, HttpSession session) {
+		String userId = (String) session.getAttribute("userId");
+		if (userId == null) {
+			return "redirect:/login";
+		}
+		map.put("writer", userId);
+		map.put("pstg_ymd", LocalDate.now().toString());
+		int result = boardService.submitReply(map);
+		return "redirect:/indiboard_detail?no=" + map.get("originalPostId");
+	}
+
+	@PostMapping("/postDel")
+	public String postDel(@RequestParam("no") int no) {
+
+		return "redirect:/board";
+	}
 }

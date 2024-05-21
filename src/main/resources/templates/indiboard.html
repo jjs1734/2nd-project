@@ -64,7 +64,7 @@ body {
 								<th>작성자</th>
 								<th>게시일</th>
 								<th>완료 여부</th>
-								
+
 							</tr>
 						</thead>
 						<tbody>
@@ -76,7 +76,7 @@ body {
 								<td th:text="${board.WRITER}"></td>
 								<td th:text="${board.PSTG_YMD}"></td>
 								<td th:text="${board.PST_COMP}"></td>
-								
+
 							</tr>
 						</tbody>
 					</table>
@@ -90,9 +90,11 @@ body {
 		<div class="row">
 			<div class="col-12 d-flex justify-content-center">
 				<ul class="pagination">
-					<li th:each="i : ${#numbers.sequence(0, totalPages-1 )}"
-						class="page-item"><a th:href="@{/indiboard(page=${i+1})}"
-						th:text="${i+1 }" class="page-link">Page number</a></li>
+					<li th:each="i : ${#numbers.sequence(0, totalPages-1)}"
+						class="page-item"
+						th:classappend="${currentPage == i + 1} ? 'active'"><a
+						th:href="@{/indiboard(bbsSn=${bbsSn}, page=${i + 1})}"
+						th:text="${i + 1}" class="page-link">Page number</a></li>
 				</ul>
 			</div>
 		</div>
