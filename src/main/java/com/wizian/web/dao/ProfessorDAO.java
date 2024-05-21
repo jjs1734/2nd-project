@@ -16,4 +16,6 @@ public interface ProfessorDAO {
 
 	List<Map<String, Object>> pfList(String depart);
 
+	List<Map<String, Object>> getScList(String pf_no);
+
 }
