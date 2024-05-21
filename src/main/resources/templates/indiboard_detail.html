@@ -2,85 +2,105 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="">
 <meta name="author" content="">
 <title>상담 게시글 상세 정보</title>
 <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 <link href="css/styles.css" rel="stylesheet" />
 <style>
-    html, body {
-        height: 100%;
-        margin: 0;
-    }
-    body {
-        display: flex;
-        flex-direction: column;
-    }
-    .container {
-        flex: 1;
-    }
+html, body {
+	height: 100%;
+	margin: 0;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+}
+
+.container {
+	flex: 1;
+}
 </style>
 </head>
 <body>
-    <!-- 메뉴 -->
-    <div th:replace="menu :: Menu"></div>
+	<!-- 메뉴 -->
+	<div th:replace="menu :: Menu"></div>
 
-    <!-- Page Content -->
-    <div class="container px-4 px-lg-5">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>상담 게시글 상세 정보</h1>
-                <div class="card">
-                    <div class="card-body">
-                        <h2 th:text="${detail.PST_TTL}">게시글 제목</h2>
-                        <p class="text-muted">
-                            작성자: <span th:text="${detail.WRITER}">작성자명</span> | 게시일: <span
-                                th:text="${detail.PSTG_YMD}">게시일</span> | 수정일: <span
-                                th:text="${detail.MDFCN_YMD}">수정일</span> | 완료 여부: <span
-                                th:text="${detail.PST_COMP}">완료 여부</span>
-                        </p>
-                        <h3>내용</h3>
-                        <p th:text="${detail.PST_CN}">게시글 내용</p>
-                        <button class="btn btn-secondary" onclick="toggleReplyForm()">답글달기</button>
-                        <div id="replyForm" style="display: none;">
-                            <h4>답글 작성</h4>
-                            <form action="/submitReply" method="post">
-                                <input type="hidden" name="board_no" value="1"> 
-                                <input type="hidden" name="originalPostId" th:value="${detail.PST_SN}" />
-                                <div class="form-group">
-                                    <label for="title">제목</label> 
-                                    <input type="text" id="title" name="title" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="content">내용</label>
-                                    <textarea id="content" name="content" class="form-control" rows="4" required></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary">답글 제출</button>
-                            </form>
-                        </div>
-                        <a th:href="@{/indiboard}" class="btn btn-primary">목록으로 돌아가기</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<!-- Page Content -->
+	<div class="container px-4 px-lg-5">
+		<div class="row">
+			<div class="col-md-12">
+				<h1>상담 게시글 상세 정보</h1>
+				<div class="card">
+					<div class="card-body">
+						<h2 th:text="${detail.PST_TTL}">게시글 제목</h2>
+						<p class="text-muted">
+							작성자: <span th:text="${detail.WRITER}">작성자명</span> | 게시일: <span
+								th:text="${detail.PSTG_YMD}">게시일</span> | 수정일: <span
+								th:text="${detail.MDFCN_YMD}">수정일</span> | 완료 여부: <span
+								th:text="${detail.PST_COMP}">완료 여부</span>
+						</p>
+						<h3>내용</h3>
+						<p th:text="${detail.PST_CN}">게시글 내용</p>
+						<button class="btn btn-secondary" onclick="toggleReplyForm()">답글달기</button>
+						<div id="replyForm" style="display: none;">
+							<h4>답글 작성</h4>
+							<form action="/submitReply" method="post">
+								<input type="hidden" name="board_no" value="1"> <input
+									type="hidden" name="originalPostId" th:value="${detail.PST_SN}" />
+								<div class="form-group">
+									<label for="title">제목</label> <input type="text" id="title"
+										name="title" class="form-control" required>
+								</div>
+								<div class="form-group">
+									<label for="content">내용</label>
+									<textarea id="content" name="content" class="form-control"
+										rows="4" required></textarea>
+								</div>
+								<button type="submit" class="btn btn-primary">답글 제출</button>
+							</form>
+						</div>
+						<a th:href="@{/indiboard}" class="btn btn-primary">목록으로 돌아가기</a>
+					</div>
+				</div>
+				<div th:if="${replies != null}">
+					<h3>답글 목록</h3>
+					<div th:each="reply : ${replies}">
+						<div class="card mt-2">
+							<div class="card-body">
+								<h4 th:text="${reply.PST_TTL}">답글 제목</h4>
+								<p class="text-muted">
+									작성자: <span th:text="${reply.WRITER}">작성자명</span> | 게시일: <span
+										th:text="${reply.PSTG_YMD}">게시일</span>
+								</p>
+								<p th:text="${reply.PST_CN}">답글 내용</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <!-- 푸터 -->
-    <div class="container px-4 px-lg-5" th:replace="footer :: Footer"></div>
+	<!-- 푸터 -->
+	<div class="container px-4 px-lg-5" th:replace="footer :: Footer"></div>
 
-    <script>
-        function toggleReplyForm() {
-            var form = document.getElementById('replyForm');
-            if (form.style.display === 'none') {
-                form.style.display = 'block';
-            } else {
-                form.style.display = 'none';
-            }
-        }
-    </script>
+	<script>
+		function toggleReplyForm() {
+			var form = document.getElementById('replyForm');
+			if (form.style.display === 'none') {
+				form.style.display = 'block';
+			} else {
+				form.style.display = 'none';
+			}
+		}
+	</script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/scripts.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="js/scripts.js"></script>
 </body>
 </html>

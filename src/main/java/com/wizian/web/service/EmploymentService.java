@@ -24,8 +24,7 @@ public class EmploymentService {
 		return employmentDAO.empCounProfile();
 	}
 
-	public List<Map<String, Object>> selectEmpCoun(String cslNo) {
-		System.out.println("22222");
+	public Map<String, Object> selectEmpCoun(String cslNo) {
 		return employmentDAO.selectEmpCoun(cslNo);
 	}
 	/*
@@ -58,5 +57,10 @@ public class EmploymentService {
 
 		public Map<String, Object> calSelectApply(String cslNo) {
 			return employmentDAO.calSelectApply(cslNo);
+		}
+
+		public void insertApplyFinal(EventData eventData) {
+			employmentDAO.insertApplyFinal(eventData);
+			
 		}
 }

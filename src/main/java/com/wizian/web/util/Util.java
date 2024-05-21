@@ -69,5 +69,11 @@ public class Util {
 			return false;
 		}
 	}
-
+	
+    public static String formatPhoneNumber(String phoneNumber) {
+        if (phoneNumber != null && phoneNumber.length() == 11) {
+            return phoneNumber.replaceAll("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3");
+        }
+        return phoneNumber; // 기본적으로는 변환되지 않은 값을 반환합니다.
+    }
 }
