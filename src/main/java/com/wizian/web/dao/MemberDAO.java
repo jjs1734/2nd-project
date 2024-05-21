@@ -15,5 +15,7 @@ public interface MemberDAO {
 
 	MemberDTO getMemberById(String id);
 
+	Map<String, Object> userInfo(String userId);
+
 
 }
