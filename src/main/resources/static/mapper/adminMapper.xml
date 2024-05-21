@@ -29,4 +29,10 @@
 		FROM GROUP_COUN_INFO i
 		JOIN COUNSELOR c ON i.CSL_NO = c.CSL_NO
 	</select>
+	
+	<select id="getEcounList" resultType="Map">
+		SELECT c.CSL_NM, c.CSL_NO, e.EMP_CSL_EM, e.EMP_CSL_TELNO, e.SCSBJT_NM 
+		FROM EMP_COUN_PRO e 
+		JOIN COUNSELOR c ON c.CSL_NO = e.CSL_NO
+	</select>
 </mapper>

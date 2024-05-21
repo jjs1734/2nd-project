@@ -20,4 +20,6 @@ public interface AdminDAO {
 
 	List<Map<String, Object>> getGcounStudList(String gcounCd);
 
+	List<Map<String, Object>> getEcounList();
+
 }
