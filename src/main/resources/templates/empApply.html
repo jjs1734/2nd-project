@@ -91,7 +91,7 @@
 						        이 름
 						    </label>
 						    <div class="col-sm-3">
-						        <input type="text" class="form-control" id="empName" th:value="${userId}" readonly>
+						        <input type="text" class="form-control" id="empName" th:value="${empUserInfo.STUD_NM}" readonly>
 						        <!-- 로그인한 session값 가져오기
 						        <input type="text" class="form-control" id="empName" placeholder="John" value="${session.user.name}" required>
 						         -->
@@ -100,8 +100,8 @@
 						        상 담 사
 						    </label>
 						    <div class="col-sm-3">
-						        <input type="text" class="form-control" id="empCounName" th:value="${selectEmpCoun[0]['EMP_COUN_NM']}" readonly>
-						        <input type="hidden" id="CSL_NO" name="CSL_NO" th:value="${selectEmpCoun[0]['CSL_NO']}"/>
+						        <input type="text" class="form-control" id="empCounName" th:value="${selectEmpCoun['CSL_NM']}" readonly>
+						        <input type="hidden" id="CSL_NO" name="CSL_NO" th:value="${selectEmpCoun['CSL_NO']}"/>
 						    </div>
 						</div>
 						
@@ -122,7 +122,7 @@
 						        <!-- <input type="text" class="form-control" id="empDate" placeholder="예약 날짜" required> -->
 						    </div>
 						    <label for="empTime" class="col-sm-3 col-form-label">
-						        상담 가능 시간
+						        상담 시간(시)
 						    </label>
 						    <div class="col-sm-3">
 						        <input type="text" class="form-control" name="empTime" id="empTime" placeholder="시간" readonly>
@@ -133,13 +133,13 @@
 						        연 락 처
 						    </label>
 						    <div class="col-sm-3">
-						        <input type="text" class="form-control" id="phoneNum" placeholder="John" required>
+						        <input type="text" class="form-control" id="phoneNum" placeholder="John" th:value="${empUserInfo['TELNO']}" required>
 						    </div>
 						    <label for="lastName" class="col-sm-3 col-form-label">
 						        학 과
 						    </label>
 						    <div class="col-sm-3">
-						        <input type="text" class="form-control" id="lastName" placeholder="th:value="${userId}"" required>
+						        <input type="text" class="form-control" id="lastName" placeholder="학과" th:value="${empUserInfo.SCSBJT_NM}" readonly>
 						    </div>
 						</div>
 						<div class="form-group row">
@@ -147,14 +147,14 @@
 						        E-mail
 						    </label>
 						    <div class="col-sm-3">
-						        <input type="text" class="form-control" id="email" placeholder="th:value="${userId}"" required>
+						        <input type="text" class="form-control" id="email" placeholder="E-mail" th:value="${empUserInfo.STUD_EML_ADDR}" required>
 						    </div>
 						    
 						    <label for="colleageNum" class="col-sm-3 col-form-label">
 						        학 번
 						    </label>
 						    <div class="col-sm-3">
-						        <input type="text" class="form-control" id="colleageNum" placeholder="중앙대학교" readonly>
+						        <input type="text" class="form-control" id="colleageNum" th:value="${empUserInfo.STUD_NO}"  placeholder="중앙대학교" readonly>
 						    </div>
 						</div>
 						<div class="form-group row">
@@ -178,7 +178,7 @@
 						    </label>
 						    <div class="col-sm-12">
 						        <input type="file" class="form-control" id="portfolio" style="background-color: lightgray;">
-						    </div>
+						    </div>	
 						    
 						    <label for="empEtc" class="col-sm-3 col-form-label">
 						        기 타
@@ -218,7 +218,7 @@
 			});
 			<!-- 연락처 및 이메일은 로그인한 정보와 실제 유저와 다를 수 있으니 변경이 가능하도록 설정 -->
 	        // 서버에서 받은 로그인한 사용자의 연락처
-		    var loggedInUserContact = "010-1234-5678"; // 이 부분은 서버에서 실제 값으로 대체되어야 합니다.
+		    //var loggedInUserContact = "010-1234-5678"; // 이 부분은 서버에서 실제 값으로 대체되어야 합니다.
 		
 		    // 이메일 주소의 유효성을 정규 표현식을 사용하여 검사하는 함수
 		    function validateEmail(email) {
@@ -352,56 +352,7 @@
 			<script type="text/javascript">
 			// 모달 요소를 가져옵니다.
 			var myModal = document.getElementById('empModal');
-
-			// 모달 요소에 이벤트 리스너를 추가합니다.
-			myModal.addEventListener('show.bs.modal', function () {
-			    // 모달이 표시될 때 캘린더 크기 업데이트
-			    console.log("updateSize() 작동테스트");
-			    calendar.updateSize();
-			});
 			
-			var saveButton = document.getElementById('saveButton');
-	        
-			var selectedTitle = "";
-			var selectedStart = null;
-			var selectedTime = null;
-			
-			
-	        saveButton.addEventListener('click', function() {
-	            // 필요한 데이터를 저장하는 로직을 여기에 추가할 수 있습니다.
-	            // "상담 내용" 텍스트 에어리어에 title과 start 값을 설정
-			    var empContent = document.getElementById('empContent');
-	            var empDate = document.getElementById('empDate');
-	            var empTime = document.getElementById('empTime');
-			    empContent.value = `${selectedTitle}`;
-			    empDate.value = `${selectedStart}`;
-			    empTime.value = `${selectedTime}`;
-    
-    			// 필요한 데이터를 저장하는 로직을 여기에 추가할 수 있습니다.
-	            
-	            // 모달 닫기
-	            var modal = document.getElementById('empModal');
-	            var bootstrapModal = bootstrap.Modal.getInstance(modal); // 모달 인스턴스를 가져옴
-	            bootstrapModal.hide(); // 모달을 닫음
-	        });
-	        
-	     	//모달이 완전히 닫혔을 때 이벤트 핸들러 추가
-            /*
-	     	var empModal = document.getElementById('empModal');
-            empModal.addEventListener('hidden.bs.modal', function () {
-                // 백드롭 요소를 제거
-                var backdrop = document.querySelector('.modal-backdrop');
-                if (backdrop) {
-                    backdrop.parentNode.removeChild(backdrop);
-                }
-            });
-            */
-			
-			var date = null;
-		    var CSL_NO = document.getElementById('CSL_NO').value;
-			$('#empModal').on('shown.bs.modal', function () {
-	    	    initializeCalendar();
-	    	});
 			
 			// 풀캘린더 시작.
 		    function initializeFullCalendar(events) {
@@ -443,7 +394,8 @@
 		    			      console.log(CSL_NO);
 		    			      
 		    			      selectedTitle = title;
-		                      selectedStart = arg.start.toLocaleDateString();
+		                      //selectedStart = arg.start.toLocaleDateString();
+		    			      selectedStart = arg.start.toISOString().split('T')[0];
 		                      selectedTime = empCounCd.toString().padStart(2, '0') + ':00';
 		    			      
 		    				  var eventData = {
@@ -536,6 +488,67 @@
 		    		});
 		    		calendar.render();
 		    	}
+			
+
+			// 모달 요소에 이벤트 리스너를 추가합니다.
+			myModal.addEventListener('show.bs.modal', function () {
+			    // 모달이 표시될 때 캘린더 크기 업데이트
+			    console.log("updateSize() 작동테스트");
+			    //calendar.updateSize();
+			});
+			
+			$('#empModal').on('shown.bs.modal', function() {
+				$("#calendar").fullCalendar('render');
+            });
+			
+			var saveButton = document.getElementById('saveButton');
+	        
+			var selectedTitle = "";
+			var selectedStart = null;
+			var selectedTime = null;
+			
+			
+	        saveButton.addEventListener('click', function() {
+	            // 필요한 데이터를 저장하는 로직을 여기에 추가할 수 있습니다.
+	            // "상담 내용" 텍스트 에어리어에 title과 start 값을 설정
+			    var empContent = document.getElementById('empContent');
+	            var empDate = document.getElementById('empDate');
+	            var empTime = document.getElementById('empTime');
+			    empContent.value = `${selectedTitle}`;
+			    empDate.value = `${selectedStart}`;
+			    //empTime.value = `${selectedTime}`;
+    			
+			 	// selectedTime이 유효한 문자열인지 확인 후 앞 두 자리를 추출하여 설정
+			    if (selectedTime && selectedTime.length >= 2) {
+			        empTime.value = selectedTime.substring(0, 2);
+			    } else {
+			        empTime.value = selectedTime; // 혹시나 selectedTime이 null이거나 짧은 경우 그대로 설정
+			    }
+			    
+	            // 모달 닫기
+	            var modal = document.getElementById('empModal');
+	            var bootstrapModal = bootstrap.Modal.getInstance(modal); // 모달 인스턴스를 가져옴
+	            bootstrapModal.hide(); // 모달을 닫음
+	        });
+	        
+	     	//모달이 완전히 닫혔을 때 이벤트 핸들러 추가
+            /*
+	     	var empModal = document.getElementById('empModal');
+            empModal.addEventListener('hidden.bs.modal', function () {
+                // 백드롭 요소를 제거
+                var backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) {
+                    backdrop.parentNode.removeChild(backdrop);
+                }
+            });
+            */
+			
+			var date = null;
+		    var CSL_NO = document.getElementById('CSL_NO').value;
+			$('#empModal').on('shown.bs.modal', function () {
+				$("#calendar").fullCalendar('render');
+	    	});
+			
 		        
 			</script>
 	        <!-- 푸터-->
