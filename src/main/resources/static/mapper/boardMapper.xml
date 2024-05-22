@@ -99,6 +99,12 @@
 		PST_DEL = '1'
 		ORDER BY PSTG_YMD DESC
 	</select>
+		
+		<select id="findByPstComp" parameterType="String" resultType="com.wizian.web.dto.BoardDTO">
+        SELECT * FROM ICOUN_POSTS WHERE PST_COMP = #{pstComp}
+    </select>
+	
+	
 
 
 </mapper>
