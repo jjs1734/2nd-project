@@ -11,6 +11,7 @@ import com.wizian.web.dao.AdminDAO;
 import com.wizian.web.dao.BoardDAO;
 import com.wizian.web.dao.GroupDAO;
 import com.wizian.web.dto.BoardDTO;
+import com.wizian.web.dto.AdminDTO;
 import com.wizian.web.dto.GroupDTO;
 
 @Service
@@ -45,6 +46,16 @@ public class AdminService {
 
 	public List<BoardDTO> getReplies(int postId) {
 		return adminDAO.getReplies(postId);
+	public List<Map<String, Object>> getEcounStudList(String cslNo) {
+		return adminDAO.getEcounStudList(cslNo);
+	}
+
+	public List<Map<String, Object>> getGcountCslList() {
+		return adminDAO.getGcounCslList();
+	}
+
+	public int gcounEnroll(AdminDTO adminDTO) {
+		return adminDAO.gcounEnroll(adminDTO);
 	}
 	
 	public int getIncompleteConsultCount(String studentNo) {

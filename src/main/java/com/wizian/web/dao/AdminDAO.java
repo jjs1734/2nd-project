@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import com.wizian.web.dto.BoardDTO;
+import com.wizian.web.dto.AdminDTO;
 import com.wizian.web.dto.GroupDTO;
 
 @Repository
@@ -31,4 +32,11 @@ public interface AdminDAO {
 	
 	 BoardDTO getPostDetail(int postId);
 	 List<BoardDTO> getReplies(int postId);
+	List<Map<String, Object>> getEcounStudList(String cslNo);
+	
+	List<Map<String, Object>> getGcounCslList();
+
+	int gcounEnroll(AdminDTO adminDTO);
+
+	
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wizian.web.dto.AdminDTO;
 import com.wizian.web.dto.BoardDTO;
 import com.wizian.web.service.AdminService;
 import com.wizian.web.service.BoardService;
@@ -36,7 +37,11 @@ public class AdminController {
 	}
 	
 	@GetMapping("/admin/gcoun")
-	public String gcoun() {
+	public String gcoun(Model model) {
+		
+		List<Map<String, Object>> getGcounCslList = adminService.getGcountCslList();
+		model.addAttribute("cslList" ,getGcounCslList);
+		
 		
 		return "admin/gcoun";
 	}
@@ -48,7 +53,6 @@ public class AdminController {
 		return "/admin/student";
 	}
 	
-	@ResponseBody
 	@GetMapping("/admin/studentList")
 	public List<Map<String, Object>> readData() {
 		List<Map<String, Object>> studentList = adminService.studentList();
@@ -144,5 +148,28 @@ public class AdminController {
 	     return ResponseEntity.ok(count);
 	 }
 
+	@ResponseBody
+	@PostMapping("/admin/getEcounStudList")
+	public List<Map<String, Object>> getEcounStudList(@RequestParam("cslNo") String cslNo) {
+		
+		List<Map<String, Object>> getEcounStudList = adminService.getEcounStudList(cslNo);
+		return getEcounStudList;
+	}
+	
+	@ResponseBody
+	@PostMapping("/admin/getEcounStudModify")
+	public String getEcounStudModify(@RequestParam("") int counNum){
+		
+		return "as";
+	}
+	
+	@ResponseBody
+	@PostMapping("/admin/gcounEnroll")
+	public int gcounEnroll(AdminDTO adminDTO) {
+		System.out.println("컨트롤러 실행");
+		int gcounEnroll = adminService.gcounEnroll(adminDTO);
+		
+		return gcounEnroll;
+	}
 	
 }
