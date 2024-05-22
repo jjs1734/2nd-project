@@ -38,6 +38,12 @@ public class AdminService {
 		return adminDAO.getEcounStudList(cslNo);
 	}
 
+	public List<Map<String, Object>> getGcountCslList() {
+		return adminDAO.getGcounCslList();
+	}
 
+	public int gcounEnroll(AdminDTO adminDTO) {
+		return adminDAO.gcounEnroll(adminDTO);
+	}
 	
 }

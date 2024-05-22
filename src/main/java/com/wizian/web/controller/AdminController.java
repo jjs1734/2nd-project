@@ -96,5 +96,13 @@ public class AdminController {
 		return "as";
 	}
 	
+	@ResponseBody
+	@PostMapping("/admin/gcounEnroll")
+	public int gcounEnroll(AdminDTO adminDTO) {
+		System.out.println("컨트롤러 실행");
+		int gcounEnroll = adminService.gcounEnroll(adminDTO);
+		
+		return gcounEnroll;
+	}
 	
 }
