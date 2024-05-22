@@ -21,6 +21,10 @@ public class ProfessorService {
 	public List<Map<String, Object>> pfList(String depart) {
 		return pfDAO.pfList(depart);
 	}
+
+	public List<Map<String, Object>> getScList(String pf_no) {
+		return pfDAO.getScList(pf_no);
+	}
 	
 	
 }
