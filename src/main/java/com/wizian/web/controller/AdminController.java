@@ -105,4 +105,10 @@ public class AdminController {
 		return gcounEnroll;
 	}
 	
+	// 심리상담
+	@GetMapping("/admin/pcoun")
+	public String pcoun() {
+		
+		return "admin/pcoun";
+	}
 }
