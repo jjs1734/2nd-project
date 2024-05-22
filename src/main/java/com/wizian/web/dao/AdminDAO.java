@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import com.wizian.web.dto.BoardDTO;
 import com.wizian.web.dto.AdminDTO;
 import com.wizian.web.dto.GroupDTO;
 
@@ -23,6 +24,14 @@ public interface AdminDAO {
 
 	List<Map<String, Object>> getEcounList();
 
+	List<Map<String, Object>> getBoardListByStudentNo(String studentNo);
+	
+	 int countIncompletePostsByStudentNo(String studentNo);
+
+	
+	
+	 BoardDTO getPostDetail(int postId);
+	 List<BoardDTO> getReplies(int postId);
 	List<Map<String, Object>> getEcounStudList(String cslNo);
 	
 	List<Map<String, Object>> getGcounCslList();

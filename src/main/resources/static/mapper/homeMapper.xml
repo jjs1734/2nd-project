@@ -1,7 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper	namespace="com.wizian.web.dao.EmploymentDAO">
+<mapper namespace="com.wizian.web.dao.EmploymentDAO">
 
+    <select id="loginInfo" resultType="UserDTO" parameterType="String">
+        SELECT * 
+        FROM USER 
+        WHERE LOGIN_ID = #{userId}
+    </select>
+    
+    <select id="empCounProfile" resultType="Map">
+        SELECT e.CSL_NO, c.CSL_EMAIL, c.CSL_MOBILE, e.SCSBJT_NM, c.CSL_NM
+        FROM EMP_COUN_PRO e 
+        JOIN COUNSELOR c ON e.CSL_NO = c.CSL_NO 
+    </select>
+    
+    <select id="selectEmpCoun" resultType="Map" parameterType="String">
+        SELECT c.CSL_NM, e.CSL_NO, c.CSL_EMAIL 
+        FROM EMP_COUN_PRO e 
+        JOIN COUNSELOR c ON e.CSL_NO = c.CSL_NO 
+        WHERE e.CSL_NO = #{cslNo}
+    </select>
+    
+    <select id="calSelectApply" resultType="Map" parameterType="String">
+        SELECT DATE_FORMAT(STR_TO_DATE(`DATE`, '%Y-%m-%d'), '%m-%d') AS DATE_PART, 
+               CONCAT(EMP_COUN_CD, ':00') AS Selected_DATE  
+        FROM JINSU_TESTTABLE 
+        WHERE CSL_NO = 'CSL11'
+    </select>
+    
+    <!-- 취업 상담사 스케줄 테이블에 정보 넣기 -->
+    <insert id="insertCalFinal" parameterType="EventData">
+        INSERT INTO EMP_COUN_CAL (CSL_NO, EMP_COUN_CD, DATE, USR_CN) 
+        VALUES (#{CSL_NO}, #{empTime}, #{empDate}, #{empContent})
+        <selectKey keyProperty="CAL_NUM" order="AFTER" resultType="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    
+    <!-- 취업 상담사에 정보 넣기 -->
+    <insert id="insertTabFinal" parameterType="String">
+        INSERT INTO EMP_COUN_TAB (CAL_NUM, STUD_NO, EMP_COUN_RSVT_YMD, EMP_COUN_RSVT_CD, EMP_COUN_YMD, EMP_COUN_CD, USR_CN, COUN_CN, EMP_STTS_CD) 
+        VALUES (#{CAL_NUM}, #{userId}, #{empCounRswtYmd}, #{empCounRswtCd}, #{empCounYmd}, #{empCounCd}, #{usrCn}, #{counCn}, #{empSttsCd})
+    </insert>
+    
+    <!-- DB에 DATE타입이 CHAR여서 DATE로 변경해주는거 수정 -->
+    <select id="updateCal" parameterType="String" resultType="Map">
+        SELECT DATE, EMP_COUN_CD
+        FROM EMP_COUN_CAL 
+        WHERE CSL_NO = #{cslNo}
+    </select>
 	<select id="loginInfo" resultType="UserDTO" parameterType="String">
 		select * 
 		FROM USER 
@@ -58,10 +105,10 @@
 	    WHERE CSL_NO = #{cslNo}
 	</select>
 
-	<select id="empCalList" parameterType="String" resultType="Map">
-	    select CSL_NO, DATE, EMP_COUN_CD, USR_CN 
-	    FROM EMP_COUN_CAL 
-	    WHERE CSL_NO = #{cslNo1}
-	</select>
+    <select id="empCalList" parameterType="String" resultType="Map">
+        SELECT CSL_NO, DATE, EMP_COUN_CD, USR_CN 
+        FROM EMP_COUN_CAL 
+        WHERE CSL_NO = #{cslNo1}
+    </select>
 
 </mapper>

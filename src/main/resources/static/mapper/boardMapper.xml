@@ -7,7 +7,7 @@
 	<select id="board" parameterType="int"
 		resultType="com.wizian.web.dto.BoardDTO">
 		SELECT BBS_SN, PST_SN, PST_CAT, PST_TTL, WRITER, PSTG_YMD,
-		MDFCN_YMD,
+		MDFCN_YMD,COUNSL,
 		PST_COMP
 		FROM ICOUN_POSTS
 		WHERE BBS_SN = #{bbsSn}
@@ -50,7 +50,7 @@
 	<!-- 페이징 처리를 위한 게시글 조회 -->
 	<select id="selectPagedBoards"
 		resultType="com.wizian.web.dto.BoardDTO">
-		SELECT PST_SN, PST_CAT, PST_TTL, WRITER, PSTG_YMD, PST_COMP, BBS_SN
+		SELECT PST_SN, PST_CAT, PST_TTL, WRITER, PSTG_YMD, PST_COMP, BBS_SN,COUNSL
 		FROM ICOUN_POSTS
 		WHERE PST_DEL = '1' AND BBS_SN = #{bbsSn}
 		<if test="bbsSn != 2 and userId != null and userId != ''">
@@ -97,8 +97,14 @@
 		FROM ICOUN_POSTS
 		WHERE PST_SN_OLD = #{postId} AND
 		PST_DEL = '1'
-		ORDER BY PSTG_YMD DESCF
+		ORDER BY PSTG_YMD DESC
 	</select>
+		
+		<select id="findByPstComp" parameterType="String" resultType="com.wizian.web.dto.BoardDTO">
+        SELECT * FROM ICOUN_POSTS WHERE PST_COMP = #{pstComp}
+    </select>
+	
+	
 
 
 </mapper>

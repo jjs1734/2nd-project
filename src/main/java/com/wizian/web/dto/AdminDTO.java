@@ -18,4 +18,7 @@ public class AdminDTO {
 	private LocalDate GCOUN_BGNG_DT, GCOUN_DDLN_DT;
 	
 	private String CSL_NM;
+	
+	
+	
 }
