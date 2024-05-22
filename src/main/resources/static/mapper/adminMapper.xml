@@ -9,4 +9,30 @@
 		JOIN PF_INFO p on s.PF_NO = p.PF_NO
 	</select>
 	
+	<select id="getGcounStudList" resultType="Map" parameterType="String">
+		SELECT a.STUD_NO, a.GCOUN_CD, a.GCOUN_STA_NM, a.GCOUN_ATND_YN, a.GCOUN_ATND_STUD_RV, a.GCOUN_CSL_RV,
+		i.SCSBJT_NM, i.STUD_GEN, i.TELNO, i.STUD_EML_ADDR, i.COL_REG, i.STUD_NM,
+		gc.CSL_NO, gc.GCOUN_NM, gc.GCOUN_BGNG_DT, c.CSL_NM
+		FROM GROUP_COUN_APPLICANT a
+		JOIN STUD_INFO i ON a.STUD_NO = i.STUD_NO
+		JOIN GROUP_COUN_INFO gc ON a.GCOUN_CD = gc.GCOUN_CD
+		JOIN COUNSELOR c ON gc.CSL_NO = c.CSL_NO
+		WHERE a.GCOUN_CD = #{gcounCd}
+	</select>
+	
+	<select id="getGcounList" resultType="Map">
+		SELECT i.GCOUN_CD, i.CSL_NO, i.GCOUN_NM,
+		 	   DATE_FORMAT(i.GCOUN_DT, '%Y-%m-%d %H:%i') AS GCOUN_DT, 
+		 	   i.GCOUN_BGNG_DT, i.GCOUN_DDLN_DT,
+			   i.GCOUN_LMT_COUNT, i.GCOUN_CONTS_CN, i.GCOUN_DTL_CN, i.GCOUN_PROG_STA_NM,
+			   i.GCOUN_REG_COUNT, i.GCOUN_ATND_COUNT, c.CSL_NM
+		FROM GROUP_COUN_INFO i
+		JOIN COUNSELOR c ON i.CSL_NO = c.CSL_NO
+	</select>
+	
+	<select id="getEcounList" resultType="Map">
+		SELECT c.CSL_NM, c.CSL_NO, e.EMP_CSL_EM, e.EMP_CSL_TELNO, e.SCSBJT_NM 
+		FROM EMP_COUN_PRO e 
+		JOIN COUNSELOR c ON c.CSL_NO = e.CSL_NO
+	</select>
 </mapper>

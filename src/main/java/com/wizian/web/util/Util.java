@@ -26,7 +26,7 @@ public class Util {
 		return Integer.parseInt(str);
 	}
 
-	// 2024-02-21 psd 웹표준
+	//세션
 	public HttpServletRequest req() {
 		ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 		HttpServletRequest request = sra.getRequest();
@@ -69,5 +69,11 @@ public class Util {
 			return false;
 		}
 	}
-
+	
+    public static String formatPhoneNumber(String phoneNumber) {
+        if (phoneNumber != null && phoneNumber.length() == 11) {
+            return phoneNumber.replaceAll("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3");
+        }
+        return phoneNumber; // 기본적으로는 변환되지 않은 값을 반환합니다.
+    }
 }

@@ -14,6 +14,8 @@ import com.wizian.web.dto.BoardDTO;
 
 public interface BoardDAO {
 
+	List<Map<String, Object>> counProfile();
+
 	List<BoardDTO> boardList();
 
 	BoardDTO detail(int no);
@@ -22,12 +24,15 @@ public interface BoardDAO {
 
 	int write(Map<String, Object> map);
 
-	int submitReply(Map<String, Object> replyData);
+	int submitReply(Map<String, Object> map);
 
 	List<BoardDTO> getReplies(int postId);
 
-	List<BoardDTO> selectPagedBoards(@Param("pageSize") int pageSize, @Param("offset") int offset);
+	int countAllBoards(@Param("bbsSn") int bbsSn, @Param("userId") String userId);
 
-	int countAllBoards();
+	List<BoardDTO> selectPagedBoards(@Param("bbsSn") int bbsSn, @Param("userId") String userId,
+			@Param("pageSize") int pageSize, @Param("offset") int offset);
+
+	List<String> getCounselors();
 
 }

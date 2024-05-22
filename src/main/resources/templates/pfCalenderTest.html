@@ -18,7 +18,9 @@
      	#sidenav{background: #B6B6B6; float:left; margin-right:20px; padding:10px; margin-top:10px; margin-bottom:10px; width:200px; height:780px; text-align:center;}
      	#sidemenu{background-color:#A41034; color: white;}
      </style>
-
+	<script type="text/javascript">
+	$(function(){});
+	</script>
 </head>
 <body class="" style="">
  	<!-- 메뉴-->
@@ -46,7 +48,7 @@
 			<form class="container mx-auto py-3" style="border-style:solid; border-color:#B6B6B6;">
 				<!-- 상담사 선택, 지도교수로 기본 선택이 되어 있어야함-->
 				<div class="row mb-3 w-80 mt-3 mx-auto">
-					<label for="coun-request" class="col-sm-2 col-form-label text-center">상담 신청</label>
+					<label for="professor" class="col-sm-2 col-form-label text-center">상담 신청</label>
 					<div class="col-sm-10 d-flex align-items-center">
 						<span class="input-group-text" id="professor">지도교수이름</span>
 						<button type="button" class="btn mx-2" data-bs-toggle="modal" data-bs-target="#pfchoicemodal" style="background-color: #B6B6B6">교수 선택</button>
@@ -54,10 +56,10 @@
 				</div>
 				<!-- 날짜 선택 -->
 				<div class="row mb-3 w-80 mx-auto">
-					<label for="coun-request" class="col-sm-2 col-form-label text-center">날짜 선택</label>
+					<label for="schedule" class="col-sm-2 col-form-label text-center">날짜 선택</label>
 					<div class="col-sm-10 d-flex align-items-center">
-						<span class="input-group-text" id="">선택한 날짜와 시간 여기 표시</span>
-						<img data-bs-toggle="modal" data-bs-target="#pfscdmodal" src="images/calendar_icon.png" alt="Calendar" class="mx-2">
+						<span class="input-group-text" id="schedule">선택한 날짜와 시간 여기 표시</span>
+						<img data-bs-toggle="modal" data-bs-target="#pfscdmodal" src="images/calendar_icon.png" alt="Calendar" class="mx-2" id="openSmodal">
 					</div>
 				</div>
 				<div class="row mb-3 w-80 mx-auto">
@@ -138,7 +140,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div id='calendar'></div>
+        <div id="calendar"></div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -148,25 +150,57 @@
   </div>
 </div>
      <script type="text/javascript">
-		document.addEventListener('DOMContentLoaded', function() {
-	        var calendarEl = document.getElementById('calendar');
-	        var calendar = new FullCalendar.Calendar(calendarEl, {
-	        	headerToolbar:{//헤더에 표시할 툴바
-	        		left:'prev',
-	        		center: 'title',
-	        		right:'next',
-	        	},
-				initialView: 'timeGridWeek',
-				locale: 'kr',
-				slotMinTime: '09:00',
-				slotMaxTime: '18:00'
-			});
-			calendar.render();
+
+
+	$(function(){
+		let pf_no;
+		
+		$('#professor').on('change', function(){
+			pf_no = $('.pf_no').val();
 		});
-     
-     	$(function(){
-     		
-     	});
+		
+		$('#openSmodal').click(function(){
+			
+			$.ajax({
+				type: 'post',
+				url: '',
+				data:{},
+				dataType: 'json',
+				success: function(response){
+					alert('ajax 성공!');
+				},
+				error: function(xhr, status, error){
+					console.error(error);
+				}
+			});
+		});
+		
+		
+		
+		let header = {
+				left: 'prev',
+				center: 'title',
+				right: 'next',
+		};
+		console.log(header);
+		
+	      var calendarEl = document.getElementById('calendar');
+	      var calendar = new FullCalendar.Calendar(calendarEl,{
+			headerToolbar: header,
+			initialView: 'timeGridWeek',
+			locale: 'kr',
+			slotMinTime: '09:00',
+			slotMaxTime: '18:00',
+			height:800
+		});
+		
+		$('#pfscdmodal').on('shown.bs.modal', function () {
+			    calendar.updateSize();
+			    console.log('난 updatesize 했다.');
+		});
+		calendar.render();
+		
+	});
      </script>
 	<!-- footer-->
 	<div class="container px-4 px-lg-5" th:replace="footer :: Footer">

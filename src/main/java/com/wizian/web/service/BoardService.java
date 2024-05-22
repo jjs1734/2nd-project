@@ -13,39 +13,55 @@ import com.wizian.web.util.Util; // 이 클래스의 정의가 필요
 @Service
 public class BoardService {
 
-	@Autowired
-	private BoardDAO boardDAO;
+    @Autowired
+    private BoardDAO boardDAO;
 
-	@Autowired
-	private Util util; // Util 클래스를 사용하려면, 이 클래스를 정의하고 빈으로 등록해야 함
+    @Autowired
+    private Util util; // Util 클래스를 사용하려면, 이 클래스를 정의하고 빈으로 등록해야 함
 
-	public List<BoardDTO> boardList() {
-		return boardDAO.boardList();
-	}
+    public List<Map<String, Object>> counProfile() {
+        return boardDAO.counProfile();
+    }
+    
+    public List<String> getCounselors() {
+        return boardDAO.getCounselors();
+    }
+    
+    
 
-	public List<BoardDTO> getBoards(int pageNum, int pageSize) {
-		int offset = (pageNum - 1) * pageSize;
-		return boardDAO.selectPagedBoards(pageSize, offset);
-	}
+    public List<BoardDTO> boardList() {
+        return boardDAO.boardList();
+    }
 
-	public int getTotalBoardCount() {
-		return boardDAO.countAllBoards(); // 전체 게시물 수를 반환하는 DAO 메소드
-	}
+    public List<BoardDTO> getBoards(int bbsSn, String userId, int pageSize, int offset) {
+        System.out.println("getBoards - bbsSn: " + bbsSn + ", userId: " + userId + ", pageSize: " + pageSize + ", offset: " + offset);
+        return boardDAO.selectPagedBoards(bbsSn, userId, pageSize, offset);
+    }
 
-	public BoardDTO detail(int no) {
-		return boardDAO.detail(no);
-	}
+    public int getTotalBoardCount(int bbsSn, String userId) {
+        System.out.println("getTotalBoardCount - bbsSn: " + bbsSn + ", userId: " + userId);
+        return boardDAO.countAllBoards(bbsSn, userId);
+    }
 
-	public List<BoardDTO> board(int boardNo) {
-		return boardDAO.board(boardNo);
-	}
+    public BoardDTO detail(int no) {
+        return boardDAO.detail(no);
+    }
 
-	public int write(Map<String, Object> map) {
-		map.put("mid", "apple"); // DB에 저장할 사용자 ID
-		map.put("ip", util.getIP()); // 사용자 IP 가져오기
+    public List<BoardDTO> board(int boardNo) {
+        return boardDAO.board(boardNo);
+    }
+    
+    public int submitReply(Map<String, Object> map) {
+        return boardDAO.submitReply(map);
+    }
 
-		return boardDAO.write(map);
+    public List<BoardDTO> getReplies(int postId) {
+        return boardDAO.getReplies(postId);
+    }
 
-	}
-
+    public int write(Map<String, Object> map) {
+        map.put("mid", "apple"); // DB에 저장할 사용자 ID
+        map.put("ip", util.getIP()); // 사용자 IP 가져오기
+        return boardDAO.write(map);
+    }
 }

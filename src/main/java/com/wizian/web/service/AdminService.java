@@ -21,5 +21,18 @@ public class AdminService {
 		return adminDAO.studentList();
 	}
 
+	public List<Map<String, Object>> getGcounList() {
+		return adminDAO.getGcounList();
+	}
+
+	public List<Map<String, Object>> getGcounStudList(String gcounCd) {
+		return adminDAO.getGcounStudList(gcounCd);
+	}
+
+	public List<Map<String, Object>> getEcounList() {
+		return adminDAO.getEcounList();
+	}
+
+
 	
 }

@@ -20,5 +20,9 @@ public class UserService {
 		return userDAO.userInfo(userId);
 	}
 
+	public Map<String, Object> empUserInfo(String userId) {
+		return userDAO.empUserInfo(userId);
+	}
+
 	
 }

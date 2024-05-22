@@ -16,11 +16,14 @@
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <!-- Font Awesome Icons -->
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>  
   <!-- Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
   <!-- CSS Files -->
   <link id="pagestyle" href="../assets/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
   <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
+  <link rel="stylesheet" href="./bootstrapt/css/bootstrap.min.css" />
   <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
   
 </head>
@@ -32,89 +35,281 @@
   
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
    
-   <!-- 상단 메뉴 -->
-   <div th:replace="~{admin/navbar :: navbar}"></div>
+   <!-- Navbar -->
+    <nav th:fragment="navbar" class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <h6 class="font-weight-bolder mb-0">집단 상담</h6>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+            <div class="input-group input-group-outline">
+              <label class="form-label">Type here...</label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
    
    
    <div class="container-fluid py-4">
       <div class="row min-vh-80 h-100">
         <div class="col-12">
-        
-        	<div id="grid"></div>
+       		<div style="display: flex; align-items: center;">
+       			<h4 style="margin-right: 10px;">집단 상담 목록</h4>
+       			<button id="gcounModalBtn" class="btn btn-info btn-sm" data-bs-toggle="modal">집단상담 등록하기</button>
+       		</div>
+        	<div id="gcounGrid"></div>
+        	<br>
+        	<h4>신청자 목록</h4>
+        	<div id="studGrid"></div>
         
         </div>
    </div>
     
     <!-- footer -->
-    <div th:replace="~{admin/footer :: footer}"></div>
     
     
   </div>
   </main>
     <div th:replace="~{admin/settingBtn :: setBtn}"></div>
+    
+  <!-- Modal -->
+	<div class="modal fade" id="gcounModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+		aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-xl modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="gcounModalHeader">집단상담 등록</h1>
+				</div>
+				<div class="modal-body">
+					<div class="mb-3 row">
+						<label class="col-sm-4 col-form-label">집단상담 코드</label>
+						<div class="col-sm-8">
+							<input id="gcounCd" type="text" placeholder="GC00 형식으로 작성">
+						</div>
+					</div>
+					<div class="mb-3">
+						<label class="col-sm-4 col-form-label">담당 상담사</label>
+						<div class="col-sm-8">
+							<select id="cslNo" class="w-25">
+								<option value="" disabled selected>상담사 선택</option>
+								<option th:each="c : ${cslList}" th:value="${c.CSL_NO}" th:text="${c.CSL_NM}"></option>
+							</select>
+						</div>
+					</div>
+					<div class="mb-3">
+						<label class="col-sm-4 col-form-label">프로그램명</label>
+						<div class="col-sm-8">
+							<input id="gcounNm" type="text" placeholder="프로그램명">
+						</div>					
+					</div>
+					<div class="mb-3">
+						<label class="col-sm-4 col-form-label">일시</label>
+						<div class="col-sm-8">
+							<input id="gcounDt" type="datetime-local" placeholder="일시">
+						</div>
+					</div>
+					<div class="mb-3">
+						<label class="col-sm-4 col-form-label">모집 기간</label>
+						<div class="col-sm-8">
+							<input id="gcounBgngDt" type="date" placeholder="일시"> ~ <input id="gcounDdlnDt" type="date" placeholder="일시">
+						</div>
+					</div>
+					<div class="mb-3">
+						<label class="col-sm-4 col-form-label">정원</label>
+						<div class="col-sm-8">
+							<input id="gcounLmtCount" type="number" min="0" placeholder="모집 정원">
+						</div>
+					</div>
+					<div class="mb-3">
+						<label class="col-sm-4 col-form-label">배너 이미지</label>
+						<div class="col-sm-8">
+							<input id="telNo" type="file" placeholder="번호">
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+					<button type="button" id="enroll" class="btn btn-primary">등록</button>
+				</div>
+			</div>
+		</div>
+	</div>    
+    
+    
   <!--   Core JS Files   -->
   <script src="../assets/js/core/popper.min.js"></script>
   <script src="../assets/js/core/bootstrap.min.js"></script>
   <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-//GRID 를 생성한다.
-  // 나이는 수정할 수 있도록 설정한다.
-	var grid = new tui.Grid({
-		el: document.getElementById('grid'),
-		columns: [
-			{
-				header: '학번',
-				name: 'studNo'
-			},
-			{
-				header: '이름',
-				name: 'name',
-			},
-			{
-				header: '학과',
-				name: 'scsbjtNm'
-			},
-			{
-				header: '전화번호',
-				name: 'telNo'
-			},
-			{
-				header: '이메일',
-				name: 'studEmail'
-			},
-			{
-				header: '학적상태',
-				name: 'colReg'
-			},
-			{
-				header: '생년월일',
-				name: 'studBrdt'
-			},
-			{
-				header: '성별',
-				name: 'gender'
-			},
-			{
-				header: '국적',
-				name: 'ntnNm'
-			}
-		]
-	});
+  const grid1 = new tui.Grid({
+      el: document.getElementById('gcounGrid'),
+      scrollX: true,
+      scrollY: true,
+      bodyHeight: 225,
+      minBodyHeight: 30,
+//      rowHeaders: ['rowNum'],
+//      pageOptions: {
+//        perPage: 15
+//      },
+      columns: [
+        { header: '코드', name: 'GCOUN_CD', sortable: true, align: 'center', width: 150, filter: 'select' },
+        { header: '프로그램', name: 'GCOUN_NM', sortable: true, align: 'center', width: 300, filter: 'select' },
+        { header: '담당자', name: 'CSL_NM', sortable: true, align: 'center', width: 150, filter: 'select' },
+        { header: '일시', name: 'GCOUN_DT', sortable: true, align: 'center', width: 200, filter: 'select' },
+        { header: '모집 여부', name: 'GCOUN_PROG_STA_NM', sortable: true, align: 'center', width: 150, filter: 'select', editor: {
+        	type: 'select',
+        	options: {
+        		listItems: [
+        			{text: '모집중', value: '모집중'},
+        			{text: '모집완료', value: '모집완료'}
+        		]
+        
+        	}
+        } },
+        { header: '모집 시작일', name: 'GCOUN_BGNG_DT', sortable: true, align: 'center', width: 150, filter: 'select' },
+        { header: '모집 마감일', name: 'GCOUN_DDLN_DT', sortable: true, align: 'center', width: 150, filter: 'select' },
+        { header: '신청자 수', name: 'GCOUN_REG_COUNT', sortable: true, align: 'center', width: 100 },
+        { header: '정원', name: 'GCOUN_LMT_COUNT', sortable: true, align: 'center', width: 100 },
+        { header: '실제 참석인원', name: 'GCOUN_ATND_COUNT', sortable: true, align: 'center', width: 100 }
+      ]
+    });
+  
+  const grid2 = new tui.Grid({
+        el: document.getElementById('studGrid'),
+        scrollX: false,
+        scrollY: true,
+        bodyHeight: 400,
+        minBodyHeight: 30,
+//        rowHeaders: ['rowNum'],
+//        pageOptions: {
+//          perPage: 15
+//        },
+        columns: [
+          { header: '프로그램명', name: 'GCOUN_NM', sortable: true, align: 'center', width: 200, filter: 'select' },
+          { header: '학번', name: 'STUD_NO', sortable: true, align: 'center', width: 200, filter: {type: 'text', showApplyBtn: true, showClearBtn: true} },
+          { header: '이름', name: 'STUD_NM', sortable: true, align: 'center', width: 150, filter: {type: 'text', showApplyBtn: true, showCleatBtn: true} },
+          { header: '학과', name: 'SCSBJT_NM', sortable: true, align: 'center', width: 200, filter: 'select' },
+          { header: '신청 내역', name: 'GCOUN_STA_NM', sortable: true, align: 'center', width: 200, filter: 'select' },
+          { header: '담당 상담사', name: 'CSL_NM', sortable: true, align: 'center', width: 200, filter: 'select' }
+        ]
+      });  
 
-  // GRID 에 데이터를 입력한다.
-	var arrData = [
-		{
-			name: '홍길동',
-			value: '20세'
-		},
-		{
-			name: '이지연',
-			value: '26세'
-		}
-	];
+	$(document).ready(function () {
+		
+		$('#gcounModalBtn').click(function(e){
+			e.preventDefault();
+			$('#gcounModal').modal("show");
+		});
+		
+		$('#enroll').click(function() {
+			const gcounCd = $('#gcounCd').val();
+			const cslNo = $('#cslNo').val();
+			const gcounNm = $('#gcounNm').val();
+			const gcounDt = $('#gcounDt').val();
+			const gcounBgngDt = $('#gcounBgngDt').val();
+			const gcounDdlnDt = $('#gcounDdlnDt').val();
+			const gcounLmtCount = $('#gcounLmtCount').val();
+			//const bannerImage = $('#bannerImage')[0].files[0];
+			
+			alert('gcounCd: ' + gcounCd);
+			alert('cslNo: ' + cslNo);
+			alert('gcounNm: ' + gcounNm);
+			alert('gcounDt: ' + gcounDt);
+			alert('gcounBgngDt: ' + gcounBgngDt);
+			alert('gcounDdlnDt: ' + gcounDdlnDt);
+			alert('gcounLmtCount: ' + gcounLmtCount);
+			
+			
+			
+			$.ajax({
+				url: '/admin/gcounEnroll',
+				method: 'post',
+				data: {
+					GCOUN_CD: gcounCd,
+					CSL_NO: cslNo,
+					GCOUN_NM: gcounNm,
+					GCOUN_DT: gcounDt,
+					GCOUN_BGNG_DT: gcounBgngDt,
+					GCOUN_DDLN_DT: gcounDdlnDt,
+					GCOUN_LMT_COUNT: gcounLmtCount
+					//bannerImage: bannerImage
+				},
+				success: function(response) {
+					if (response === 1) {
+						alert('등록에 성공하였습니다.');
+						$('#gcounModal').modal('hide');
+						
+						
+						//성공 시 데이터 새로 가져와서 그리드에 세팅하기
+						$.ajax({
+					  	    url: "/admin/getGcounList",
+					  	    type: "get",
+					  	    dataType: "JSON",
+					  	    contentType: "application/json; charset=UTF-8",
+					  	    success: function (result) {
+					  	      grid1.resetData(result);
+					  	    },
+					  	  });
+						
+					} else {
+						alert('등록에 실패하였습니다.');
+					}
+				},
+				error: function(error) {
+					alert('에러가 발생하였습니다.');
+				}
+			});
+			
+		});
+		
+		
+		
+  	  $.ajax({
+  	    url: "/admin/getGcounList",
+  	    type: "get",
+  	    dataType: "JSON",
+  	    contentType: "application/json; charset=UTF-8",
+  	    success: function (result) {
+  	      grid1.resetData(result);
+  	    },
+  	  });
+  	
+  	  // 상단 그리드 클릭 시 하단 그리드 생성
+	 grid1.on('click', function(ev) {
+		const { rowKey } = ev;
+		const rowData = grid1.getRow(rowKey);
+		const gcounCd = rowData.GCOUN_CD;
+		//alert(gcounCd);
+		
+		
+		$.ajax({
+			url: "/admin/getGcounStudList",
+			type: "POST",
+			data: { gcounCd: gcounCd },
+			success: function(result) {
+				grid2.resetData(result)
+			},
+		});
+	 })
+	
+	grid2.on('afterChange', function(ev) {
+		const changes = ev.changes;
 
-	grid.resetData( arrData );
+		const changeData = changes.map(change => ({
+              rowKey: change.rowKey,
+              columnName: change.columnName,
+              newValue: change.value
+          }));
+		alert(changeData.rowKey);
+	})
+	
+	}); 
   </script>
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
