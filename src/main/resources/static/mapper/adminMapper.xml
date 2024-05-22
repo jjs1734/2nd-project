@@ -40,7 +40,9 @@
 		VALUES(#{GCOUN_CD}, #{CSL_NO}, #{GCOUN_NM}, #{GCOUN_DT}, #{GCOUN_BGNG_DT}, #{GCOUN_DDLN_DT}, #{GCOUN_LMT_COUNT}, 'banner1.png');
 	</insert>
 	
+	<!-- ★★★★★**********★★★★★ -->
 	<!-- ★★★★★ 취업상담 ★★★★★ -->
+	<!-- ★★★★★**********★★★★★ -->
 	<select id="getEcounList" resultType="Map">
 		SELECT c.CSL_NM, e.CSL_NO, c.CSL_EMAIL, c.CSL_MOBILE, e.SCSBJT_NM 
 		FROM EMP_COUN_PRO e 
@@ -81,6 +83,44 @@
 		);
 	</select>
 	
+	<update id="updateCounCn" parameterType="Map">
+		UPDATE EMP_COUN_TAB 
+		SET COUN_CN = #{fieldValue }
+		WHERE COUN_NUM = #{counNum }
+	</update>
+	
+	<update id="updateCounYmd" parameterType="Map">
+		UPDATE EMP_COUN_TAB 
+		SET EMP_COUN_YMD = #{fieldValue }
+		WHERE COUN_NUM = #{counNum }
+	</update>
+	
+	<update id="updateCounCd" parameterType="Map">
+		UPDATE EMP_COUN_TAB 
+		SET EMP_COUN_CD = #{fieldValue }
+		WHERE COUN_NUM = #{counNum }
+	</update>
+	
+	<update id="updateSttsCd" parameterType="Map">
+		UPDATE EMP_COUN_TAB 
+		SET EMP_STTS_CD = #{fieldValue }
+		WHERE COUN_NUM = #{counNum }
+	</update>
+	
+	<!-- 상담사 프로필(DB : COUNSELOR) 등록 -->
+	<insert id="registerCounselor" parameterType="Map">
+		INSERT INTO COUNSELOR (CSL_NO, CSL_NM, CSL_EMAIL, CSL_MOBILE)
+		VALUES (#{cslNo}, #{cslNm}, #{email}, #{mobile})		
+		<selectKey keyProperty="CSL_NO" order="AFTER" resultType="int">
+        	SELECT LAST_INSERT_ID()
+    	</selectKey>
+	</insert>
+	
+	<!-- 취업 상담사 프로필(DB : EMP_COUN_PRO) 등록 -->
+	<insert id="registerEmpCounPro" parameterType="Map">
+		INSERT INTO EMP_COUN_PRO (CSL_NO, EMP_CSL_EM, EMP_CSL_TELNO, SCSBJT_NM)
+		VALUES (#{cslNo}, #{email}, #{mobile}, #{scsbjtNm})
+	</insert>
 	
 	
 </mapper>

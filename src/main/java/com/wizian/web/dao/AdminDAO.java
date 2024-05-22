@@ -28,6 +28,18 @@ public interface AdminDAO {
 	
 	 int countIncompletePostsByStudentNo(String studentNo);
 
+	void updateCounCn(Map<String, Object> map);
+
+	void updateCounYmd(Map<String, Object> map);
+
+	void updateCounCd(Map<String, Object> map);
+
+	void updateSttsCd(Map<String, Object> map);
+
+	void registerCounselor(Map<String, String> formData);
+
+	void registerEmpCounPro(Map<String, String> formData);
+
 	
 	
 	 BoardDTO getPostDetail(int postId);

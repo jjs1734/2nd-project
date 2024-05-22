@@ -50,9 +50,30 @@ public class AdminService {
 		return adminDAO.getEcounStudList(cslNo);
 	}
 
-	public List<Map<String, Object>> getGcountCslList() {
-		return adminDAO.getGcounCslList();
+	public void updateCounCn(Map<String, Object> map) {
+		adminDAO.updateCounCn(map);
 	}
+
+	public void updateCounYmd(Map<String, Object> map) {
+		adminDAO.updateCounYmd(map);
+	}
+
+	public void updateCounCd(Map<String, Object> map) {
+		adminDAO.updateCounCd(map);
+	}
+
+	public void updateSttsCd(Map<String, Object> map) {
+		adminDAO.updateSttsCd(map);
+	}
+
+	public void registerCounselor(Map<String, String> formData) {
+		adminDAO.registerCounselor(formData);
+	}
+
+	public void registerEmpCounPro(Map<String, String> formData) {
+		adminDAO.registerEmpCounPro(formData);
+	}
+
 
 	public int gcounEnroll(AdminDTO adminDTO) {
 		return adminDAO.gcounEnroll(adminDTO);
