@@ -1,5 +1,6 @@
 package com.wizian.web.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import lombok.Data;
@@ -11,9 +12,10 @@ public class AdminDTO {
 
 
 	private String GCOUN_CD, GCOUN_STA_NM, GCOUN_ATND_YN, GCOUN_STUD_RV, GCOUN_CSL_RV;
-
+	private int GCOUN_LMT_COUNT;
 	private String CSL_NO, GCOUN_NM, GCOUN_PROG_STA_NM;
-	private LocalDateTime GCOUN_DT, GCOUN_BGNG_DT, GCOUN_DDLN_DT;
+	private LocalDateTime GCOUN_DT;
+	private LocalDate GCOUN_BGNG_DT, GCOUN_DDLN_DT;
 	
 	private String CSL_NM;
 }
