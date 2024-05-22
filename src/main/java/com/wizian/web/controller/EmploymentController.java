@@ -126,14 +126,14 @@ public class EmploymentController {
 		System.out.println("제출 잘 됐니4?" + eventData.getCSL_NO());
 		
 		String userId = (String) session.getAttribute("userId");
-		//System.out.println(userId);
+		System.out.println(userId);
 		//Map<String, Object> empUserInfo = memberService.empUserInfo(userId);
 		//System.out.println("나와야 하는 값들임" + empUserInfo);
 		
 		if(userId != null) {
-			//System.out.println("로그인되어있음");
+			eventData.setUserId(userId);
 			employmentService.insertCalFinal(eventData);
-			employmentService.insertTabFinal(userId);
+			employmentService.insertTabFinal(eventData);
 			System.out.println("입력 완료");
 			return "employment";
 		} else {
