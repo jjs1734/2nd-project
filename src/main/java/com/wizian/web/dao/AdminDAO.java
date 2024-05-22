@@ -24,4 +24,16 @@ public interface AdminDAO {
 
 	List<Map<String, Object>> getEcounStudList(String cslNo);
 
+	void updateCounCn(Map<String, Object> map);
+
+	void updateCounYmd(Map<String, Object> map);
+
+	void updateCounCd(Map<String, Object> map);
+
+	void updateSttsCd(Map<String, Object> map);
+
+	void registerCounselor(Map<String, String> formData);
+
+	void registerEmpCounPro(Map<String, String> formData);
+
 }
