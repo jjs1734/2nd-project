@@ -63,8 +63,8 @@ body {
 								<th>제목</th>
 								<th>작성자</th>
 								<th>게시일</th>
+								<th>상담자</th>
 								<th>완료 여부</th>
-
 							</tr>
 						</thead>
 						<tbody>
@@ -75,11 +75,12 @@ body {
 									th:text="${board.PST_TTL}"></a></td>
 								<td th:text="${board.WRITER}"></td>
 								<td th:text="${board.PSTG_YMD}"></td>
+								<td th:text="${board.COUNSL}"></td>
 								<td th:text="${board.PST_COMP}"></td>
-
 							</tr>
 						</tbody>
 					</table>
+
 				</div>
 			</div>
 		</div>
