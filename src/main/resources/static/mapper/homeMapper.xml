@@ -46,9 +46,9 @@
 	</insert>
 	
 	<!-- 취업 상담사에 정보 넣기 -->
-	<insert id="insertTabFinal" parameterType="String">
-    	INSERT INTO EMP_COUN_TAB (CAL_NUM, STUD_NO, EMP_COUN_RSVT_YMD, EMP_COUN_RSVT_CD, EMP_COUN_YMD, EMP_COUN_CD, USR_CN, COUN_CN, EMP_STTS_CD) 
-    	VALUES (#{CAL_NUM}, #{userId}, #{})
+	<insert id="insertTabFinal" parameterType="EventData">
+    	INSERT INTO EMP_COUN_TAB (CAL_NUM, STUD_NO, EMP_COUN_RSVT_YMD, EMP_COUN_RSVT_CD, USR_CN, EMP_STTS_CD) 
+    	VALUES (#{CAL_NUM}, #{userId}, #{empDate}, #{empTime}, #{empContent}, 10)
 	</insert>
 	
 	<!-- DB에 DATE타입이 CHAR여서 DATE로 변경해주는거 수정 -->

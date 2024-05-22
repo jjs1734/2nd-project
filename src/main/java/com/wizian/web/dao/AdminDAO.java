@@ -22,4 +22,6 @@ public interface AdminDAO {
 
 	List<Map<String, Object>> getEcounList();
 
+	List<Map<String, Object>> getEcounStudList(String cslNo);
+
 }

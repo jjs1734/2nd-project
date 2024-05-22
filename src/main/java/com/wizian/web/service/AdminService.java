@@ -33,6 +33,10 @@ public class AdminService {
 		return adminDAO.getEcounList();
 	}
 
+	public List<Map<String, Object>> getEcounStudList(String cslNo) {
+		return adminDAO.getEcounStudList(cslNo);
+	}
+
 
 	
 }

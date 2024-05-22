@@ -50,13 +50,13 @@ public class EmploymentService {
 	}
 
 	public void insertCalFinal(EventData eventData) {
+		
 		employmentDAO.insertCalFinal(eventData);
 		
 	}
 
-	public void insertTabFinal(String userId) {
-		employmentDAO.insertTabFinal(userId);
-		
+	public void insertTabFinal(EventData eventData) {
+		employmentDAO.insertTabFinal(eventData);
 	}
 
 	public List<Map<String, Object>> loginInfo(String userId) {

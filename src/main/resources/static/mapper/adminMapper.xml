@@ -30,9 +30,24 @@
 		JOIN COUNSELOR c ON i.CSL_NO = c.CSL_NO
 	</select>
 	
+	
+	<!-- ★★★★★ 취업상담 ★★★★★ -->
 	<select id="getEcounList" resultType="Map">
-		SELECT c.CSL_NM, c.CSL_NO, e.EMP_CSL_EM, e.EMP_CSL_TELNO, e.SCSBJT_NM 
+		SELECT c.CSL_NM, e.CSL_NO, c.CSL_EMAIL, c.CSL_MOBILE, e.SCSBJT_NM 
 		FROM EMP_COUN_PRO e 
 		JOIN COUNSELOR c ON c.CSL_NO = e.CSL_NO
 	</select>
+	
+	<select id="getEcounStudList" resultType="Map" parameterType="String">
+		SELECT COUN_NUM, COUN_NUM2, STUD_NO, CAL_NUM, EMP_COUN_RSVT_YMD, EMP_COUN_RSVT_CD, EMP_COUN_YMD, EMP_COUN_CD, USR_CN, COUN_CN, EMP_STTS_CD
+		FROM EMP_COUN_TAB
+		WHERE CAL_NUM IN (
+			SELECT CAL_NUM 
+			FROM EMP_COUN_CAL
+			WHERE CSL_NO = #{cslNo}
+		);
+	</select>
+	
+	
+	
 </mapper>

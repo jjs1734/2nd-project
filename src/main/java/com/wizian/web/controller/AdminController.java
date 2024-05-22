@@ -77,4 +77,20 @@ public class AdminController {
 		return getEcounList;
 	}
 	
+	@ResponseBody
+	@PostMapping("/admin/getEcounStudList")
+	public List<Map<String, Object>> getEcounStudList(@RequestParam("cslNo") String cslNo) {
+		
+		List<Map<String, Object>> getEcounStudList = adminService.getEcounStudList(cslNo);
+		return getEcounStudList;
+	}
+	
+	@ResponseBody
+	@PostMapping("/admin/getEcounStudModify")
+	public String getEcounStudModify(@RequestParam("") int counNum){
+		
+		return "as";
+	}
+	
+	
 }
