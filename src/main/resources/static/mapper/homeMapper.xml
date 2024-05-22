@@ -2,21 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper	namespace="com.wizian.web.dao.EmploymentDAO">
 
-	<select id="boardList" resultType="Map">
+	<select id="loginInfo" resultType="UserDTO" parameterType="String">
 		select * 
-		FROM EMP_COUN_PRO 
-		LIMIT 0, 9
+		FROM USER 
+		WHERE LOGIN_ID = #{userId}
 	</select>
 	
 	<select id="empCounProfile" resultType="Map">
-		select * 
-		FROM EMP_COUN_PRO 
+		select e.CSL_NO, c.CSL_EMAIL, c.CSL_MOBILE, e.SCSBJT_NM, c.CSL_NM
+		FROM EMP_COUN_PRO e 
+		JOIN COUNSELOR c ON e.CSL_NO = c.CSL_NO 
 	</select>
 	
 	<select id="selectEmpCoun" resultType="Map" parameterType="String">
-		select * 
-		FROM EMP_COUN_PRO 
-		WHERE CSL_NO = #{cslNo}
+		select c.CSL_NM, e.CSL_NO, c.CSL_EMAIL 
+		FROM EMP_COUN_PRO e 
+		JOIN COUNSELOR c ON e.CSL_NO = c.CSL_NO 
+		WHERE e.CSL_NO = #{cslNo}
 	</select>
 	
 	<select id="calSelectApply" resultType="Map" parameterType="String">
@@ -34,36 +36,31 @@
 	</insert>
 	 -->
 	
-	<!-- 
-	<insert id="insertEmpCal" parameterType="String">
-    	INSERT INTO JINSU_TESTTABLE (EMP_COUN_CD, DATE)
-    	VALUES (#{empCounCd}, #{dateOnly})
-	</insert>
-	-->
-	
-	<insert id="insertEmpCal" parameterType="EventData">
-    	INSERT INTO JINSU_TESTTABLE (CSL_NO, EMP_COUN_CD, DATE, USR_CN)
-    	VALUES (#{CSL_NO}, #{empCounCd}, #{dateOnly}, #{title})
+	<!-- 취업 상담사 스케줄 테이블에 정보 넣기 -->
+	<insert id="insertCalFinal" parameterType="EventData">
+    	INSERT INTO EMP_COUN_CAL (CSL_NO, EMP_COUN_CD, DATE, USR_CN) 
+    	VALUES (#{CSL_NO}, #{empTime}, #{empDate}, #{empContent})
+    	<selectKey keyProperty="CAL_NUM" order="AFTER" resultType="int">
+        	SELECT LAST_INSERT_ID()
+    	</selectKey>
 	</insert>
 	
-	<!-- 
-	<select id="updateCal" parameterType="String" resultType="Map">
-		select DATE 
-		FROM EMP_COUN_CAL 
-		WHERE CSL_NO = #{cslNo}
-	</select>
-	 -->
+	<!-- 취업 상담사에 정보 넣기 -->
+	<insert id="insertTabFinal" parameterType="String">
+    	INSERT INTO EMP_COUN_TAB (CAL_NUM, STUD_NO, EMP_COUN_RSVT_YMD, EMP_COUN_RSVT_CD, EMP_COUN_YMD, EMP_COUN_CD, USR_CN, COUN_CN, EMP_STTS_CD) 
+    	VALUES (#{CAL_NUM}, #{userId}, #{})
+	</insert>
 	
-	<!-- DB에 DATE타입이 CHAR여서 DATE로 변경해주는거 -->
+	<!-- DB에 DATE타입이 CHAR여서 DATE로 변경해주는거 수정 -->
 	<select id="updateCal" parameterType="String" resultType="Map">
-	    select DATE_FORMAT(DATE, '%Y-%m-%d') as DATE, EMP_COUN_CD
-	    FROM JINSU_TESTTABLE 
+	    SELECT DATE, EMP_COUN_CD
+	    FROM EMP_COUN_CAL 
 	    WHERE CSL_NO = #{cslNo}
 	</select>
-	
+
 	<select id="empCalList" parameterType="String" resultType="Map">
-	    select CSL_NO, DATE_FORMAT(DATE, '%Y-%m-%d') as DATE, EMP_COUN_CD, USR_CN 
-	    FROM JINSU_TESTTABLE 
+	    select CSL_NO, DATE, EMP_COUN_CD, USR_CN 
+	    FROM EMP_COUN_CAL 
 	    WHERE CSL_NO = #{cslNo1}
 	</select>
 

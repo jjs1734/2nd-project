@@ -60,4 +60,21 @@ public class AdminController {
 		
 		return getGcounList;
 	}
+	
+	// 취업상담
+	@GetMapping("/admin/ecoun")
+	public String ecoun() {
+		
+		return "admin/ecoun";
+	}
+	
+	@ResponseBody
+	@GetMapping("/admin/getEcounList")
+	public List<Map<String, Object>> getEcounList() {
+		List<Map<String, Object>> getEcounList = adminService.getEcounList();
+		System.out.println(getEcounList);
+		
+		return getEcounList;
+	}
+	
 }

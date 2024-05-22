@@ -29,6 +29,10 @@ public class AdminService {
 		return adminDAO.getGcounStudList(gcounCd);
 	}
 
+	public List<Map<String, Object>> getEcounList() {
+		return adminDAO.getEcounList();
+	}
+
 
 	
 }

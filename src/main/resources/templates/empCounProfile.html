@@ -49,16 +49,16 @@
            <!-- 메인 내용 -->
            <!-- 1번 상담사 -->
           <div th:each="row, iterStat : ${empCounProfile}" th:if="${iterStat.index < 12}"
-           id="cardCss" class="card mb-3 col-md-4" style="max-width: 300px;height: 20vh; display: inline-block;">
+           id="cardCss" class="card mb-3 col-md-6" style="max-width: 400px;height: 20vh; display: inline-block;">
              <div class="row g-0">
                  <div class="col-md-5" style="padding: 0px;">
                      <img src="images/EMP_COUN_PHOTO.jpg" class="img-fluid rounded-start" alt="..." style="height: 180px;">
                  </div>
                  <div class="col-md-7" style="padding: 10px;">
                          <div class="card-body" style="padding: 5px;">
-                             <p class="card-title">[[${row.EMP_COUN_NM}]]</p>
-                             <p class="card-text">[[${row.EMP_COUN_EM}]]</p>
-                             <p class="card-text">[[${row.EMP_COUN_TELNO}]]</p>
+                             <p class="card-title">[[${row.CSL_NM}]]</p>
+                             <p class="card-text">[[${row.CSL_EMAIL}]]</p>
+                             <p class="card-text">[[${row.CSL_MOBILE}]]</p>
                              <p class="card-text">[[${row.SCSBJT_NM}]]</p>
                              <!-- 제출 버튼 -->
 	                         <form th:action="@{/employApply}" method="post">
@@ -68,7 +68,6 @@
                          </div>
                  </div>
              </div>
-             
          </div>
          
          <!-- 제출 버튼 : 데이터 값 보내는거 예시임

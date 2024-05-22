@@ -8,4 +8,10 @@
 		WHERE LOGIN_ID = #{id}
 	</select>
 	
+	<select id="empUserInfo" resultType="map" parameterType="String">
+		SELECT STUD_NO, USER_NO, PF_NO, NTN_CD, SCSBJT_NM, STUD_NM, TELNO, STUD_EML_ADDR, COL_REG, STUD_BRDT, STUD_GEN
+		FROM STUD_INFO 
+		WHERE STUD_NO = #{userId}
+	</select>
+	
 </mapper>

@@ -5,11 +5,9 @@ import lombok.Data;
 @Data
 public class EventData {
 	
-	private String title;
-	private String start;
-    private String end;
-    private String empCounCd;
-    private String dateOnly;
+	private String empDate;
+	private String empContent;
+    private String empTime;
     private String CSL_NO;
     
 }

@@ -17,7 +17,7 @@ public interface EmploymentDAO {
 
 	public List<Map<String, Object>> empCounProfile();
 
-	public List<Map<String, Object>> selectEmpCoun(String cslNo);
+	public Map<String, Object> selectEmpCoun(String cslNo);
 
 	/* public ResponseEntity<String> insertEmpCal(String empCounCd); */
 	/* void insertEmpCal(String empCounCd, String dateOnly); */
@@ -30,5 +30,11 @@ public interface EmploymentDAO {
 	public List<Map<String, Object>> empCalList(String cslNo1);
 
 	public Map<String, Object> calSelectApply(String cslNo);
+
+	public void insertCalFinal(EventData eventData);
+
+	public void insertTabFinal(String userId);
+
+	public List<Map<String, Object>> loginInfo(String userId);
 
 }
