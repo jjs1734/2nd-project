@@ -35,4 +35,14 @@
 		FROM EMP_COUN_PRO e 
 		JOIN COUNSELOR c ON c.CSL_NO = e.CSL_NO
 	</select>
+	
+	<select id="getGcounCslList" resultType="Map">
+		SELECT CSL_NO, CSL_NM
+		FROM COUNSELOR
+	</select>
+	
+	<insert id="gcounEnroll" parameterType="AdminDTO">
+		INSERT INTO GROUP_COUN_INFO (GCOUN_CD, CSL_NO, GCOUN_NM, GCOUN_DT, GCOUN_BGNG_DT, GCOUN_DDLN_DT, GCOUN_LMT_COUNT, GCOUN_CONTS_CN)
+		VALUES(#{GCOUN_CD}, #{CSL_NO}, #{GCOUN_NM}, #{GCOUN_DT}, #{GCOUN_BGNG_DT}, #{GCOUN_DDLN_DT}, #{GCOUN_LMT_COUNT}, 'banner1.png');
+	</insert>
 </mapper>

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wizian.web.dto.AdminDTO;
 import com.wizian.web.service.AdminService;
 
 @Controller
@@ -26,7 +27,11 @@ public class AdminController {
 	}
 	
 	@GetMapping("/admin/gcoun")
-	public String gcoun() {
+	public String gcoun(Model model) {
+		
+		List<Map<String, Object>> getGcounCslList = adminService.getGcountCslList();
+		model.addAttribute("cslList" ,getGcounCslList);
+		
 		
 		return "admin/gcoun";
 	}
@@ -38,7 +43,6 @@ public class AdminController {
 		return "/admin/student";
 	}
 	
-	@ResponseBody
 	@GetMapping("/admin/studentList")
 	public List<Map<String, Object>> readData() {
 		List<Map<String, Object>> studentList = adminService.studentList();
@@ -77,4 +81,12 @@ public class AdminController {
 		return getEcounList;
 	}
 	
+	@ResponseBody
+	@PostMapping("/admin/gcounEnroll")
+	public int gcounEnroll(AdminDTO adminDTO) {
+		System.out.println("컨트롤러 실행");
+		int gcounEnroll = adminService.gcounEnroll(adminDTO);
+		
+		return gcounEnroll;
+	}
 }
