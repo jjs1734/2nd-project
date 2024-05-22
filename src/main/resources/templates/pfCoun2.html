@@ -138,6 +138,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+	        		<button type="button" class="btn btn-primary">Save changes</button>
 				</div>
 			</div>
 		</div>
@@ -160,6 +161,8 @@
   </div>
 </div>
  <script type="text/javascript">
+
+
 	$(function(){
 		$(".pfchoice").on('click',function(){
  			let row = $(this).closest('tr');// 버튼이 속한 행 찾기
@@ -175,7 +178,6 @@
  			$('#pfchoicemodal').modal('hide');
  			
  		});
-		
 		 $("#openSmodal").on('click',function(){
 			let pf_no=$('.pf-no').val();
 			console.log(pf_no);
