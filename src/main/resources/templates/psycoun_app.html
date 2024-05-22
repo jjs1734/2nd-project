@@ -13,7 +13,6 @@
     <!-- bootstrap -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> -->
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
@@ -33,10 +32,6 @@
     
      
 <style>
-/* 추가한 스타일 */
-#calendarModalBody {
- 	height: 750px; /* 모달 내 FullCalendar의 높이 지정 */
-}
        
 #sidenav{background: #B6B6B6; float:left; margin-right:20px; padding:10px; margin-top:10px; margin-bottom:10px; width:200px; height:780px; text-align:center;}
 .button{margin-bottom:30px; color:white; font-size:15pt; width:140px; height:35px; background-color:#A41034; border: none;}
@@ -74,7 +69,6 @@
 }
 
 </style>
-
 </head>
      
       
@@ -129,11 +123,11 @@
 				<th class="th" scope="row"><img src="images/sub_cs_text4.png" alt="상담가능날짜" style="width:135px; height:25px;"></th>
 				<td style="position:relative;">
 					<div class="calendar-container" style="position:relative; display:inline-block;">
-						<input type="text" class="wid53" title="상담가능날짜" placeholder="YYYY-MM-DD" id="datepicker">
+						<input type="text" class="coundate" title="상담가능날짜" placeholder="YYYY-MM-DD 오전 HH:mm" id="datepicker" style="width:250px;">
 						<img src="images/calendar_icon.png" alt="Calendar" class="calendar-icon" id="calendarIcon" style="position:absolute; right:5px; top: 50%; transform: translateY(-50%);">
 					</div>
 				</td>
-			</tr>		
+			</tr>
 			<tr>
 				<th class="th" scope="row"><img src="images/sub_cs_text6.png" alt="개인정보활용동의" style="width:135px; height:25px;"></th>
 				<td style="position:relative;">
@@ -151,7 +145,6 @@
 				</td>
 			</tr>
 		</table>
-	
 	
 		<!-- 신청하기 버튼 눌렀을 때 -->
 		<div style="text-align:center;">
@@ -193,12 +186,12 @@
 		
 	    <div id="calendar"></div>
 	    
-	<!-- 풀캘린더 modal -->
+	<!-- 날짜 선택 풀캘린더 modal -->
     <div class="modal fade" id="calendarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">날짜 선택</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">상담 날짜 예약</h5>
                     <button type="button" class="close" id="closeCalendarModalX" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -207,7 +200,7 @@
                 	<div id="calendarModalBody"></div>
                 </div>
                 <div class="modal-footer">
-                	<button type="button" class="btn btn-secondary" id="closeCalendarModal">닫기</button>
+                	<button type="button" class="btn btn-secondary" id="closeCalendarModal"  data-bs-dismiss="modal">닫기</button>
                 	<button type="button" class="btn btn-primary" id="saveDateButton">저장</button>
                 </div>
             </div>
@@ -231,18 +224,13 @@
      						<input type="text" class="form-control" id="eventTitle" required>
      					</div>
      					<div class="form-group">
-     						<label for="eventDescription">설명</label>
-     						<textarea class="form-control" id="eventDescription"></textarea>
-     					</div>
-     					<div class="form-group">
-    						<label for="eventTime">시간</label>
-    						<div class="input-group date" id="eventTimePicker" data-target-input="nearest">
-        						<input type="text" class="form-control datetimepicker-input" data-target="#eventTimePicker" id="eventTime" required>
-        						<div class="input-group-append" data-target="#eventTimePicker" data-toggle="datetimepicker">
-            						<div class="input-group-text" style="padding: 0.6rem;"><i class="fa fa-clock-o"></i></div>
-        						</div>
-    						</div>
-						</div>
+                        	<label for="eventStart">시작 시간</label>
+                        	<input type="text" class="form-control" id="eventStart" readonly>
+                    	</div>
+                    	<div class="form-group">
+                        	<label for="eventEnd">종료 시간</label>
+                        	<input type="text" class="form-control" id="eventEnd" readonly>
+                    	</div>
      				</form>
      			</div>
      			<div class="modal-footer">
@@ -252,7 +240,8 @@
      		</div>
      	</div>
      </div>
-	
+     
+     
 	
 	
 	<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@5.7.0/main.min.js"></script>
@@ -284,101 +273,199 @@
 	//확인 버튼 클릭시 Alert창 닫고 모달 닫기
 	document.getElementById("confirmButton").addEventListener("click", CloseModalAndOpenAlert);
     
-	//-------------------------------------------------------------------------------------------------
-	//여기서부터 FullCalendar Script
 	
+	//=================================================================================================================================================
+	
+	//여기서부터 FullCalendar Modal 관련 Script
+	
+		// 달력 icon 클릭시 full calendar modal 열기
+            var calendarIcon = document.getElementById('calendarIcon');
+            calendarIcon.addEventListener('click', function() {
+                $('#calendarModal').modal('show');
+            });
+		
+        // full calendar 구현
         $(document).ready(function () {
         	$(function () {
-                $('#eventTimePicker').datetimepicker({
-                	format: 'HH:mm', // 시간 형식 설정
-                    stepping: 50, // 50분 간격으로 선택
-                    icons: {
-                        time: 'fa fa-clock-o',
-                        date: 'fa fa-calendar',
-                        up: 'fa fa-arrow-up',
-                        down: 'fa fa-arrow-down',
-                        previous: 'fa fa-chevron-left',
-                        next: 'fa fa-chevron-right',
-                        today: 'fa fa-calendar-check-o',
-                        clear: 'fa fa-trash',
-                        close: 'fa fa-times'
-                    },
-                    useCurrent: false, // 현재 시간을 기본값으로 설정하지 않음
-                    disabledTimeIntervals: [
-                        [moment({ h: 0 }), moment({ h: 9 })], // 00:00 ~ 09:00
-                        [moment({ h: 17, m: 50 }), moment({ h: 23, m: 59 })] // 15:50 ~ 24:00
-                    ],
-                    widgetPositioning: {
-                    	horizontal: 'left',
-                    	vertical: 'bottom'
-                    }
-                }).on('dp.show', function (e) {
-                	var currentDate = new Date();
-                    var nextHour = currentDate.getHours() + 1;
-                    var hour = nextHour < 10 ? '0' + nextHour : nextHour;
-                    var minute = '00';
-                    var startTime = hour + ':00';
-                    var endTime = hour + ':50';
-                    $('#eventTimePicker').data('DateTimePicker').minDate(moment({ h: nextHour, m: 0 }));
-                    $('#eventTimePicker').data('DateTimePicker').maxDate(moment({ h: nextHour, m: 50 }));
-                    $('#eventTimePicker').data('DateTimePicker').defaultDate(moment({ h: nextHour, m: 0 }));
-                    $('#eventTimePicker').data('DateTimePicker').date(moment({ h: nextHour, m: 0 }));
-                    $('#eventTimePicker').data('DateTimePicker').options({
-                    	minDate: moment({ h: nextHour, m: 0 }),
-                        maxDate: moment({ h: nextHour, m: 50 }),
-                        disabledTimeIntervals: [
-                            [moment({ h: 0 }), moment({ h: 9 })], // 00:00 ~ 09:00
-                            [moment({ h: nextHour, m: 50 }), moment({ h: 23, m: 59 })] // 15:50 ~ 24:00
-                        ]
-                    });
-                }).on('change.datetimepicker', function(e){
-                    var selectedHour = e.date.hour();
-                    var selectedMinute = e.date.minute();
-                    var nextHour = selectedHour + 1;
-                    var hour = nextHour < 10 ? '0' + nextHour : nextHour;
-                    var minute = selectedMinute < 10 ? '0' + selectedMinute : selectedMinute;
-                    var startTime = selectedHour + ':00';
-                    var endTime = nextHour + ':00';
-                    $('#eventTimePicker').data('DateTimePicker').options({
-                        minDate: moment({ h: selectedHour, m: 0 }),
-                        maxDate: moment({ h: selectedHour, m: 50 }),
-                        disabledTimeIntervals: [
-                            [moment({ h: 0 }), moment({ h: 9 })], // 00:00 ~ 09:00
-                            [moment({ h: selectedHour, m: 50 }), moment({ h: 23, m: 59 })] // 17:50 ~ 24:00
-                        ]
-                    });
-                    $('#eventTimePicker').val(startTime + ' - ' + endTime);
-                });
-            });
-        	
-        	
-        	
-        	var addedEvents = []; // 추가된 일정을 저장할 배열
+        	var addedEvents = []; // 추가된 일정을 저장할 배열로 수정
+        	var addedEvent = null;
         	var deletedDates = []; // 삭제된 일정에 해당하는 날짜를 저장할 배열
         	
         	// 달력 초기화
             var calendarEl = document.getElementById('calendarModalBody');
             var calendar = new FullCalendar.Calendar(calendarEl, {
+            	height: 750, // calendar 높이 설정        
+            	expandRows: true, // 화면에 맞게 높이 재설정        
+            	slotMinTime: '09:00', // Day 캘린더에서 시작 시간        
+            	slotMaxTime: '18:00', // Day 캘린더에서 종료 시간
+            	slotDuration: '01:00:00', // 1시간 간격으로 시간 표시
+            	slotLabelInterval: '01:00:00', // 1시간 간격으로 레이블 표시
+            	// 해더에 표시할 툴바        
+            	headerToolbar: {          
+            		left: 'prev,next today',          
+            		center: 'title',          
+            		right: 'dayGridMonth,timeGridWeek,timeGridDay'        
+            	},
                 initialView: 'dayGridMonth', // 초기 달력 뷰 설정
                 locale: 'ko', // 한국어로 설정
+                timeZone: 'local',
                 editable: true,
                 selectable: true,
                 select: function(info) {
-                	$('#eventModal').modal('show');
+                	// 시작 시간을 정각으로 설정
+                    var start = new Date(info.start);
+                    start.setMinutes(0);
+                    start.setSeconds(0);
+                    start.setMilliseconds(0);
+                    
+                 	// 종료 시간을 시작 시간으로부터 50분 후로 설정
+                    var end = new Date(info.start);
+                    end.setMinutes(end.getMinutes() + 50);
+                    
+                    $('#eventModal').modal('show');
                     $('#eventForm')[0].reset();
-                    $('#eventModal').data('selectedDate', info.startStr);
+                    $('#eventModal').data('selectedEvent', { start: start, end: end });
+                    $('#eventStart').val(formatDateTime(start)); // 사용자 친화적인 시간 형식으로 표시
+                    $('#eventEnd').val(formatDateTime(end)); // 사용자 친화적인 시간 형식으로 표시
                 },
                 eventClick: function(info) {
                     if (confirm("이 일정을 삭제하시겠습니까?")) {
                         info.event.remove();
                         var deletedDate = info.event.startStr;
                         removeSavedDate(info.event.startStr); // 삭제된 일정에 해당하는 저장된 날짜 삭제
-                        clearDatePicker(info.event.startStr); // 삭제된 일정에 해당하는 datepicker 날짜 삭제
+                        clearDatePicker(deletedDate); // 삭제된 일정에 해당하는 datepicker 날짜 삭제
                         deletedDates.push(deletedDate); // 삭제된 일정에 해당하는 날짜를 저장
                     }
                 }
             });
             calendar.render();
+            
+            
+         	// 일정 추가 버튼 클릭 시 이벤트 처리
+            $('#addEventButton').on('click', function() {
+                /* // 사용자가 입력한 일정 정보 가져오기
+                var eventModalData = $('#eventModal').data('selectedEvent');
+                var title = $('#eventTitle').val();
+                var start = new Date(eventModalData.start);
+                var end = new Date(eventModalData.end); */
+                
+             	// 사용자가 선택한 시작 시간과 종료 시간 가져오기
+                var eventModalData = $('#eventModal').data('selectedEvent');
+                var start = new Date(eventModalData.start);
+                var end = new Date(eventModalData.end);
+                
+             	// 캘린더에서 중복되는 일정 확인
+                var overlappingEvents = calendar.getEvents().filter(function (event) {
+                    return (start >= event.start && start < event.end) || (end > event.start && end <= event.end);
+                });
+             	
+             	// 중복되는 일정이 있을 경우 경고 메시지 표시하고 일정 추가 중지
+                if (overlappingEvents.length > 0) {
+                    alert('선택한 시간에 이미 일정이 있습니다.');
+                    return;
+                }
+
+             	// 사용자가 입력한 일정 정보 가져오기
+                var title = $('#eventTitle').val();
+                
+
+                // 새 이벤트 생성
+                var newEvent = {
+                    title: title,
+                    start: start,
+                    end: end,
+                    allDay: false // 시간 지정된 일정이므로 false로 설정
+                };  
+
+                // 캘린더에 이벤트 추가
+                calendar.addEvent(newEvent);
+                
+             	// 일정 추가 버튼 비활성화
+                $('#addEventButton').prop('disabled', true);
+                
+             	// 추가된 일정 배열에 추가
+                addedEvents.push(newEvent);
+
+                // 일정 추가 모달 닫기
+                $('#eventModal').modal('hide');
+                
+             	// 캘린더 새로고침
+                calendar.refetchEvents();
+             	
+             	// 상담 날짜 예약 모달에서 datepicker에 날짜와 시간 설정
+                var formattedDate = formatDateTime(start);
+                $('#datepicker').val(formattedDate); // datepicker에 날짜 설정
+                $('#timepicker').val(formattedDate); // timepicker에 시간 설정
+                
+                // 일정이 추가되었을 때 알림 표시
+                alert('일정이 추가되었습니다.');
+                
+                /* // 변경 사항 저장 여부 확인
+                if (addedEvents.length > 0) {
+                    alert('일정이 등록되었습니다.'); // 저장 버튼 눌렀을 때 alert창 띄우기
+                    //addedEvents = []; // 저장 후 추가된 일정 배열 비움
+                } else {
+                    alert('추가된 일정이 없습니다.');
+                } */
+            });
+         	
+         	
+         	
+         	
+            var selectedDateTime = null; // 상담 날짜 예약 모달에서 선택한 날짜와 시간 저장 변수
+
+         	// 일정 추가 모달이 열릴 때 선택한 날짜와 시간 기억
+            calendar.on('dateClick', function(info) {
+            	 selectedDateTime = info.date;
+            	 
+            	 $('#eventModal').modal('show');
+
+            	 var start = new Date(info.date);
+                 //start.setHours(9);
+
+                 var end = new Date(start);
+                 end.setMinutes(start.getMinutes() + 50);
+
+                 $('#eventForm')[0].reset();
+                 $('#eventModal').data('selectedEvent', { start: start, end: end });
+                 $('#eventStart').val(formatDateTime(start));
+                 $('#eventEnd').val(formatDateTime(end));
+                 
+              	 // datepicker의 값을 선택한 날짜로 설정
+                 var formattedDate = formatDateTime(start);
+                 $('#datepicker').val(formattedDate);
+                 $('#timepicker').val(formattedDate);
+             });
+            
+         	
+            
+            
+         	
+            $('#calendarModal').on('show.bs.modal', function () {
+                // 상담 날짜 예약 모달이 열릴 때 실행되는 코드
+                var events = calendar.getEvents(); // 캘린더에 있는 모든 이벤트 가져오기
+                // 모든 기존 이벤트 제거
+                //calendar.removeAllEvents();
+                // 추가된 모든 이벤트를 다시 추가
+                //addedEvents.forEach(function(event) {
+                //    calendar.addEvent(event);
+                //});
+                events.forEach(function(event) {
+                    calendar.addEvent(event);
+                });
+                
+                if (selectedDateTime) {
+                    var formattedDateTime = formatDateTime(selectedDateTime);
+                    $('#datepicker').val(formattedDateTime);
+                    $('#timepicker').val(formattedDateTime);
+                }
+            });
+            
+         // 상담 날짜 예약 모달이 닫힐 때, 선택한 날짜와 시간 초기화
+            $('#calendarModal').on('hidden.bs.modal', function () {
+                selectedDateTime = null;
+            });
+         	
             
             // 날짜 선택 모달(calendarModal)을 static으로 설정
              $('#calendarModal').modal({
@@ -396,26 +483,6 @@
                 $('#calendarModal').modal('show');
             });
             
-            $('#addEventButton').on('click', function() {
-                var title = $('#eventTitle').val();
-                var description = $('#eventDescription').val();
-                var dateStr = $('#eventModal').data('selectedDate');
-
-                if (title) {
-                    calendar.addEvent({
-                        title: title,
-                        start: dateStr,
-                        description: description
-                    });
-
-                    addedEvents.push(dateStr); // 추가된 일정에 해당하는 날짜를 저장
-                    $('#datepicker').val(dateStr);
-                    $('#eventModal').modal('hide'); //일정 추가한 뒤에 일정 추가 모달만 닫기
-                    alert('일정이 추가되었습니다.');
-                    
-                    saveDate(dateStr); // 일정이 추가되면 해당 날짜를 저장
-                }
-            });
             
             $('#closeEventModal').on('click', function() {
                 $('#eventModal').modal('hide');  // 닫기 버튼 눌렀을 때 일정 추가 모달 닫기
@@ -433,29 +500,50 @@
                 $('#calendarModal').modal('hide');  // X버튼 눌렀을 때 날짜 선택 모달 닫기
             });
             
+            
             $('#saveDateButton').on('click', function() {
-            	 if (addedEvents.length > 0) {
-                	alert('날짜가 저장되었습니다.'); //저장 버튼 눌렀을 때 alert창 띄우기
-                	addedEvents = []; // 저장 후 추가된 일정 배열 비움
-            	 } else if (deletedDates.length > 0) {
-                     alert('변경내용이 저장되었습니다.');
-                     deletedDates = []; // 저장 후 삭제된 일정 배열 비움
-                 } else {
-                     alert('변경된 내용이 없습니다.');
-                 }
-             });
-
+            	if (addedEvents.length > 0 || deletedDates.length > 0) {
+            		if (addedEvents.length > 0) {
+                        alert('예약이 완료되었습니다.');
+                        addedEvents = [];
+                    }
+                    if (deletedDates.length > 0) { // 추가: 삭제된 날짜가 있을 경우 알림 표시
+                        alert('변경된 내용이 저장되었습니다.');
+                        deletedDates = [];
+                    }
+                } else {
+                    alert('변경된 내용이 없습니다.');
+                }
+            });
+             
+             
             function removeSavedDate(date) {
                 // 저장된 날짜 삭제하는 코드 추가
                 console.log('날짜가 삭제되었습니다.:', date);
             }
             
-            function clearDatePicker(date) {
-                if ($('#datepicker').val() === date) {
+            function clearDatePicker() {
+            	// FullCalendar에서 반환되는 날짜 형식으로 변환하여 비교
+                //var formattedDate = new Date(date);
+                //var formattedDateString = formattedDate.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
+
+                //if ($('#datepicker').val() === formattedDateString) {
                     $('#datepicker').val('');
-                }
+                //}
+            }
+            
+            function saveDate(date) {
+                // 저장된 날짜를 처리하는 코드 추가
+                console.log('날짜가 저장되었습니다.:', date);
+            }
+            
+            function formatDateTime(date) {
+                // 사용자 친화적인 시간 형식으로 변환하는 함수
+                var options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+                return new Date(date).toLocaleDateString('ko-KR', options);
             }
         });
+    });
 
  	
 	    </script>
