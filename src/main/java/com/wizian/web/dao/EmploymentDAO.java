@@ -33,7 +33,7 @@ public interface EmploymentDAO {
 
 	public void insertCalFinal(EventData eventData);
 
-	public void insertTabFinal(String userId);
+	public void insertTabFinal(EventData eventData);
 
 	public List<Map<String, Object>> loginInfo(String userId);
 

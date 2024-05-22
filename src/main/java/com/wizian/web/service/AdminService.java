@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.wizian.web.dao.AdminDAO;
 import com.wizian.web.dao.GroupDAO;
+import com.wizian.web.dto.AdminDTO;
 import com.wizian.web.dto.GroupDTO;
 
 
@@ -33,6 +34,16 @@ public class AdminService {
 		return adminDAO.getEcounList();
 	}
 
+	public List<Map<String, Object>> getEcounStudList(String cslNo) {
+		return adminDAO.getEcounStudList(cslNo);
+	}
 
+	public List<Map<String, Object>> getGcountCslList() {
+		return adminDAO.getGcounCslList();
+	}
+
+	public int gcounEnroll(AdminDTO adminDTO) {
+		return adminDAO.gcounEnroll(adminDTO);
+	}
 	
 }

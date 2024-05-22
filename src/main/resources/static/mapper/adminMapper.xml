@@ -30,9 +30,33 @@
 		JOIN COUNSELOR c ON i.CSL_NO = c.CSL_NO
 	</select>
 	
+	<select id="getGcounCslList" resultType="Map">
+		SELECT CSL_NO, CSL_NM
+		FROM COUNSELOR
+	</select>
+	
+	<insert id="gcounEnroll" parameterType="AdminDTO">
+		INSERT INTO GROUP_COUN_INFO (GCOUN_CD, CSL_NO, GCOUN_NM, GCOUN_DT, GCOUN_BGNG_DT, GCOUN_DDLN_DT, GCOUN_LMT_COUNT, GCOUN_CONTS_CN)
+		VALUES(#{GCOUN_CD}, #{CSL_NO}, #{GCOUN_NM}, #{GCOUN_DT}, #{GCOUN_BGNG_DT}, #{GCOUN_DDLN_DT}, #{GCOUN_LMT_COUNT}, 'banner1.png');
+	</insert>
+	
+	<!-- ★★★★★ 취업상담 ★★★★★ -->
 	<select id="getEcounList" resultType="Map">
-		SELECT c.CSL_NM, c.CSL_NO, e.EMP_CSL_EM, e.EMP_CSL_TELNO, e.SCSBJT_NM 
+		SELECT c.CSL_NM, e.CSL_NO, c.CSL_EMAIL, c.CSL_MOBILE, e.SCSBJT_NM 
 		FROM EMP_COUN_PRO e 
 		JOIN COUNSELOR c ON c.CSL_NO = e.CSL_NO
 	</select>
+	
+	<select id="getEcounStudList" resultType="Map" parameterType="String">
+		SELECT COUN_NUM, COUN_NUM2, STUD_NO, CAL_NUM, EMP_COUN_RSVT_YMD, EMP_COUN_RSVT_CD, EMP_COUN_YMD, EMP_COUN_CD, USR_CN, COUN_CN, EMP_STTS_CD
+		FROM EMP_COUN_TAB
+		WHERE CAL_NUM IN (
+			SELECT CAL_NUM 
+			FROM EMP_COUN_CAL
+			WHERE CSL_NO = #{cslNo}
+		);
+	</select>
+	
+	
+	
 </mapper>
