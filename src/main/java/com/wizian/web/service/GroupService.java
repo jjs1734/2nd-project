@@ -28,5 +28,9 @@ public class GroupService {
 		return groupDAO.groupEnroll(groupDto);
 	}
 
+	public Map<String, Object> selectMyInfo(String userId) {
+		return groupDAO.selectMyInfo(userId);
+	}
+
 	
 }

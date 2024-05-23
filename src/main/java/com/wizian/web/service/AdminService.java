@@ -88,6 +88,13 @@ public class AdminService {
 		return adminDAO.counselorList();
 	}
 
+	public List<Map<String, Object>> getGcounCslList() {
+		return adminDAO.getGcounCslList();
+	}
+	
+	
+
+
 	public void toggleCompletionStatus(int postId) {
 		adminDAO.toggleCompletionStatus(postId);
 	}

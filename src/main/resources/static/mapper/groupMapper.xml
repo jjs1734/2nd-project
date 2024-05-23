@@ -19,4 +19,11 @@
 		INSERT INTO GROUP_COUN_APPLICANT (STUD_NO, GCOUN_CD, GCOUN_CURRENT_DT)
 		VALUES(#{STUD_NO}, #{GCOUN_CD}, #{GCOUN_CURRENT_DT})
 	</insert>
+	
+	<select id="selectMyInfo" resultType="Map" parameterType="String">
+		SELECT * 
+		FROM STUD_INFO 
+		WHERE STUD_NO = #{userId} 
+	</select>
+	
 </mapper>

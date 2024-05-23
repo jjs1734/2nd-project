@@ -14,10 +14,10 @@ public class MemberService {
 	@Autowired
 	private MemberDAO memberDAO;
 	
-	public String login(String id, String pw) {
+	public MemberDTO login(String id, String pw) {
 		MemberDTO memberDTO = memberDAO.getMemberById(id);
 		if (memberDTO.getPW().equals(pw)) {
-			return memberDTO.getLOGIN_ID();
+			return memberDTO;
 		}
 		
 		return null;
