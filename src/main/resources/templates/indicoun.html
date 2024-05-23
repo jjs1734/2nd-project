@@ -51,15 +51,15 @@ body {
 				<div class="row">
 					<div th:each="counselor : ${counProfile}" class="col-md-6">
 						<div class="card">
-							<img src="path_to_your_image/character.png" class="card-img-top"
+							<img th:src="@{path_to_your_image/character.png}" class="card-img-top"
 								alt="상담사 이미지">
 							<div class="card-body">
-								<h5 class="card-title" th:text="${counselor.CSL_NM}">홍길동</h5>
+								<h5 class="card-title" th:text="${counselor.CSL_NM}"></h5>
 								<p class="card-text">
-									이메일: <span th:text="${counselor.CSL_EMAIL}">example@example.com</span>
+									이메일: <span th:text="${counselor.CSL_EMAIL}"></span>
 								</p>
 								<p class="card-text">
-									전화번호: <span th:text="${counselor.CSL_MOBILE}">010-1234-5678</span>
+									전화번호: <span th:text="${counselor.CSL_MOBILE}"></span>
 								</p>
 								<button class="btn btn-primary"
 									data-counselor-name="${counselor.CSL_NM}">상담신청</button>
@@ -85,7 +85,7 @@ body {
             buttons.forEach(button => {
                 button.addEventListener('click', function () {
                     const counselorName = this.getAttribute('data-counselor-name');
-                    window.location.href = '/indiboard_apply?counselor=' + encodeURIComponent(counselorName);
+                    window.location.href = 'http://localhost/indiboard_apply?counselor=' + encodeURIComponent(counselorName);
                 });
             });
         });

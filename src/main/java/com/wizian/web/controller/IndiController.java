@@ -137,6 +137,16 @@ public class IndiController {
 		return "indiboard_detail";
 	}
 
+	@GetMapping("/notice_detail")
+	public String notice_detail(@RequestParam("no") int no, Model model) {
+		BoardDTO detail = boardService.detail(no);
+		model.addAttribute("detail", detail);
+		return "notice_detail";
+	}
+	
+	
+	
+	
 	@PostMapping("/submitReply")
 	public String submitReply(@RequestParam Map<String, Object> map, HttpSession session) {
 		String userId = (String) session.getAttribute("userId");

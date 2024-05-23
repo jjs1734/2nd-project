@@ -47,7 +47,7 @@ public class AdminService {
 	public List<BoardDTO> getReplies(int postId) {
 		return adminDAO.getReplies(postId);
 	}
-	
+
 	public List<Map<String, Object>> getEcounStudList(String cslNo) {
 		return adminDAO.getEcounStudList(cslNo);
 	}
@@ -76,21 +76,20 @@ public class AdminService {
 		adminDAO.registerEmpCounPro(formData);
 	}
 
-
 	public int gcounEnroll(AdminDTO adminDTO) {
 		return adminDAO.gcounEnroll(adminDTO);
 	}
-	
+
 	public int getIncompleteConsultCount(String studentNo) {
-        return adminDAO.countIncompletePostsByStudentNo(studentNo);
-    }
+		return adminDAO.countIncompletePostsByStudentNo(studentNo);
+	}
 
 	public List<Map<String, Object>> counselorList() {
 		return adminDAO.counselorList();
 	}
-	
-	
 
-
+	public void toggleCompletionStatus(int postId) {
+		adminDAO.toggleCompletionStatus(postId);
+	}
 
 }

@@ -132,4 +132,11 @@
 	</insert>
 	
 	
+    <!-- 게시글의 상담 완료 여부 토글 -->
+    <update id="toggleCompletionStatus" parameterType="int">
+        UPDATE ICOUN_POSTS
+        SET PST_COMP = CASE WHEN PST_COMP = '미완료' THEN '완료' ELSE '미완료' END
+        WHERE PST_SN = #{postId}
+    </update>
+	
 </mapper>

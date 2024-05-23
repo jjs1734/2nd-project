@@ -301,4 +301,16 @@ public class AdminController {
 	        return "success";
 	    }
 	
+	 
+	 @ResponseBody
+	    @PostMapping("/admin/toggleCompletionStatus")
+	    public ResponseEntity<String> toggleCompletionStatus(@RequestParam("postId") int postId) {
+	        adminService.toggleCompletionStatus(postId);
+	        return ResponseEntity.ok("Status toggled successfully");
+	 
+	 
+	 
+	 
+}
+	 
 }
