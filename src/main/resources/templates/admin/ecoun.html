@@ -302,7 +302,7 @@
 				type: "post",
 				data: { cslNo: cslNo },
 				success: function(result) {
-					result.forEach(row => {
+					/* result.forEach(row => {
 			            if(row.EMP_STTS_CD == 10){
 			            	row.EMP_STTS_CD = row.EMP_STTS_CD + "(예약중)"; // 상담 코드 하드코딩
 			            }else if(row.EMP_STTS_CD == 20){
@@ -315,7 +315,7 @@
 			            	row.EMP_STTS_CD = row.EMP_STTS_CD + "(추가상담)"; // 상담 코드 하드코딩
 			            }
 			          });
-					grid2.resetData(result)
+ */					grid2.resetData(result)
 				},
 				error: function(xhr, status, error) {
 		            console.error("Error fetching data: ", error);

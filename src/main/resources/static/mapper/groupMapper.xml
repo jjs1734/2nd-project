@@ -23,4 +23,11 @@
         SELECT LAST_INSERT_ID()
     </selectKey>
 	</insert>
+	
+	<select id="selectMyInfo" resultType="Map" parameterType="String">
+		SELECT * 
+		FROM STUD_INFO 
+		WHERE STUD_NO = #{userId} 
+	</select>
+	
 </mapper>

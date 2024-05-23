@@ -21,36 +21,40 @@
 	    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         
 <style>
-.leftnavapply {
-    text-align: center; /* 텍스트를 가운데 정렬합니다. */
-	background-color: gray;
-}
+#sidenav{background: #B6B6B6; float:left; margin-right:20px; padding:10px; margin-top:40px; width:200px; height:780px; text-align:center;}
+.leftnavapply {text-align: center; background-color: gray;}
+.button{margin-bottom:30px; color:white; font-size:15pt; width:140px; height:35px; background-color:#A41034; border: none;}
+#content{background: #B6B6B6; float:left; padding:10px; margin-top:40px; width:1000px; height:780px;}
 </style>
        
 </head>
 <body>
 	<!-- 메뉴-->
         <div th:replace="~{menu :: Menu}"></div>
+        
+        <!-- Page Content-->
+        <div class="container px-4 px-lg-5">
 
-		<div class="leftnavapply">
-			<h1>취업 상담	</h1>
-		</div>
+		<div class="d-flex justify-content-center">
 		
-		<div class="d-flex justify-content-center" style="margin: 0 400px;">
 	        <!-- 좌측 메뉴 nav -->
-	        <div th:replace="~{leftmenu :: LeftMenu}"></div>
+	        <!-- <div th:replace="~{leftmenu :: LeftMenu}"></div> -->
+	        <form th:action="@{/empCounProfile}" >
+	        <div id="sidenav">
+				<p style="margin-top:20px; margin-bottom:80px; font-weight:bold; font-size:20pt;">취업 상담</p>
+				<button class="button" type="submit" onclick="openPage('/empCounProfile')">상담사 소개</button><br>
+				<button class="button" type="submit" onclick="openPage('/psycoun_type')">상담 신청</button><br>
+				<button class="button" type="submit" onclick="openPage('/psycoun_app')"></button>
+			</div>
+            </form>
 	        
-	        <!-- Page Content-->
-	        <!-- 좌측 메뉴 nav와 container 클래스를 가로로 배열하기 위해서 div설정 -->
-	        <div>
-		        
-		    <!-- 메인 내용 -->
-	        
+	        <div id="content">
+        		메인 내용
         	</div>
         </div>
+        </div>	
         <!-- 푸터-->
-        <div th:replace="~{footer :: Footer}">
-        </div>
+        <div th:replace="~{footer :: Footer}"></div>
         
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>

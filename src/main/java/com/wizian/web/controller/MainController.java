@@ -1,6 +1,7 @@
 package com.wizian.web.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,11 +38,16 @@ public class MainController {
 	
 	
 	@GetMapping("/mypage")
-	public String mypage() {
+	public String mypage(HttpSession session, Model model) {
 		
+		String userId = (String) session.getAttribute("userId");
+		System.out.println(userId);
+		Map<String, Object> selectMyInfo = groupService.selectMyInfo(userId);
+		model.addAttribute("selectMyInfo", selectMyInfo);
 		
 		return "mypage";
 	}
+	
 	@GetMapping("/intro")
 	public String intro() {
 		
