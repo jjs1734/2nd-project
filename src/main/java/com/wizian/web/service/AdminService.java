@@ -87,6 +87,10 @@ public class AdminService {
 	public List<Map<String, Object>> counselorList() {
 		return adminDAO.counselorList();
 	}
+
+	public List<Map<String, Object>> getGcounCslList() {
+		return adminDAO.getGcounCslList();
+	}
 	
 	
 

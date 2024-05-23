@@ -33,8 +33,11 @@ public class GroupController {
 		List<Map<String, String>> groupList = groupService.groupList(); 
 		
 		String userId = (String) session.getAttribute("userId");
+		String grade = (String) session.getAttribute("grade");
+		
 		System.out.println(userId);
 		if (userId == null) return "redirect:/login"; // 로그인 세션이 없다면 로그인 페이지로 이동
+		if (!grade.equals("학생")) return "redirect:/main";
 		
 		UserDTO userInfo = userService.userInfo(userId);
 		
@@ -46,8 +49,15 @@ public class GroupController {
 	
 	@ResponseBody
 	@PostMapping("/groupEnroll")
-	public int groupEnroll(GroupDTO groupDto) {
-		int result = groupService.groupEnroll(groupDto);
+	public int groupEnroll(GroupDTO groupDto, HttpSession session) {
+		
+		String userId = (String) session.getAttribute("userId");
+		String grade = (String) session.getAttribute("grade");
+		int result = 0;
+		
+		if(userId != null && grade.equals("학생")) {
+			result = groupService.groupEnroll(groupDto);
+		}
 		
 		return result;
 	}

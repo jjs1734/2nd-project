@@ -48,8 +48,8 @@ public class AdminController {
 	@GetMapping("/admin/gcoun")
 	public String gcoun(Model model) {
 		
-		//List<Map<String, Object>> getGcounCslList = adminService.getGcountCslList();
-		//model.addAttribute("cslList" ,getGcounCslList);
+	List<Map<String, Object>> getGcounCslList = adminService.getGcounCslList();
+	model.addAttribute("cslList" ,getGcounCslList);
 		
 		
 		return "admin/gcoun";
@@ -269,7 +269,6 @@ public class AdminController {
         adminDTO.setGCOUN_CONTS_CN("/gcounFiles/" + fileName);
         
         int gcounEnroll = adminService.gcounEnroll(adminDTO);
-		int gcounEnroll = adminService.gcounEnroll(adminDTO);
 		
         return gcounEnroll;
 	}

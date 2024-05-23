@@ -103,7 +103,8 @@
 					<div class="mb-3">
 						<label class="col-sm-4 col-form-label">프로그램명</label>
 						<div class="col-sm-8">
-							<input id="gcounNm" type="text" placeholder="프로그램명">
+							<input id="gcounNm" type="text" placeholder="프로그램명" maxlength="100" class="w-50">
+							<small id="gcounNmCount" class="form-text text-muted">0/100</small>
 						</div>					
 					</div>
 					<div class="mb-3">
@@ -115,7 +116,8 @@
 					<div class="mb-3">
 						<label class="col-sm-4 col-form-label">장소</label>
 						<div class="col-sm-8">
-							<input id="place" type="text" placeholder="장소">
+							<input id="place" type="text" placeholder="장소" maxlength="100" class="w-50">
+							<small id="placeCount" class="form-text text-muted">0/100</small>
 						</div>
 					</div>
 					<div class="mb-3">
@@ -215,29 +217,38 @@
 			$('#gcounModal').modal("show");
 		});
 		
-		// 이미지 파일인지 확인
-		function isValidImageFile(file) {
-			const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
-			const fileExtension = file.name.split('.').pop().tooLowerCase();
-			return validExtension.includes(fileExtension);
-		}
-		
-		$('#gcounFile').change(function() {
-			var files = this.files;
-			let valid = true;
-			for (let i = 0; i < files.length; i++) {
-				if (!isValidImageFile(files[i])) {
-					valid = false;
-					break;
-				}
-			}
-			
-			if (!valid) {
-				alert('이미지 파일만 업로드 할 수 있습니다. (jpg, jpeg, png, gif, bmf)');
-				this.value = '';
-			}
+		function updateCharCount(input, countDisplay, maxLength) {
+	        const currentLength = $(input).val().length;
+	        $(countDisplay).text(`${currentLength}/${maxLength}`);
+	    }
 
-		});
+	    function enforceMaxLength(input, maxLength) {
+	        const value = $(input).val();
+	        if (value.length > maxLength) {
+	            $(input).val(value.slice(0, maxLength));
+	        }
+	    }
+
+	    const textInputs = [
+	        { id: '#gcounNm', countId: '#gcounNmCount', maxLength: 100 },
+	        { id: '#place', countId: '#placeCount', maxLength: 100 }
+	    ];
+
+	    textInputs.forEach(function(input) {
+	        const $input = $(input.id);
+	        const $countDisplay = $(input.countId);
+	        const maxLength = input.maxLength;
+
+	        $input.on('input', function() {
+	            enforceMaxLength($input, maxLength);
+	            updateCharCount($input, $countDisplay, maxLength);
+	        });
+
+	        // 페이지 로드 시 초기 글자 수 업데이트
+	        updateCharCount($input, $countDisplay, maxLength);
+	    });
+		
+		
 		
 		
 		// 모달 내의 등록하기 버튼 기능
@@ -261,49 +272,114 @@
 			const currentDate = new Date();
 			currentDate.setHours(0, 0, 0, 0);
 			
+			if(!cslNo) {
+				alert('상담사를 선택해주세요.');
+				$('#cslNo').focus();
+				return;
+			}
+			
+			if(!gcounNm){
+				alert('프로그램명을 입력해주세요.');
+				$('#gcounNm').focus();
+				return;
+			}
+			
+			if(!gcounDt) {
+				alert('일시를 입력해주세요.');
+				$('#gcounDt').focus();
+				return;
+			}
+			
+			if(!place) {
+				alert('장소를 입력해주세요.');
+				$('#place').focus();
+				return;
+			}
+			
+			if(!gcounBgngDt) {
+				alert('모집 시작일을 입력해주세요.');
+				$('#gcounBgngDt').focus();
+				return;
+			}
+			
 			// 모집 시작일이 오늘 날짜보다 빠를 시 알림
 			if (currentDate > bgngDt) {
 				alert('모집 시작일은 금일보다 빠를 수 없습니다.');
+				$('#gcounBgngDt').focus();
+				return;
+			}
+
+			if(!gcounDdlnDt) {
+				alert('모집 마감일을 입력해주세요.');
+				$('#gcounDdlnDt').focus();
 				return;
 			}
 
 			// 모집 마감일보다 모집일이 더 늦을 시 알림
 			if (bgngDt > ddlnDt) {
 				alert('모집 마감일은 모집 시작일 이후이어야 합니다.');
+				$('#gcounDdlnDt').focus();
 				return;
 			}
 			
 			// 상담 일시보다 마감일이 더 늦을 시 알림
 			if (gcDt < ddlnDt) {
 				alert('상담 일시는 모집 마감일보다 이후이어야 합니다.');
+				$('#gcounDt').focus();
 				return;
 			}
 			
+			if(!gcounLmtCount) {
+				alert('정원을 입력해주세요.');
+				$('#gcounLmtCount').focus();
+				return;
+			}
+
 			// 정원 숫자인지 확인 기능
 			if (!/^\d+$/.test(gcounLmtCount)) {
 				alert('정원을 올바르게 입력해주세요.');
+				$('#gcounLmtCount').focus();
 	            return;
 	        }
 			
 			// 정원 0명인지 확인
 			if (gcounLmtCount == 0) {
 				alert('정원은 최소 1명 이상이어야 합니다.');
+				$('#gcounLmtCount').focus();
+				return;
+			}
+			if (gcounLmtCount > 500) {
+				alert('정원은 500명을 초과할 수 없습니다.');
+				$('#gcounLmtCount').focus();
 				return;
 			}
 			
 			// 업로드 파일 존재 여부 확인
 			if (!gcounFile.val()) {
 				alert('업로드 할 이미지를 선택하세요.');
+				$('#gcounFile').focus();
 				return;
 			}
+			
+			const files = gcounFile[0].files;
+			
+			if (files.length > 0) {
+				const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+				const fileExtension = files[0].name.split('.').pop().toLowerCase();
+
+				if (!validExtensions.includes(fileExtension)) {
+					alert(fileExtension + ' 파일은 업로드 불가합니다. jpg, jpeg, png, gif, bmp 형식의 파일을 선택해주세요.');
+					$('#gcounFile').focus();
+					return;
+				}
+			} 
+			
 			const formData = new FormData();
 			
 			// 파일 부분 기능
-			const files = gcounFile[0].files;
 			for(var i = 0; i < files.length; i++) {
 				formData.append("file", files[i]);
 			}
-			//
 			
 			formData.append("CSL_NO", cslNo);
 			formData.append("GCOUN_NM", gcounNm);
@@ -332,6 +408,16 @@
 					  	    dataType: "JSON",
 					  	    contentType: "application/json; charset=UTF-8",
 					  	    success: function (result) {
+								$('#cslNo').val('');
+								$('#gcounNm').val('');
+								$('#gcounDt').val('');
+								$('#place').val('');
+								$('#gcounBgngDt').val('');
+								$('#gcounDdlnDt').val('');
+								$('#gcounLmtCount').val('');
+								$('#gcounFile').val('');
+								$('#gcounNmCount').text('0/100'); // 프로그램명 글자 수 초기화
+					            $('#placeCount').text('0/100'); // 장소 글자 수 초기화
 					  	      grid1.resetData(result);
 					  	    },
 					  	  });
