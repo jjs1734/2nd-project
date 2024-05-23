@@ -39,11 +39,8 @@ public class AdminController {
 	
 	@GetMapping("/admin/gcoun")
 	public String gcoun(Model model) {
-		
 		List<Map<String, Object>> getGcounCslList = adminService.getGcountCslList();
-		model.addAttribute("cslList" ,getGcounCslList);
-		
-		
+		model.addAttribute("cslList" ,getGcounCslList);		
 		return "admin/gcoun";
 	}
 	

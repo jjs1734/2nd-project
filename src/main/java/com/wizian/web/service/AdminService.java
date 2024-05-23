@@ -46,6 +46,8 @@ public class AdminService {
 
 	public List<BoardDTO> getReplies(int postId) {
 		return adminDAO.getReplies(postId);
+	}
+	
 	public List<Map<String, Object>> getEcounStudList(String cslNo) {
 		return adminDAO.getEcounStudList(cslNo);
 	}
