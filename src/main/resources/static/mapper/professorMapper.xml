@@ -26,8 +26,8 @@
 	<insert id="pfCounReservation" parameterType="com.wizian.web.dto.PfRsvDTO">
 		INSERT INTO PF_COUN_INFO (PF_NO, STUD_NO, PF_COUN_RSVT_YMD, PF_COUN_RSVT_TIME, PFS_NO, PF_CONTENTS) 
 		VALUES (#{PF_NO}, #{STUD_NO}, #{PF_COUN_RSVT_YMD}, #{PF_COUN_RSVT_TIME}, #{PFS_NO}, #{PF_CONTENTS});
-		<selectKey keyProperty="pfCounNo" order="AFTER" resultType="Integer">
-        	SELECT LAST_INSERT_ID() AS pfCounNo
+		<selectKey keyProperty="PF_COUN_NO" order="AFTER" resultType="Integer">
+        	SELECT LAST_INSERT_ID() AS PF_COUN_NO
     	</selectKey>
 	</insert>
 	

@@ -88,6 +88,10 @@ public class AdminService {
 	public List<Map<String, Object>> counselorList() {
 		return adminDAO.counselorList();
 	}
+
+	public List<Map<String, Object>> getPfcounList() {
+		return adminDAO.getPfcounList();
+	}
 	
 	
 

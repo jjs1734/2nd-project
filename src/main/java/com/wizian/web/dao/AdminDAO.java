@@ -49,5 +49,7 @@ public interface AdminDAO {
 
 	List<Map<String, Object>> counselorList();
 
+	List<Map<String, Object>> getPfcounList();
+
 	
 }

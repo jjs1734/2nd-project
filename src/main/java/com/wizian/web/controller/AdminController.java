@@ -74,6 +74,44 @@ public class AdminController {
 		return "/admin/counselor";
 	}
 	
+	@GetMapping("/admin/professor")
+	public String professor() {
+		return "/admin/professor";
+	}
+	
+	//지도교수 상담
+	@GetMapping("/admin/pfcoun")
+	public String pfcoun() {
+		return "/admin/pfcoun";
+	}
+	
+	@ResponseBody
+	@PostMapping("/admin/pfcounEnroll")
+	public int pfcounEnroll(
+			@RequestParam("PF_NO") String pfNo,
+			@RequestParam("STUD_NO") String studNo,
+			@RequestParam("PF_CONTENTS") String pfContents,
+			@RequestParam("PF_COUN_DT") String pfcounDT,
+			@RequestParam("PF_COMMENT") String pfComm,
+			@RequestParam("PF_COUN_STATE_CD") String pfStCD){
+		
+		return 1;
+	}
+	
+	@ResponseBody
+	@GetMapping("/admin/getPfcounList")
+	public List<Map<String, Object>> getPfcounList() {
+		List<Map<String, Object>> getPfcounList = adminService.getPfcounList();
+		return getPfcounList;
+	}
+	
+	@ResponseBody
+	@PostMapping("/admin/pfcounModify")
+	public void pfcounModify() {
+		
+	}
+	
+	
 	@GetMapping("/admin/counselorList")
 	public List<Map<String, Object>> counselorList(){
 		
@@ -268,7 +306,6 @@ public class AdminController {
         adminDTO.setGCOUN_CONTS_CN("/gcounFiles/" + fileName);
         
         int gcounEnroll = adminService.gcounEnroll(adminDTO);
-		int gcounEnroll = adminService.gcounEnroll(adminDTO);
 		
         return gcounEnroll;
 	}
