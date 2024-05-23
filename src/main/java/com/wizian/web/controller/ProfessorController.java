@@ -36,9 +36,9 @@ public class ProfessorController {
 		model.addAttribute("userInfo", userInfo); // 사용자 정보
 		
 		//교수리스트 전송
-		System.out.println(userInfo.PF_NO);
-		String pf_no = userInfo.PF_NO;
-		String depart = userInfo.SCSBJT_NM;
+		System.out.println(userInfo.getPF_NO());
+		String pf_no = userInfo.getPF_NO();
+		String depart = userInfo.getSCSBJT_NM();
 		
 		ProfessorDTO pfInfo = pfService.pfInfo(pf_no);//지도교수 정보
 		System.out.println("교수이름: "+ pfInfo.getPF_NM());

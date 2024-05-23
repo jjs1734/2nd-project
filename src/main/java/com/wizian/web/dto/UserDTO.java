@@ -1,10 +1,10 @@
 package com.wizian.web.dto;
 
-import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
 
-import lombok.Data;
-
-@Data
+@Getter
+@Setter
 public class UserDTO {
 	
 	private String STUD_NO, USER_NO, PF_NO, NTN_CD, SCSBJT_NM, STUD_NM, TELNO, STUD_EML_ADDR, COL_REG, STUD_BRDT, STUD_GEN;
