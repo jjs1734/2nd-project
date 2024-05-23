@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper	namespace="com.wizian.web.dao.ProfessorDAO">
-
 	<select id="pfInfo" resultType="ProfessorDTO" parameterType="String">
 		select * 
 		FROM PF_INFO
@@ -12,5 +11,25 @@
 	select * from PF_INFO
 	WHERE SCSBJT_NM = #{depart}
 	</select>
+	
+	<select id="getScList" resultType="Map" parameterType="String">
+		SELECT PFS_NO, PF_NO, PF_DATE, PF_TIME_CD, PF_SC_DEL FROM PF_SCHEDULE
+		WHERE PF_SC_DEL ='1' AND PF_NO= #{pf_no}
+	</select>
+	
+	<update id="pfDelUpdate" parameterType="Integer">
+		UPDATE PF_SCHEDULE 
+		SET PF_SC_DEL = '0' 
+		WHERE PFS_NO = #{pfs_no};
+	</update>
+	
+	<insert id="pfCounReservation" parameterType="com.wizian.web.dto.PfRsvDTO">
+		INSERT INTO PF_COUN_INFO (PF_NO, STUD_NO, PF_COUN_RSVT_YMD, PF_COUN_RSVT_TIME, PFS_NO, PF_CONTENTS) 
+		VALUES (#{PF_NO}, #{STUD_NO}, #{PF_COUN_RSVT_YMD}, #{PF_COUN_RSVT_TIME}, #{PFS_NO}, #{PF_CONTENTS});
+		<selectKey keyProperty="PF_COUN_NO" order="AFTER" resultType="Integer">
+        	SELECT LAST_INSERT_ID() AS PF_COUN_NO
+    	</selectKey>
+	</insert>
+	
 	
 </mapper>

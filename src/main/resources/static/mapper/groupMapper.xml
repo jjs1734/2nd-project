@@ -16,11 +16,7 @@
 	</select>
 	
 	<insert id="groupEnroll" parameterType="GroupDTO">
-		INSERT INTO GROUP_COUN_APPLICANT (STUD_NO, GCOUN_CD)
-		VALUES(#{STUD_NO}, #{GCOUN_CD});
-		<!-- MyBatis에서 INSERT의 경우 성공적으로 수행된 행의 수를 반환할 수 있도록 설정 -->
-    <selectKey keyProperty="id" resultType="int" order="AFTER">
-        SELECT LAST_INSERT_ID()
-    </selectKey>
+		INSERT INTO GROUP_COUN_APPLICANT (STUD_NO, GCOUN_CD, GCOUN_CURRENT_DT)
+		VALUES(#{STUD_NO}, #{GCOUN_CD}, #{GCOUN_CURRENT_DT})
 	</insert>
 </mapper>

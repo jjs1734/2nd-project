@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://thymeleaf.org">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <title>
+    관리자 페이지
+  </title>
+  <!--     Fonts and icons     -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
+  <!-- Nucleo Icons -->
+  <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>  
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <!-- CSS Files -->
+  <link id="pagestyle" href="../assets/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
+  <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
+  <link rel="stylesheet" href="./bootstrapt/css/bootstrap.min.css" />
+  <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+  
+</head>
+
+<body class="g-sidenav-show  bg-gray-200">
+  
+  <!-- 좌측 메뉴 -->
+  <div th:replace="~{admin/sidenav :: sidenav}"></div>
+  
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+   
+   <!-- Navbar -->
+    <nav th:fragment="navbar" class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <h6 class="font-weight-bolder mb-0">심리 상담</h6>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+            <div class="input-group input-group-outline">
+              <label class="form-label">Type here...</label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+   
+   
+   <div class="container-fluid py-4">
+      <div class="row min-vh-80 h-100">
+        <div class="col-12">
+       		<h4 style="margin-right: 10px;">방문 신청자 목록</h4>
+       		<div id="studGrid"></div>
+        	<br>
+        	<h4>상담 목록</h4>
+        	<div id="pcounGrid"></div>
+        
+        </div>
+   </div>
+    
+    <!-- footer -->
+    
+    
+  </div>
+  </main>
+    <div th:replace="~{admin/settingBtn :: setBtn}"></div>
+    
+    
+  <!--   Core JS Files   -->
+  <script src="../assets/js/core/popper.min.js"></script>
+  <script src="../assets/js/core/bootstrap.min.js"></script>
+  <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+  const grid1 = new tui.Grid({
+      el: document.getElementById('studGrid'),
+      scrollX: true,
+      scrollY: true,
+      bodyHeight: 225,
+      minBodyHeight: 30,
+//      rowHeaders: ['rowNum'],
+//      pageOptions: {
+//        perPage: 15
+//      },
+      columns: [
+        { header: '이름', name: 'STUD_NM', sortable: true, align: 'center', width: 250, filter: 'select' },
+        { header: '학번', name: 'STUD_NO', sortable: true, align: 'center', width: 150, filter: 'select' },
+        { header: '학과', name: 'SCSBJT_NM', sortable: true, align: 'center', width: 400, filter: 'select' },
+        { header: '전화번호', name: 'TELNM', sortable: true, align: 'center', width: 350, filter: 'select' },
+        { header: '이메일', name: 'STUD_EML_ADDR', sortable: true, align: 'center', width: 350, filter: 'select'}
+      ]
+    });
+  
+  const grid2 = new tui.Grid({
+        el: document.getElementById('pcounGrid'),
+        scrollX: false,
+        scrollY: true,
+        bodyHeight: 400,
+        minBodyHeight: 30,
+//        rowHeaders: ['rowNum'],
+//        pageOptions: {
+//          perPage: 15
+//        },
+        columns: [
+          { header: '상담신청번호', name: 'Key', sortable: true, align: 'center', width: 200, filter: 'select' },
+          { header: '학번', name: 'STUD_NO', sortable: true, align: 'center', width: 200, filter: 'select' },
+          { header: '방문예약일자', name: 'VISIT_RES_YMD', sortable: true, align: 'center', width: 150, filter: 'select' },
+          { header: '방문예약시간(시)', name: 'VISIT_RES_CD', sortable: true, align: 'center', width: 200, filter: 'select' },
+          { header: '방문확정일자', name: 'CON_VISIT_YMD', sortable: true, align: 'center', width: 150, filter: 'select' },
+          { header: '방문확정시간(시)', name: 'CON-VISIT_CD', sortable: true, align: 'center', width: 200, filter: 'select' },
+          { header: '상담진행코드', name: 'COUN_PRO_CD', sortable: true, align: 'center', width: 200, filter: 'select' },
+          { header: '심리검사종류', name: 'PSY_EXAM', sortable: true, align: 'center', width: 300, filter: 'select' }
+        ]
+      });  
+
+	/* $(document).ready(function () {
+		
+		$('#enroll').click(function() {
+			const gcounCd = $('#gcounCd').val();
+			const cslNo = $('#cslNo').val();
+			const gcounNm = $('#gcounNm').val();
+			const gcounDt = $('#gcounDt').val();
+			const gcounBgngDt = $('#gcounBgngDt').val();
+			const gcounDdlnDt = $('#gcounDdlnDt').val();
+			const gcounLmtCount = $('#gcounLmtCount').val();
+			//const bannerImage = $('#bannerImage')[0].files[0];
+			
+			alert('gcounCd: ' + gcounCd);
+			alert('cslNo: ' + cslNo);
+			alert('gcounNm: ' + gcounNm);
+			alert('gcounDt: ' + gcounDt);
+			alert('gcounBgngDt: ' + gcounBgngDt);
+			alert('gcounDdlnDt: ' + gcounDdlnDt);
+			alert('gcounLmtCount: ' + gcounLmtCount);
+			
+			
+			
+			$.ajax({
+				url: '/admin/gcounEnroll',
+				method: 'post',
+				data: {
+					GCOUN_CD: gcounCd,
+					CSL_NO: cslNo,
+					GCOUN_NM: gcounNm,
+					GCOUN_DT: gcounDt,
+					GCOUN_BGNG_DT: gcounBgngDt,
+					GCOUN_DDLN_DT: gcounDdlnDt,
+					GCOUN_LMT_COUNT: gcounLmtCount
+					//bannerImage: bannerImage
+				},
+				success: function(response) {
+					if (response === 1) {
+						alert('등록에 성공하였습니다.');
+						$('#gcounModal').modal('hide');
+						
+						
+						//성공 시 데이터 새로 가져와서 그리드에 세팅하기
+						$.ajax({
+					  	    url: "/admin/getGcounList",
+					  	    type: "get",
+					  	    dataType: "JSON",
+					  	    contentType: "application/json; charset=UTF-8",
+					  	    success: function (result) {
+					  	      grid1.resetData(result);
+					  	    },
+					  	  });
+						
+					} else {
+						alert('등록에 실패하였습니다.');
+					}
+				},
+				error: function(error) {
+					alert('에러가 발생하였습니다.');
+				}
+			});
+			
+		});
+		
+		
+		
+  	  $.ajax({
+  	    url: "/admin/getGcounList",
+  	    type: "get",
+  	    dataType: "JSON",
+  	    contentType: "application/json; charset=UTF-8",
+  	    success: function (result) {
+  	      grid1.resetData(result);
+  	    },
+  	  });
+  	
+  	  // 상단 그리드 클릭 시 하단 그리드 생성
+	 grid1.on('click', function(ev) {
+		const { rowKey } = ev;
+		const rowData = grid1.getRow(rowKey);
+		const gcounCd = rowData.GCOUN_CD;
+		//alert(gcounCd);
+		
+		
+		$.ajax({
+			url: "/admin/getGcounStudList",
+			type: "POST",
+			data: { gcounCd: gcounCd },
+			success: function(result) {
+				grid2.resetData(result)
+			},
+		});
+	 })
+	
+	grid2.on('afterChange', function(ev) {
+		const changes = ev.changes;
+
+		const changeData = changes.map(change => ({
+              rowKey: change.rowKey,
+              columnName: change.columnName,
+              newValue: change.value
+          }));
+		alert(changeData.rowKey);
+	})
+	
+	});  */
+  </script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="../assets/js/material-dashboard.min.js?v=3.0.0"></script>
+</body>
+
+</html>

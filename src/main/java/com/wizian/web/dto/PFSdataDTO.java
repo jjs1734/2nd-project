@@ -1,5 +1,12 @@
 package com.wizian.web.dto;
 
-public class PFSdataDTO {
+import java.time.LocalDate;
 
+import lombok.Data;
+
+@Data
+public class PFSdataDTO {
+	private int PFS_NO;
+	private String PF_NO, PF_TIME_CD, PF_SC_DEL;
+	private LocalDate PF_DATE;
 }

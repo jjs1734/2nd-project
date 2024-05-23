@@ -1,5 +1,7 @@
 package com.wizian.web.service;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +23,10 @@ public class MemberService {
 		return null;
 	}
 	
+	// 취업상담: 신진수
+	public Map<String, Object> empUserInfo(String userId) {
+		return memberDAO.empUserInfo(userId);
+	}
+
 	
 }

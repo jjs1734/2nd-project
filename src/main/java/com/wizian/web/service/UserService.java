@@ -1,6 +1,5 @@
 package com.wizian.web.service;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,10 @@ public class UserService {
 
 	public UserDTO userInfo(String userId) {
 		return userDAO.userInfo(userId);
+	}
+
+	public Map<String, Object> empUserInfo(String userId) {
+		return userDAO.empUserInfo(userId);
 	}
 
 	

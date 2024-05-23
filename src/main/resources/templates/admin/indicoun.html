@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://thymeleaf.org">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <title>
+    관리자 페이지 - 학생 정보 및 게시글 관리
+  </title>
+  <!-- Fonts and icons -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
+  <!-- Nucleo Icons -->
+  <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- TOAST UI Pagination CSS -->
+  <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+  <!-- TOAST UI Pagination JS -->
+  <script src="https://uicdn.toast.com/tui-pagination/latest/tui-pagination.js"></script>
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <!-- CSS Files -->
+  <link id="pagestyle" href="../assets/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
+  <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .content-wrapper {
+      display: flex;
+    }
+    #grid-container, #board-container {
+      flex: 1;
+      padding: 20px;
+    }
+    #grid, #board {
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fff;
+      padding: 20px;
+    }
+    #grid .tui-grid-header-area, #board .tui-grid-header-area {
+      background-color: #f5f5f5;
+      border-bottom: 1px solid #ddd;
+    }
+    #grid .tui-grid-body-area, #board .tui-grid-body-area {
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    #board {
+      margin-left: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f5f5f5;
+    }
+  </style>
+</head>
+
+<body class="g-sidenav-show bg-gray-200">
+  
+  <!-- 좌측 메뉴 -->
+  <div th:replace="~{admin/sidenav :: sidenav}"></div>
+  
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <!-- Navbar -->
+    <nav th:fragment="navbar" class="navbar navbar-main navbar-expand-lg px=0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <h6 class="font-weight-bolder mb-0">개인상담관리</h6>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+            <div class="input-group input-group-outline">
+              <label class="form-label">Type here...</label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+
+    <div class="container-fluid py-4">
+      <div class="row min-vh-80 h-100 content-wrapper">
+        <div class="col-6" id="grid-container">
+          <div id="grid"></div>
+          <button type="button" onclick="grid.request('updateData')" class="btn btn-primary mt-3">저장</button>
+        </div>
+        <div class="col-6" id="board-container">
+          <div id="board">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>번호</th>
+                  <th>제목</th>
+                  <th>작성자</th>
+                  <th>진행중상담개수</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- 게시글 리스트 -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-labelledby="postModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="postModalLabel">게시글 제목</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p class="text-muted" id="postInfo">
+              작성자: <span id="postWriter">작성자명</span> | 게시일: <span id="postDate">게시일</span> | 수정일: <span id="postModified">수정일</span> | 완료 여부: <span id="postCompleted">완료 여부</span>
+            </p>
+            <h3>내용</h3>
+            <p id="postContent">게시글 내용</p>
+            <button class="btn btn-secondary" onclick="toggleReplyForm()">답글달기</button>
+            <div id="replyForm" style="display: none;">
+              <h4>답글 작성</h4>
+              <form id="replyFormElement" action="/submitReply" method="post">
+                <input type="hidden" name="board_no" value="1"> 
+                <input type="hidden" id="originalPostId" name="originalPostId" value="" />
+                <div class="form-group">
+                  <label for="title">제목</label> 
+                  <input type="text" id="replyTitle" name="title" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="content">내용</label>
+                  <textarea id="replyContent" name="content" class="form-control" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">답글 제출</button>
+              </form>
+            </div>
+            <div id="replies">
+              <h3>답글 목록</h3>
+              <!-- 답글 목록 -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <div th:replace="~{admin/settingBtn :: setBtn}"></div>
+  <!-- Core JS Files -->
+  <script src="../assets/js/core/popper.min.js"></script>
+  <script src="../assets/js/core/bootstrap.min.js"></script>
+  <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    tui.Grid.setLanguage('ko', {
+      display: {
+        noData: '데이터가 없습니다',
+        loadingData: '데이터를 불러오는 중입니다',
+      },
+      net: {
+        confirmCreate: '정말로 데이터를 추가하시겠습니까?',
+        confirmUpdate: '정말로 데이터를 수정하시겠습니까?',
+        confirmDelete: '정말로 데이터를 삭제하시겠습니까?',
+        confirmModify: '정말로 데이터를 변경하시겠습니까?',
+        noDataToCreate: '추가할 데이터가 없습니다',
+        noDataToUpdate: '수정할 데이터가 없습니다',
+        noDataToDelete: '삭제할 데이터가 없습니다',
+        noDataToModify: '변경할 데이터가 없습니다',
+      },
+      filter: {
+        contains: '포함',
+        eq: '같음',
+        ne: '같지 않음',
+        start: '시작',
+        end: '끝',
+        after: '이후',
+        afterEq: '이후 또는 같음',
+        before: '이전',
+        beforeEq: '이전 또는 같음',
+        selctAll: '전체 선택'
+      }
+    });
+
+    const grid = new tui.Grid({
+        el: document.getElementById('grid'),
+        scrollX: false,
+        scrollY: true,
+        bodyHeight: 700,
+        minBodyHeight: 30,
+        columns: [
+            { header: '학번', name: 'STUD_NO', sortable: true, align: 'center', width: 200, filter: { type: 'text', showApplyBtn: true, showClearBtn: true } },
+            { header: '이름', name: 'STUD_NM', sortable: true, align: 'center', width: 150, filter: { type: 'text', showApplyBtn: true, showClearBtn: true } },
+            { header: '성별', name: 'STUD_GEN', sortable: true, align: 'center', width: 100, filter: 'select' },
+            { header: '진행중상담', name: 'INCOMPLETE_COUNT', sortable: true, align: 'center', width: 100, filter: 'select' },
+        ]
+    });
+
+    $(document).ready(function () {
+        $.ajax({
+            url: "/admin/studentList",
+            type: "get",
+            dataType: "JSON",
+            contentType: "application/json; charset=UTF-8",
+            success: function (result) {
+                // 학생 리스트를 불러와서 그리드에 설정
+                grid.resetData(result);
+
+                // 각 학생마다 미완료 상담 개수 설정
+                result.forEach((student, index) => {
+                    $.ajax({
+                        url: "/admin/incompleteConsultCount",
+                        type: "get",
+                        data: { studentNo: student.STUD_NO },
+                        dataType: "json", // JSON 형태로 응답을 받음
+                        success: function (count) {
+                            grid.setValue(index, 'INCOMPLETE_COUNT', count);
+                        },
+                    });
+                });
+            },
+        });
+
+        // 학생 이름 클릭 이벤트 핸들러
+        grid.on('click', (ev) => {
+            const rowKey = ev.rowKey;
+            const student = grid.getRow(rowKey);
+            const studentNo = student.STUD_NO;
+
+            // 학번에 해당하는 게시글 리스트 불러오기
+            $.ajax({
+                url: "/admin/boardList",
+                type: "get",
+                data: { studentNo: studentNo },
+                dataType: "JSON",
+                contentType: "application/json; charset=UTF-8",
+                success: function (result) {
+                    const tbody = $('#board tbody');
+                    tbody.empty(); // 기존 게시글 삭제
+                    result.forEach(function (post) {
+                        const row = $('<tr></tr>');
+                        row.append('<td>' + post.PST_SN + '</td>');
+                        row.append('<td><a href="#" class="post-title" data-id="' + post.PST_SN + '">' + post.PST_TTL + '</a></td>');
+                        row.append('<td>' + post.WRITER + '</td>');
+                        row.append('<td>' + post.PST_COMP + '</td>');
+                        tbody.append(row);
+                    });
+
+                    // 게시글 제목 클릭 이벤트 핸들러
+                    $('.post-title').on('click', function (e) {
+                        e.preventDefault();
+                        const postId = $(this).data('id');
+
+                        // 게시글 상세 내용 및 답글 불러오기
+                        $.ajax({
+                            url: "/admin/postDetail",
+                            type: "get",
+                            data: { postId: postId },
+                            dataType: "JSON",
+                            contentType: "application/json; charset=UTF-8",
+                            success: function (post) {
+                                $('#postModalLabel').text(post.detail.PST_TTL);
+                                $('#postWriter').text(post.detail.WRITER);
+                                $('#postDate').text(post.detail.PSTG_YMD);
+                                $('#postModified').text(post.detail.MDFCN_YMD);
+                                $('#postCompleted').text(post.detail.PST_COMP);
+                                $('#postContent').text(post.detail.PST_CN);
+                                $('#originalPostId').val(post.detail.PST_SN);
+
+                                // 답글 목록 표시
+                                const repliesDiv = $('#replies');
+                                repliesDiv.empty();
+                                if (post.replies && post.replies.length > 0) {
+                                    post.replies.forEach(reply => {
+                                        const replyCard = `
+                                            <div class="card mt-2">
+                                                <div class="card-body">
+                                                    <h4>${reply.PST_TTL}</h4>
+                                                    <p class="text-muted">
+                                                        작성자: ${reply.WRITER} | 게시일: ${reply.PSTG_YMD}
+                                                    </p>
+                                                    <p>${reply.PST_CN}</p>
+                                                </div>
+                                            </div>`;
+                                        repliesDiv.append(replyCard);
+                                    });
+                                } else {
+                                    repliesDiv.append('<p>답글이 없습니다.</p>');
+                                }
+
+                                // 모달 열기
+                                $('#postModal').modal('show');
+                            }
+                        });
+                    });
+                },
+            });
+        });
+
+        // 모달 닫기 이벤트 핸들러
+        $('.close').on('click', function () {
+            $('#postModal').modal('hide');
+        });
+        window.onclick = function (event) {
+            if (event.target == document.getElementById('postModal')) {
+                $('#postModal').modal('hide');
+            }
+        };
+    });
+
+    function toggleReplyForm() {
+        var form = document.getElementById('replyForm');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
+        }
+    }
+  </script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="../assets/js/material-dashboard.min.js?v=3.0.0"></script>
+</body>
+</html>

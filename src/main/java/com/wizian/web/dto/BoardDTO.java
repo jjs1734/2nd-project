@@ -19,6 +19,11 @@ public class BoardDTO {
 	public String PSTG_YMD; // 게시일
 	public String MDFCN_YMD; // 수정일
 	public String PST_COMP; // 게시 완료 여부
+	public String COUNSL;
 	public int PST_DEL; // 게시글 삭제 여부
 	// 롬복 어노테이션을 사용하여 모든 게터와 세터를 자동 생성
+
+	public String name;
+	public String email;
+
 }
