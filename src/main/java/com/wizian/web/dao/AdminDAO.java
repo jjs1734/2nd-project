@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import com.wizian.web.dto.AdminDTO;
-import com.wizian.web.dto.GroupDTO;
 
 @Repository
 @Mapper

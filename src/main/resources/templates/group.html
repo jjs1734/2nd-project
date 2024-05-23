@@ -116,16 +116,19 @@
 			});
 			
 			function enroll(gcounCD, studNum) {
+				const currentDateTime = new Date().toISOString();
+				
 				$.ajax({
 				    type: "POST",
 				    url: "/groupEnroll",
 				    data:{
 				    	GCOUN_CD: gcounCD,
-				    	STUD_NO: studNum
+				    	STUD_NO: studNum,
+				    	GCOUN_CURRENT_DT: currentDateTime 
 				    },
 				    success: function(data) {
-				        // console.log('Success:', data);
-				        $('#gcounModal').modal('hide'); // 모달 창 닫기
+						if (data === 1) {
+				    	$('#gcounModal').modal('hide'); // 모달 창 닫기
 				        Swal.fire({
 				        	  text: "신청이 완료되었습니다",
 				        	  icon: "success",
@@ -134,9 +137,11 @@
 						        location.reload();
 				        	  }
 				        	});
+						} else {
+							alert('통신에 실패하였습니다.');
+						}
 				    },
-				    error: function(xhr, status, error) {
-				        console.error('Error', error);
+				    error: function(error) {
 				        alert('이미 신청이 되어 있습니다.');
 				    }
 				});

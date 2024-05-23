@@ -24,7 +24,7 @@ public class GroupService {
 		return groupDAO.mainGroupImg();
 	}
 
-	public Object groupEnroll(GroupDTO groupDto) {
+	public int groupEnroll(GroupDTO groupDto) {
 		return groupDAO.groupEnroll(groupDto);
 	}
 
