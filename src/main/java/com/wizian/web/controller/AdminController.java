@@ -22,12 +22,13 @@ import com.wizian.web.service.BoardService;
 @Controller
 public class AdminController {
 	
-	 private final AdminService service;
+	 //private final AdminService service;
 
-	    @Autowired
-	    public AdminController(AdminService service) {
-	        this.service = service;
-	    }
+		/*
+		 * @Autowired public AdminController(AdminService service) { this.service =
+		 * service; }
+		 */
+	    
 	@Autowired
 	private AdminService adminService;
 	
@@ -40,8 +41,8 @@ public class AdminController {
 	@GetMapping("/admin/gcoun")
 	public String gcoun(Model model) {
 		
-		List<Map<String, Object>> getGcounCslList = adminService.getGcountCslList();
-		model.addAttribute("cslList" ,getGcounCslList);
+		//List<Map<String, Object>> getGcounCslList = adminService.getGcountCslList();
+		//model.addAttribute("cslList" ,getGcounCslList);
 		
 		
 		return "admin/gcoun";
@@ -148,7 +149,9 @@ public class AdminController {
 	     int count = adminService.getIncompleteConsultCount(studentNo);
 	     return ResponseEntity.ok(count);
 	 }
-
+	 
+	 
+	 // 취업 상담
 	@ResponseBody
 	@PostMapping("/admin/getEcounStudList")
 	public List<Map<String, Object>> getEcounStudList(@RequestParam("cslNo") String cslNo) {
@@ -209,7 +212,6 @@ public class AdminController {
 		
 		return "admin/pcoun";
 	}
-}
 
 	 @PostMapping("/admin/registerEmpCounselor")
 	    @ResponseBody

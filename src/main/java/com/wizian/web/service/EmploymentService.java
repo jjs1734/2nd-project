@@ -59,7 +59,7 @@ public class EmploymentService {
 		employmentDAO.insertTabFinal(eventData);
 	}
 
-	public List<Map<String, Object>> loginInfo(String userId) {
-		return employmentDAO.loginInfo(userId);
+	public List<Map<String, Object>> empLoginInfo(String userId) {
+		return employmentDAO.empLoginInfo(userId);
 	}
 }

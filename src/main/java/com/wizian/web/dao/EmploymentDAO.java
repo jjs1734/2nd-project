@@ -35,6 +35,6 @@ public interface EmploymentDAO {
 
 	public void insertTabFinal(EventData eventData);
 
-	public List<Map<String, Object>> loginInfo(String userId);
+	public List<Map<String, Object>> empLoginInfo(String userId);
 
 }
