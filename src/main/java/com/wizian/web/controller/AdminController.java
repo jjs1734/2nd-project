@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.wizian.web.dto.AdminDTO;
 import com.wizian.web.dto.BoardDTO;
 import com.wizian.web.service.AdminService;
-import com.wizian.web.service.BoardService;
 
 @Controller
 public class AdminController {
