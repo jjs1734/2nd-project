@@ -85,12 +85,12 @@
 					<h1 class="modal-title fs-5" id="gcounModalHeader">집단상담 등록</h1>
 				</div>
 				<div class="modal-body">
-					<div class="mb-3 row">
+					<!-- <div class="mb-3 row">
 						<label class="col-sm-4 col-form-label">집단상담 코드</label>
 						<div class="col-sm-8">
 							<input id="gcounCd" type="text" placeholder="GC00 형식으로 작성">
 						</div>
-					</div>
+					</div> -->
 					<div class="mb-3">
 						<label class="col-sm-4 col-form-label">담당 상담사</label>
 						<div class="col-sm-8">
@@ -113,6 +113,12 @@
 						</div>
 					</div>
 					<div class="mb-3">
+						<label class="col-sm-4 col-form-label">장소</label>
+						<div class="col-sm-8">
+							<input id="place" type="text" placeholder="장소">
+						</div>
+					</div>
+					<div class="mb-3">
 						<label class="col-sm-4 col-form-label">모집 기간</label>
 						<div class="col-sm-8">
 							<input id="gcounBgngDt" type="date" placeholder="일시"> ~ <input id="gcounDdlnDt" type="date" placeholder="일시">
@@ -125,9 +131,9 @@
 						</div>
 					</div>
 					<div class="mb-3">
-						<label class="col-sm-4 col-form-label">배너 이미지</label>
+						<label class="col-sm-4 col-form-label">배너 이미지 <p style="color: red;">(900px * 400px 사이즈의 이미지를 권장합니다.)</p> </label>
 						<div class="col-sm-8">
-							<input id="telNo" type="file" placeholder="번호">
+							<input id="gcounFile" type="file" multiple>
 						</div>
 					</div>
 				</div>
@@ -196,50 +202,123 @@
           { header: '이름', name: 'STUD_NM', sortable: true, align: 'center', width: 150, filter: {type: 'text', showApplyBtn: true, showCleatBtn: true} },
           { header: '학과', name: 'SCSBJT_NM', sortable: true, align: 'center', width: 200, filter: 'select' },
           { header: '신청 내역', name: 'GCOUN_STA_NM', sortable: true, align: 'center', width: 200, filter: 'select' },
+          { header: '신청 시간', name: 'GCOUN_CURRENT_DT', sortable: true, align: 'center', width: 200, filter: 'select' },
           { header: '담당 상담사', name: 'CSL_NM', sortable: true, align: 'center', width: 200, filter: 'select' }
         ]
       });  
 
 	$(document).ready(function () {
 		
+		// 모달 열기 기능
 		$('#gcounModalBtn').click(function(e){
 			e.preventDefault();
 			$('#gcounModal').modal("show");
 		});
 		
+		// 이미지 파일인지 확인
+		function isValidImageFile(file) {
+			const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+			const fileExtension = file.name.split('.').pop().tooLowerCase();
+			return validExtension.includes(fileExtension);
+		}
+		
+		$('#gcounFile').change(function() {
+			var files = this.files;
+			let valid = true;
+			for (let i = 0; i < files.length; i++) {
+				if (!isValidImageFile(files[i])) {
+					valid = false;
+					break;
+				}
+			}
+			
+			if (!valid) {
+				alert('이미지 파일만 업로드 할 수 있습니다. (jpg, jpeg, png, gif, bmf)');
+				this.value = '';
+			}
+
+		});
+		
+		
+		// 모달 내의 등록하기 버튼 기능
 		$('#enroll').click(function() {
-			const gcounCd = $('#gcounCd').val();
+
 			const cslNo = $('#cslNo').val();
 			const gcounNm = $('#gcounNm').val();
 			const gcounDt = $('#gcounDt').val();
+			const place = $('#place').val();
 			const gcounBgngDt = $('#gcounBgngDt').val();
 			const gcounDdlnDt = $('#gcounDdlnDt').val();
 			const gcounLmtCount = $('#gcounLmtCount').val();
-			//const bannerImage = $('#bannerImage')[0].files[0];
+			const gcounFile = $('#gcounFile');
 			
-			alert('gcounCd: ' + gcounCd);
-			alert('cslNo: ' + cslNo);
-			alert('gcounNm: ' + gcounNm);
-			alert('gcounDt: ' + gcounDt);
-			alert('gcounBgngDt: ' + gcounBgngDt);
-			alert('gcounDdlnDt: ' + gcounDdlnDt);
-			alert('gcounLmtCount: ' + gcounLmtCount);
+			// 입력된 값 비교허기 위해서 Date 값 생성
+			const bgngDt = new Date(gcounBgngDt);
+			const ddlnDt = new Date(gcounDdlnDt);
+			const gcDt = new Date(gcounDt);
+
+			// 현재 날짜 값 생성
+			const currentDate = new Date();
+			currentDate.setHours(0, 0, 0, 0);
 			
+			// 모집 시작일이 오늘 날짜보다 빠를 시 알림
+			if (currentDate > bgngDt) {
+				alert('모집 시작일은 금일보다 빠를 수 없습니다.');
+				return;
+			}
+
+			// 모집 마감일보다 모집일이 더 늦을 시 알림
+			if (bgngDt > ddlnDt) {
+				alert('모집 마감일은 모집 시작일 이후이어야 합니다.');
+				return;
+			}
 			
+			// 상담 일시보다 마감일이 더 늦을 시 알림
+			if (gcDt < ddlnDt) {
+				alert('상담 일시는 모집 마감일보다 이후이어야 합니다.');
+				return;
+			}
+			
+			// 정원 숫자인지 확인 기능
+			if (!/^\d+$/.test(gcounLmtCount)) {
+				alert('정원을 올바르게 입력해주세요.');
+	            return;
+	        }
+			
+			// 정원 0명인지 확인
+			if (gcounLmtCount == 0) {
+				alert('정원은 최소 1명 이상이어야 합니다.');
+				return;
+			}
+			
+			// 업로드 파일 존재 여부 확인
+			if (!gcounFile.val()) {
+				alert('업로드 할 이미지를 선택하세요.');
+				return;
+			}
+			const formData = new FormData();
+			
+			// 파일 부분 기능
+			const files = gcounFile[0].files;
+			for(var i = 0; i < files.length; i++) {
+				formData.append("file", files[i]);
+			}
+			//
+			
+			formData.append("CSL_NO", cslNo);
+			formData.append("GCOUN_NM", gcounNm);
+			formData.append("GCOUN_DT", gcounDt);
+			formData.append("GCOUN_DTL_CN", place);
+			formData.append("GCOUN_BGNG_DT", gcounBgngDt);
+			formData.append("GCOUN_DDLN_DT", gcounDdlnDt);
+			formData.append("GCOUN_LMT_COUNT", gcounLmtCount);
 			
 			$.ajax({
 				url: '/admin/gcounEnroll',
 				method: 'post',
-				data: {
-					GCOUN_CD: gcounCd,
-					CSL_NO: cslNo,
-					GCOUN_NM: gcounNm,
-					GCOUN_DT: gcounDt,
-					GCOUN_BGNG_DT: gcounBgngDt,
-					GCOUN_DDLN_DT: gcounDdlnDt,
-					GCOUN_LMT_COUNT: gcounLmtCount
-					//bannerImage: bannerImage
-				},
+				data: formData,
+				processData: false,
+				contentType: false,
 				success: function(response) {
 					if (response === 1) {
 						alert('등록에 성공하였습니다.');
@@ -285,7 +364,6 @@
 		const { rowKey } = ev;
 		const rowData = grid1.getRow(rowKey);
 		const gcounCd = rowData.GCOUN_CD;
-		//alert(gcounCd);
 		
 		
 		$.ajax({

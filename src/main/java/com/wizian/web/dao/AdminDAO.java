@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import com.wizian.web.dto.BoardDTO;
 import com.wizian.web.dto.AdminDTO;
-import com.wizian.web.dto.GroupDTO;
 
 @Repository
 @Mapper
