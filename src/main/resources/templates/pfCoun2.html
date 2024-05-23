@@ -73,7 +73,7 @@
 					<label for="coun-request" class="col-sm-2 col-form-label text-center">날짜 선택</label>
 					<div class="col-sm-10 d-flex align-items-center">
 						<span class="input-group-text" id="selectDate">선택한 날짜와 시간 여기 표시</span>
-						<input type="hidden" class="hPfs_No">
+						<input type="hidden" id="hiddenPfsNo">
 						<img data-bs-toggle="modal" data-bs-target="#pfscdmodal" src="images/calendar_icon.png" alt="Calendar" class="mx-2" id="openSmodal">
 					</div>
 				</div>
@@ -82,21 +82,22 @@
 				<div class="row mb-3 w-80 mx-auto">
 					<label for="Counseling-content" class="col-sm-2 col-form-label text-center">상담 내용</label>
 					<div class="col-sm-10">
-					   <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" style="resize:none;"></textarea>
+					   <textarea class="form-control" id="Counseling-content" rows="7" style="resize:none;"></textarea>
 					</div>
 				</div>
 				<!-- 첨부 파일 -->
 				<div class="row mb-3 w-80 mx-auto">
-				<label for="" class="col-sm-2 col-form-label text-center">첨부파일</label>
-					<div class="col-sm-10 d-flex align-items-center">
-						<input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+				<label for="file_upload" class="col-sm-2 col-form-label text-center">첨부파일</label>
+					<div class="col-sm-10 align-items-center">
+						<input type="file" class="form-control" id="file_upload" aria-describedby="inputGroupFileAddon04" aria-label="Upload" multiple>
+						<ul class="list-group" id="file_list" ></ul>
 						<!-- 업로드 버튼은 삭제할지도..? -->
-						<button class="btn btn-outline-secondary col-2" type="button" id="inputGroupFileAddon04">업로드</button>
+						<!-- <button class="btn btn-outline-secondary col-2" type="button" id="inputGroupFileAddon04">업로드</button> -->
 					</div>	
 				</div>
 				<!-- 상담신청 버튼 -->
 				<div class="input-group justify-content-center w-10 mx-auto">
-					<button type="button" class="btn mb-3" style="background-color: #A41034; color: white;">상담신청</button>
+					<button type="button" class="btn mb-3" id="counRequest" style="background-color: #A41034; color: white;">상담신청</button>
 				</div>
 			</form>
 			</section>
@@ -138,7 +139,6 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-	        		<button type="button" class="btn btn-primary">Save changes</button>
 				</div>
 			</div>
 		</div>
@@ -161,16 +161,14 @@
   </div>
 </div>
  <script type="text/javascript">
-
-
 	$(function(){
 		$(".pfchoice").on('click',function(){
  			let row = $(this).closest('tr');// 버튼이 속한 행 찾기
  			let pf_no = row.find('.pf_no').val();
  			let pf_nm = row.find('.pf_nm').text();
  			
- 			console.log('교수번호: ', pf_no );
- 			console.log('교수이름: ', pf_nm );
+ 			//console.log('교수번호: ', pf_no );
+ 			//console.log('교수이름: ', pf_nm );
  			
  			$('#professor').text(pf_nm);
  			$('.pf-no').val(pf_no);
@@ -178,16 +176,17 @@
  			$('#pfchoicemodal').modal('hide');
  			
  		});
+		
 		 $("#openSmodal").on('click',function(){
 			let pf_no=$('.pf-no').val();
-			console.log(pf_no);
+			//console.log(pf_no);
 			$.ajax({
 				type: 'post',
 				url: '/getSData',
 				data:{"pf_no" : pf_no},
 				dataType: 'json',
 				success: function(response){
-					//console.log('서버에서 받은 객체:'+JSON.stringify(response));
+					console.log('서버에서 받은 객체:'+JSON.stringify(response));
 					 let eventlist = response.map(eventData =>{
 						let dateTime=eventData.PF_DATE+'T'+eventData.PF_TIME_CD+':00';
 						return {
@@ -207,6 +206,69 @@
 				}
 			});
 		});
+		 
+		let files=[];
+		$('#file_upload').on('change', function(){
+			
+			let newFiles = $(this)[0].files;
+			
+			files = files.concat(Array.from(newFiles));
+			
+			updateFileList();
+			console.log(files);
+		});
+		
+		$(document).on('click', '.delete-file', function(){
+			let fileName = $(this).parent().text().trim().slice(0, -1);
+			files = files.filter(file => file.name !== fileName);
+			updateFileList();
+		});
+		
+		$('#counRequest').on('click', function(){
+			let formData = new FormData();
+			formData.append("studentNo", $('#std_no').text());//학번
+			//formData.append("studentTel", $('#std_tel').text());//학생전화번호
+			//formData.append("studentEmail", $('#std_email').text());//학생이메일
+			formData.append("professorNo", $('.pf-no').val());//교수번호
+			formData.append("pfs_no", $('#hiddenPfsNo').val());//교수스케쥴번호			
+			//console.log('교수스케쥴번호: '+$('#hiddenPfsNo').val());		
+			formData.append("selectedDate", $('#selectDate').text());//예약일시
+			console.log('예약일시: '+$('#selectDate').text());		
+			formData.append("counselingContent", $('#Counseling-content').val());//상담내용
+			for(let i = 0; i<files.length; i++){
+				formData.append("files", files[i]);//파일		
+			}
+			console.log(formData);
+			
+			$.ajax({
+				url: '/submitPFCoun',
+				type: 'post',
+				data: formData,
+				contentType: false,
+				processData: false,
+				success:function(response){
+					alert('통신에 성공하였습니다.')
+				},
+				error: function(xhr, status, error){
+					console.error(xhr);
+					console.error(status);
+					console.error(error);
+					alert('상담 신청에 실패하였습니다.');
+					
+				}
+			});
+			
+		});
+		
+		function updateFileList(){
+			let fileListHtml = '';
+			for(let i=0; i< files.length; i++){
+				fileListHtml += '<li class="list-group-item">'+ files[i].name + '<button class="btn btn-danger btn-sm float-end delete-file">X</button></li>';
+			}
+			
+			$('#file_list').html(fileListHtml);
+		}
+		  
 		function initCalendar(events) {
 			let header = {
 					left: 'prev',
@@ -235,7 +297,9 @@
 					
 					$('#selectDate').text(selectedDate + ' ' + selectedTime);
 					let pfs_no = info.event.extendedProps.pfs_no;
+					//console.log(pfs_no);
 					$('#hiddenPfsNo').val(pfs_no);
+					//console.log($('#hiddenPfsNo').val());
 					 if (confirm("해당 일정을 선택하시겠습니까?")) {
 			                // 확인 클릭 시
 			                info.event.remove();
@@ -246,10 +310,10 @@
 			
 			$('#pfscdmodal').on('shown.bs.modal', function () {
 				    calendar.updateSize();
-				    console.log('난 updatesize 했다.');
+				    //console.log('난 updatesize 했다.');
 			});
 			calendar.render();
-			console.log('맵로드');
+			//console.log('맵로드');
 		}
 		
 		//ajax form 데이터 서버로 전송 DB로 삽입

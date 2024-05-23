@@ -15,5 +15,21 @@
 	<select id="getScList" resultType="Map" parameterType="String">
 		SELECT PFS_NO, PF_NO, PF_DATE, PF_TIME_CD, PF_SC_DEL FROM PF_SCHEDULE
 		WHERE PF_SC_DEL ='1' AND PF_NO= #{pf_no}
-	</select>	
+	</select>
+	
+	<update id="pfDelUpdate" parameterType="Integer">
+		UPDATE PF_SCHEDULE 
+		SET PF_SC_DEL = '0' 
+		WHERE PFS_NO = #{pfs_no};
+	</update>
+	
+	<insert id="pfCounReservation" parameterType="com.wizian.web.dto.PfRsvDTO">
+		INSERT INTO PF_COUN_INFO (PF_NO, STUD_NO, PF_COUN_RSVT_YMD, PF_COUN_RSVT_TIME, PFS_NO, PF_CONTENTS) 
+		VALUES (#{PF_NO}, #{STUD_NO}, #{PF_COUN_RSVT_YMD}, #{PF_COUN_RSVT_TIME}, #{PFS_NO}, #{PF_CONTENTS});
+		<selectKey keyProperty="pfCounNo" order="AFTER" resultType="Integer">
+        	SELECT LAST_INSERT_ID() AS pfCounNo
+    	</selectKey>
+	</insert>
+	
+	
 </mapper>
