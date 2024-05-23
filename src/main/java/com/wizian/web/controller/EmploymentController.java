@@ -47,7 +47,7 @@ public class EmploymentController {
 		if(userId != null) {
 			model.addAttribute("userId", userId);
 			//System.out.println("로그인되어있음");
-			List<Map<String, Object>> list = employmentService.loginInfo(userId);
+			List<Map<String, Object>> list = employmentService.empLoginInfo(userId);
 			System.out.println("로그인 정보를 받아옵니다. " + list);
 			model.addAttribute("boardList", list);
 			return "employment";

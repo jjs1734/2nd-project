@@ -40,8 +40,6 @@ public interface AdminDAO {
 
 	void registerEmpCounPro(Map<String, String> formData);
 
-	
-	
 	 BoardDTO getPostDetail(int postId);
 	 List<BoardDTO> getReplies(int postId);
 	List<Map<String, Object>> getEcounStudList(String cslNo);
@@ -49,6 +47,8 @@ public interface AdminDAO {
 	List<Map<String, Object>> getGcounCslList();
 
 	int gcounEnroll(AdminDTO adminDTO);
+
+	List<Map<String, Object>> counselorList();
 
 	
 }
