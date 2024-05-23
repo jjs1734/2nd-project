@@ -46,10 +46,9 @@ public class GroupController {
 	
 	@ResponseBody
 	@PostMapping("/groupEnroll")
-	public ResponseEntity<String> groupEnroll(GroupDTO groupDto) {
-		System.out.println(groupDto.getGCOUN_CD());
-		groupService.groupEnroll(groupDto);
+	public int groupEnroll(GroupDTO groupDto) {
+		int result = groupService.groupEnroll(groupDto);
 		
-		return ResponseEntity.ok("컨트롤러 성공");
+		return result;
 	}
 }
