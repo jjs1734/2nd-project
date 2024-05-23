@@ -34,5 +34,6 @@ public interface BoardDAO {
 			@Param("pageSize") int pageSize, @Param("offset") int offset);
 
 	List<String> getCounselors();
-
+	
+	 List<BoardDTO> findByPstComp(@Param("pstComp") String pstComp);
 }

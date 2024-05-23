@@ -31,6 +31,10 @@ public interface EmploymentDAO {
 
 	public Map<String, Object> calSelectApply(String cslNo);
 
-	public void insertApplyFinal(EventData eventData);
+	public void insertCalFinal(EventData eventData);
+
+	public void insertTabFinal(EventData eventData);
+
+	public List<Map<String, Object>> loginInfo(String userId);
 
 }

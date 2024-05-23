@@ -54,7 +54,8 @@ public class IndiController {
 		List<BoardDTO> board = boardService.getBoards(bbsSn, userId, pageSize, offset);
 		int totalItems = boardService.getTotalBoardCount(bbsSn, userId); // 전체 게시물 수
 		int totalPages = (int) Math.ceil((double) totalItems / pageSize);
-
+		
+		System.err.println(board);
 		model.addAttribute("board", board);
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("currentPage", page);

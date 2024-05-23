@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wizian.web.dto.EventData;
+import com.wizian.web.dto.UserDTO;
 import com.wizian.web.service.EmploymentService;
 import com.wizian.web.service.MemberService;
 import com.wizian.web.service.UserService;
@@ -28,8 +29,13 @@ public class EmploymentController {
 	
 	@Autowired
 	private EmploymentService employmentService;
+	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private MemberService memberService;
+	
 	@Autowired
 	private com.wizian.web.util.Util util;
 	
@@ -41,7 +47,8 @@ public class EmploymentController {
 		if(userId != null) {
 			model.addAttribute("userId", userId);
 			//System.out.println("로그인되어있음");
-			List<Map<String, Object>> list = employmentService.boardList();
+			List<Map<String, Object>> list = employmentService.loginInfo(userId);
+			System.out.println("로그인 정보를 받아옵니다. " + list);
 			model.addAttribute("boardList", list);
 			return "employment";
 		} else {
@@ -51,8 +58,8 @@ public class EmploymentController {
 	}
 	
 	@GetMapping("/empCounProfile")
-	public String empCounProfile(Model model) {
-		
+	public String empCounProfile(HttpSession session, Model model) {
+			
 		List<Map<String, Object>> list = employmentService.empCounProfile();
 		System.out.println(list);
 		model.addAttribute("empCounProfile", list);
@@ -112,14 +119,26 @@ public class EmploymentController {
 
 	/* empApply에서 제출 버튼 누를때 db에 입력(최종) */
 	@PostMapping("/insertApply")
-	public String insertApply(@ModelAttribute EventData eventData) {
+	public String insertApply(HttpSession session, UserDTO userDTO, @ModelAttribute EventData eventData) {
 		System.out.println("제출 잘 됐니1?" + eventData.getEmpDate());
 		System.out.println("제출 잘 됐니2?" + eventData.getEmpContent());
 		System.out.println("제출 잘 됐니3?" + eventData.getEmpTime());
 		System.out.println("제출 잘 됐니4?" + eventData.getCSL_NO());
 		
-		employmentService.insertApplyFinal(eventData);
+		String userId = (String) session.getAttribute("userId");
+		System.out.println(userId);
+		//Map<String, Object> empUserInfo = memberService.empUserInfo(userId);
+		//System.out.println("나와야 하는 값들임" + empUserInfo);
 		
-		return "employment";
+		if(userId != null) {
+			eventData.setUserId(userId);
+			employmentService.insertCalFinal(eventData);
+			employmentService.insertTabFinal(eventData);
+			System.out.println("입력 완료");
+			return "employment";
+		} else {
+			return "login";
+		}
+		
 	}
 }

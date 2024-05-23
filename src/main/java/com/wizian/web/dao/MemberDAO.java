@@ -15,5 +15,6 @@ public interface MemberDAO {
 
 	Map<String, Object> userInfo(String userId);
 
+	Map<String, Object> empUserInfo(String userId);
 
 }

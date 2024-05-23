@@ -15,7 +15,7 @@
 	        <!-- Bootstrap CSS -->
 		    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 		    <!-- Bootstrap JS -->
-		    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+		    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 		    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 		    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 		    <script src="./dist/index.global.js"></script>
@@ -50,9 +50,6 @@
 		background-color: #f4f4f4;
 	}
 	
-	.fc .fc-timegrid-slot {
-		height: 4.5em !important; /* 슬롯의 너비를 100px로 조정 */
-	}
 	#confirmButton {
 	            position: absolute; /* 절대 위치 설정 */
 	            top: 1000px; /* 위쪽 여백 설정 */
@@ -215,6 +212,14 @@
 			<script type="text/javascript">
 			document.getElementById('empDate').addEventListener('click', function() {
 			    document.getElementById('shwoEmpCal').click();
+			    
+			    var delay = 750; // 밀리초 단위의 시간 지연 설정 (여기서는 750밀리초)
+
+			    // setTimeout 함수를 사용하여 일정 시간이 지난 후에 모달을 보여주는 코드 실행
+			    setTimeout(function() {
+			        $('#empModal').modal('show'); // 모달 보여주는 코드
+			    }, delay);
+			    
 			});
 			<!-- 연락처 및 이메일은 로그인한 정보와 실제 유저와 다를 수 있으니 변경이 가능하도록 설정 -->
 	        // 서버에서 받은 로그인한 사용자의 연락처
@@ -339,7 +344,7 @@
 			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			      </div>
 			      <div class="modal-body">
-			        <div id='calendar'></div>
+        			<div id='calendar'></div>
 			      </div>
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -353,6 +358,82 @@
 			// 모달 요소를 가져옵니다.
 			var myModal = document.getElementById('empModal');
 			
+			// 모달 요소에 이벤트 리스너를 추가합니다.
+			
+			
+			/*
+			$('#empModal').on('shown.bs.modal', function() {
+				$("#calendar").fullCalendar('render');
+				//$("#calendar").fullCalendar('refetchEvents');
+				calendar.refetchEvents();
+            });
+			*/
+			
+			var saveButton = document.getElementById('saveButton');
+	        
+			var selectedTitle = "";
+			var selectedStart = null;
+			var selectedTime = null;
+			
+			
+	        saveButton.addEventListener('click', function() {
+	            // 필요한 데이터를 저장하는 로직을 여기에 추가할 수 있습니다.
+	            // "상담 내용" 텍스트 에어리어에 title과 start 값을 설정
+			    var empContent = document.getElementById('empContent');
+	            var empDate = document.getElementById('empDate');
+	            var empTime = document.getElementById('empTime');
+			    empContent.value = `${selectedTitle}`;
+			    empDate.value = `${selectedStart}`;
+			    //empTime.value = `${selectedTime}`;
+    			
+			 	// selectedTime이 유효한 문자열인지 확인 후 앞 두 자리를 추출하여 설정
+			    if (selectedTime && selectedTime.length >= 2) {
+			        empTime.value = selectedTime.substring(0, 2);
+			    } else {
+			        empTime.value = selectedTime; // 혹시나 selectedTime이 null이거나 짧은 경우 그대로 설정
+			    }
+			    
+	            // 모달 닫기
+	            var modal = document.getElementById('empModal');
+	            var bootstrapModal = bootstrap.Modal.getInstance(modal); // 모달 인스턴스를 가져옴
+	            bootstrapModal.hide(); // 모달을 닫음
+	        });
+			
+			document.addEventListener('DOMContentLoaded', function() {
+		        var events = [];
+		    	// DB에서 예약된 일정 가져오기    
+		        $.ajax({
+		            type: 'POST',
+		            url: '/empCalList',
+		            data: { 'cslNum': CSL_NO },
+		            dataType: 'json',
+		            async: false,
+		            success: function(response) {
+		                console.log('서버로부터의 응답:', response);
+		                for (var i = 0; i < response.length; i++) {
+		                    var res = response[i];
+		                    var dateTime = res.DATE + 'T' + res.EMP_COUN_CD + ':00';
+		                    var eventCal = {
+		                        title: '예약',   // 예약자 이름을 제목으로 설정
+		                        //title: res.USR_CN,   // 예약자 이름을 제목으로 설정
+		                        start: dateTime,  // 예약 날짜를 시작일로 설정
+		                        dbEvent: true,  // DB에서 가져온 이벤트임을 나타내는 플래그
+		                        color: 'green'
+		                        // 다른 필요한 속성도 추가 가능
+		                    };
+		                    console.log(eventCal);
+		                    events.push(eventCal);
+		                }
+		                // FullCalendar를 초기화하고 렌더링합니다.
+		                initializeFullCalendar(events);
+		            },
+		            
+		            error: function () {
+		                // 에러 처리
+		                console.log('서버로부터 데이터를 불러오는 데 실패했습니다.');
+		            }
+		        });
+		    });
 			
 			// 풀캘린더 시작.
 		    function initializeFullCalendar(events) {
@@ -364,6 +445,11 @@
 		            slotMinTime : '08:00:00',
 		            slotMaxTime : '18:00:00', // 오후 8시까지
 		            slotDuration : '01:00:00', // 시간 단위를 1시간으로 설정
+		            allDaySlot : false,
+		            expandRows : true,
+		            duration: { days: 5 },
+		            //contentHeight: 800,
+		            height: 600,
 		            locale: 'ko',
 		            navLinks : true,
 		            editable : true,
@@ -379,7 +465,10 @@
 		    			 * 드래그로 이벤트 추가하기 신진수가 한거
 		    			 */
 		    			select: function (arg) { // 캘린더에서 이벤트를 생성할 수 있다.
-		    				
+		    				if (arg.start.getDay() === 0 || arg.start.getDay() === 6) {
+		    			        // 일요일 또는 토요일을 선택하려고 할 때
+		    			        return;
+		    			    }
 		    			   //var title = prompt('일정을 입력해주세요.');
 		    			  //if (confirm(arg.start.toLocaleString() + '부터 ' + arg.end.toLocaleString() + '까지 해당 시간대로 예약하시겠습니까?')) {
 		    			  if (confirm(arg.start.toLocaleString() + '시로 예약하시겠습니까?')) {
@@ -486,51 +575,27 @@
 		    			},
 
 		    		});
+			        
 		    		calendar.render();
 		    	}
-			
+			        myModal.addEventListener('show.bs.modal', function () {
+					    // 모달이 표시될 때 캘린더 크기 업데이트
+					    console.log("updateSize() 작동테스트");
+			    		//calendar.refetchEvents();
+					    //calendar.updateSize();
+			    		//calendar.refetch();
+					});
+		        /*
+		    	// Bootstrap 모달이 열렸을 때 캘린더를 렌더링
+	            $('#empModal').on('shown.bs.modal', function () {
+	            	$("#calendar").fullCalendar('render');
+	            	//$("#calendar").fullCalendar('refetchEvents');
+	            	$("#calendar").fullCalendar('refetch');
+	            	//calendar.refetchEvents();	
+	            });
+		        */
 
-			// 모달 요소에 이벤트 리스너를 추가합니다.
-			myModal.addEventListener('show.bs.modal', function () {
-			    // 모달이 표시될 때 캘린더 크기 업데이트
-			    console.log("updateSize() 작동테스트");
-			    //calendar.updateSize();
-			});
 			
-			$('#empModal').on('shown.bs.modal', function() {
-				$("#calendar").fullCalendar('render');
-            });
-			
-			var saveButton = document.getElementById('saveButton');
-	        
-			var selectedTitle = "";
-			var selectedStart = null;
-			var selectedTime = null;
-			
-			
-	        saveButton.addEventListener('click', function() {
-	            // 필요한 데이터를 저장하는 로직을 여기에 추가할 수 있습니다.
-	            // "상담 내용" 텍스트 에어리어에 title과 start 값을 설정
-			    var empContent = document.getElementById('empContent');
-	            var empDate = document.getElementById('empDate');
-	            var empTime = document.getElementById('empTime');
-			    empContent.value = `${selectedTitle}`;
-			    empDate.value = `${selectedStart}`;
-			    //empTime.value = `${selectedTime}`;
-    			
-			 	// selectedTime이 유효한 문자열인지 확인 후 앞 두 자리를 추출하여 설정
-			    if (selectedTime && selectedTime.length >= 2) {
-			        empTime.value = selectedTime.substring(0, 2);
-			    } else {
-			        empTime.value = selectedTime; // 혹시나 selectedTime이 null이거나 짧은 경우 그대로 설정
-			    }
-			    
-	            // 모달 닫기
-	            var modal = document.getElementById('empModal');
-	            var bootstrapModal = bootstrap.Modal.getInstance(modal); // 모달 인스턴스를 가져옴
-	            bootstrapModal.hide(); // 모달을 닫음
-	        });
-	        
 	     	//모달이 완전히 닫혔을 때 이벤트 핸들러 추가
             /*
 	     	var empModal = document.getElementById('empModal');
@@ -545,11 +610,10 @@
 			
 			var date = null;
 		    var CSL_NO = document.getElementById('CSL_NO').value;
-			$('#empModal').on('shown.bs.modal', function () {
+			/* $('#empModal').on('shown.bs.modal', function () {
 				$("#calendar").fullCalendar('render');
-	    	});
+	    	}); */
 			
-		        
 			</script>
 	        <!-- 푸터-->
 	        <div th:replace="~{footer :: Footer}"></div>
@@ -558,46 +622,8 @@
 	        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 	        <!-- Core theme JS-->
 	        <script src="./js/scripts.js"></script>
-	        <!-- jQuery -->
-			<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	        
 	        <script type="text/javascript">
-	        document.addEventListener('DOMContentLoaded', function() {
-		        var events = [];
-		    	// DB에서 예약된 일정 가져오기    
-		        $.ajax({
-		            type: 'POST',
-		            url: '/empCalList',
-		            data: { 'cslNum': CSL_NO },
-		            dataType: 'json',
-		            async: false,
-		            success: function(response) {
-		                console.log('서버로부터의 응답:', response);
-		                for (var i = 0; i < response.length; i++) {
-		                    var res = response[i];
-		                    var dateTime = res.DATE + 'T' + res.EMP_COUN_CD + ':00';
-		                    var eventCal = {
-		                        title: '예약',   // 예약자 이름을 제목으로 설정
-		                        //title: res.USR_CN,   // 예약자 이름을 제목으로 설정
-		                        start: dateTime,  // 예약 날짜를 시작일로 설정
-		                        dbEvent: true,  // DB에서 가져온 이벤트임을 나타내는 플래그
-		                        color: 'green'
-		                        // 다른 필요한 속성도 추가 가능
-		                    };
-		                    console.log(eventCal);
-		                    events.push(eventCal);
-		                }
-		                // FullCalendar를 초기화하고 렌더링합니다.
-		                initializeFullCalendar(events);
-		            },
-		            
-		            error: function () {
-		                // 에러 처리
-		                console.log('서버로부터 데이터를 불러오는 데 실패했습니다.');
-		            }
-		        });
-		    });
-	        
 		</script>
 
 	        

@@ -3,7 +3,7 @@ package com.wizian.web.dto;
 import lombok.Data;
 
 @Data
-public class EventData {
+public class EmpCounRegDTO {
 	
 	private int CAL_NUM;  // 추가된 부분
 	private String empDate;
