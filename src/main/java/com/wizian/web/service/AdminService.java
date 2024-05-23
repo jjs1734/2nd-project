@@ -83,6 +83,10 @@ public class AdminService {
 	public int getIncompleteConsultCount(String studentNo) {
         return adminDAO.countIncompletePostsByStudentNo(studentNo);
     }
+
+	public List<Map<String, Object>> counselorList() {
+		return adminDAO.counselorList();
+	}
 	
 	
 

@@ -48,5 +48,7 @@ public interface AdminDAO {
 
 	int gcounEnroll(AdminDTO adminDTO);
 
+	List<Map<String, Object>> counselorList();
+
 	
 }

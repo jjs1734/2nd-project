@@ -61,6 +61,19 @@ public class AdminController {
 		return studentList;
 	}
 	
+	@GetMapping("/admin/counselor")
+	public String counselor() {
+		
+		return "/admin/counselor";
+	}
+	
+	@GetMapping("/admin/counselorList")
+	public List<Map<String, Object>> counselorList(){
+		
+		List<Map<String, Object>> counselorList = adminService.counselorList();
+		return counselorList;
+	}
+	
 	@ResponseBody
 	@PostMapping("/admin/getGcounStudList")
 	public List<Map<String, Object>> getGcounStudList(@RequestParam("gcounCd") String gcounCd) {
