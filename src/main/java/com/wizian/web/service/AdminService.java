@@ -97,6 +97,8 @@ public class AdminService {
 
 	public int ecounEnroll(EcounAdDTO ecounAdDTO) {
 		return adminDAO.ecounEnroll(ecounAdDTO);
+	}
+	
 	public List<Map<String, Object>> getPfcounList() {
 		return adminDAO.getPfcounList();
 	}
