@@ -28,6 +28,7 @@ import com.wizian.web.dto.AdminDTO;
 import com.wizian.web.dto.BoardDTO;
 import com.wizian.web.dto.PfRsvDTO;
 import com.wizian.web.dto.EcounAdDTO;
+import com.wizian.web.dto.PFSdataDTO;
 import com.wizian.web.service.AdminService;
 
 @Controller
@@ -79,10 +80,98 @@ public class AdminController {
 		return "/admin/counselor";
 	}
 	
+	//교수 관리
 	@GetMapping("/admin/professor")
 	public String professor() {
 		return "/admin/professor";
 	}
+	
+	@ResponseBody
+	@GetMapping("/admin/getPfList")
+	public List<Map<String, Object>> getPfList() {
+		List<Map<String, Object>> getPfList = adminService.getPfList();
+		return getPfList;
+	}
+	
+	@ResponseBody
+	@PostMapping("/admin/getPfscList")
+	public List<Map<String, Object>> getPfscList(@RequestParam("PF_NO") String pfNo) {
+		System.out.println(pfNo);
+		List<Map<String, Object>> getPfscList = adminService.getPfscList(pfNo);
+		return getPfscList;
+	}
+	
+	@ResponseBody
+	@PostMapping("/admin/pfscEnroll")
+	public int pfscEnroll(
+		@RequestParam("PF_NO") String pfNo,
+		@RequestParam("PF_DT") String pfDT){
+		System.out.println("");
+		System.out.println(pfNo);		
+		System.out.println(pfDT);
+		
+		//date 타입으로 변환
+		String[] dateTime = pfDT.split("T");
+		String dateStr = dateTime[0];
+		System.out.println(dateStr);
+		String time = dateTime[1].substring(0,2);
+		System.out.println(time);
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = null;
+		try {
+			date = dateFormat.parse(dateStr);
+			System.out.println(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		//DTO에 저장
+		PFSdataDTO pfsDTO = new PFSdataDTO();
+		pfsDTO.setPF_NO(pfNo);
+		pfsDTO.setPF_DATE(date);
+		pfsDTO.setPF_TIME_CD(time);
+		
+		int pfscResult = adminService.pfscEnroll(pfsDTO);
+		if (pfscResult==1) { System.out.println("성공");
+		} else {System.out.println("실패");}
+		
+		return pfscResult;
+	}
+	
+	@ResponseBody
+	@PostMapping("/admin/pfModify")
+	public void pfModify(
+		@RequestParam("counNum") String counNum,
+        @RequestParam(value = "fieldName", required = false) String fieldName,
+        @RequestParam(value = "fieldValue", required = false) String fieldValue) {
+		Map<String, Object> map = new HashMap<>();
+			System.out.println(fieldName);
+			System.out.println(fieldValue);
+		if (fieldName.equals("PF_NM")) {
+			map.put("counNum", counNum);
+			map.put("fieldValue", fieldValue);
+			adminService.pfNmUpdate(map);
+			//System.out.println("삽입성공1");
+		}else if(fieldName.equals("PF_TEL")) {
+			map.put("counNum", counNum);
+			map.put("fieldValue", fieldValue);
+			adminService.pfTelUpdate(map);
+			//System.out.println("삽입성공2");
+		}else if(fieldName.equals("PF_EMAIL")) {
+			map.put("counNum", counNum);
+			map.put("fieldValue", fieldValue);
+			adminService.pfEmailUpdate(map);
+			//System.out.println("삽입성공3");
+		}else {
+			//EMP_STTS_CD
+			map.put("counNum", counNum);
+			map.put("fieldValue", fieldValue);
+			adminService.pfNcdUpdate(map);
+			//System.out.println("삽입성공4");
+		}
+	}
+	
 	
 	//지도교수 상담
 	@GetMapping("/admin/pfcoun")

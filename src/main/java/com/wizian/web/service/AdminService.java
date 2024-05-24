@@ -13,6 +13,7 @@ import com.wizian.web.dto.BoardDTO;
 import com.wizian.web.dto.EcounAdDTO;
 import com.wizian.web.dto.AdminDTO;
 import com.wizian.web.dto.GroupDTO;
+import com.wizian.web.dto.PFSdataDTO;
 import com.wizian.web.dto.PfRsvDTO;
 
 @Service
@@ -122,6 +123,35 @@ public class AdminService {
 	public void pfStateUpdate(Map<String, Object> map) {
 		adminDAO.pfStateUpdate(map);
 	}
+
+	public List<Map<String, Object>> getPfList() {
+		return adminDAO.getPfList();
+	}
+
+	public List<Map<String, Object>> getPfscList(String pfNo) {
+		return adminDAO.getPfscList(pfNo);
+	}
+
+	public int pfscEnroll(PFSdataDTO pfsDTO) {
+		return adminDAO.pfscEnroll(pfsDTO);
+	}
+
+	public void pfNmUpdate(Map<String, Object> map) {
+		adminDAO.pfNmUpdate(map);
+	}
+
+	public void pfTelUpdate(Map<String, Object> map) {
+		adminDAO.pfTelUpdate(map);
+	}
+
+	public void pfEmailUpdate(Map<String, Object> map) {
+		adminDAO.pfEmailUpdate(map);
+	}
+
+	public void pfNcdUpdate(Map<String, Object> map) {
+		adminDAO.pfNcdUpdate(map);
+	}
+
 	
 	
 
