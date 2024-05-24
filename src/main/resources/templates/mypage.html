@@ -10,6 +10,8 @@
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        
         
 		<style>
 			#sidenav{background: #B6B6B6; float:left; margin-right:20px; padding:10px; margin-top:40px; width:200px; height:780px; text-align:center;}
@@ -34,11 +36,174 @@
 				<button class="button" type="submit" onclick="openPage('/psycoun_type')"></button><br>
 				<button class="button" type="submit" onclick="openPage('/psycoun_app')"></button>
 			</div>
-        
+        	
         	<div id="content">
-        		중앙에 들어갑니다.
+        		<!-- <div>
+        			<input type="text" class="form-control" id="phoneNum" placeholder="John" th:value="${selectMyInfo.get('STUD_NM')}" required>
+        		</div> -->
+        		<div class="form-group row">
+                      <label for="empName" class="col-sm-3 col-form-label">
+                          이 름
+                      </label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" id="STUD_NM" th:value="${selectMyInfo.get('STUD_NM')}" readonly>
+                          <!-- 로그인한 session값 가져오기
+                          <input type="text" class="form-control" id="empName" placeholder="John" value="${session.user.name}" required>
+                           -->
+                      </div>
+                      <label for="empCounName" class="col-sm-3 col-form-label">
+                          지도교수
+                      </label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" id="PF_NM" th:value="${selectMyInfo.get('PF_NM')}" readonly>
+                          <!-- <input type="hidden" id="CSL_NO" name="CSL_NO" th:value="${selectEmpCoun['CSL_NO']}"/> -->
+                      </div>
+                  </div>
+        		<div class="form-group row">
+                      <label for="empName" class="col-sm-3 col-form-label">
+                          이 메 일
+                      </label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" id="STUD_EML_ADDR" th:value="${selectMyInfo.get('STUD_EML_ADDR')}" required>
+                          <!-- 로그인한 session값 가져오기
+                          <input type="text" class="form-control" id="empName" placeholder="John" value="${session.user.name}" required>
+                           -->
+                      </div>
+                      <label for="empCounName" class="col-sm-3 col-form-label">
+                          지도교수 메일
+                      </label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" id="PF_EMAIL" th:value="${selectMyInfo.get('PF_EMAIL')}" readonly>
+                          <!-- <input type="hidden" id="CSL_NO" name="CSL_NO" th:value="${selectEmpCoun['CSL_NO']}"/> -->
+                      </div>
+                  </div>
+        		<div class="form-group row">
+                      <label for="empName" class="col-sm-3 col-form-label">
+                          전화번호
+                      </label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" id="TELNO" th:value="${selectMyInfo.get('TELNO')}" required>
+                          <!-- 로그인한 session값 가져오기
+                          <input type="text" class="form-control" id="empName" placeholder="John" value="${session.user.name}" required>
+                           -->
+                      </div>
+                      <label for="empCounName" class="col-sm-3 col-form-label">
+                          지도교수 전화번호
+                      </label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" id="STUD_NM" th:value="${selectMyInfo.get('STUD_NM')}" readonly>
+                          <!-- <input type="hidden" id="CSL_NO" name="CSL_NO" th:value="${selectEmpCoun['CSL_NO']}"/> -->
+                      </div>
+                  </div>
+        		<div class="form-group row">
+                      <label for="empName" class="col-sm-3 col-form-label">
+                          학 과
+                      </label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" id="SCSBJT_NM" th:value="${selectMyInfo.get('SCSBJT_NM')}" readonly>
+                          <!-- 로그인한 session값 가져오기
+                          <input type="text" class="form-control" id="empName" placeholder="John" value="${session.user.name}" required>
+                           -->
+                      </div>
+                      <label for="empCounName" class="col-sm-3 col-form-label">
+                          학 번
+                      </label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" id="STUD_NO" th:value="${selectMyInfo.get('STUD_NO')}" readonly>
+                          <!-- <input type="hidden" id="CSL_NO" name="CSL_NO" th:value="${selectEmpCoun['CSL_NO']}"/> -->
+                      </div>
+                  </div>
+        		<div class="form-group row">
+                      <label for="empName" class="col-sm-3 col-form-label">
+                          생 년 월 일
+                      </label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" id="STUD_BRDT" th:value="${selectMyInfo.get('STUD_BRDT')}" readonly>
+                          <!-- 로그인한 session값 가져오기
+                          <input type="text" class="form-control" id="empName" placeholder="John" value="${session.user.name}" required>
+                           -->
+                      </div>
+                      <label for="empCounName" class="col-sm-3 col-form-label">
+                          성 별
+                      </label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" id="STUD_GEN" th:value="${selectMyInfo.get('STUD_GEN')}" required>
+                          <!-- <input type="hidden" id="CSL_NO" name="CSL_NO" th:value="${selectEmpCoun['CSL_NO']}"/> -->
+                      </div>
+                  </div>
+        		<div class="form-group row">
+                      <label for="empName" class="col-sm-3 col-form-label">
+                          학 적 상 태
+                      </label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" id="COL_REG" th:value="${selectMyInfo.get('COL_REG')}" readonly>
+                          <!-- 로그인한 session값 가져오기
+                          <input type="text" class="form-control" id="empName" placeholder="John" value="${session.user.name}" required>
+                           -->
+                      </div>
+                      <label for="empCounName" class="col-sm-3 col-form-label">
+                          국 가 코 드
+                      </label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" id="NTN_CD" th:value="${selectMyInfo.get('NTN_CD')}" readonly>
+                          <!-- <input type="hidden" id="CSL_NO" name="CSL_NO" th:value="${selectEmpCoun['CSL_NO']}"/> -->
+                      </div>
+                  </div>
         	</div>
-        
+        	<script type="text/javascript">
+		    // 로그인한 사람 정보 값이 바뀌면 db에 update되게하기 
+// 값이 변경될 때마다 해당 함수를 호출하도록 설정
+$('#STUD_EML_ADDR').change(function() {
+	var valueEml = $(this).val();
+	alert(valueEml);
+	$.ajax({
+        type: "POST",
+        url: "/updateMyInfoEml",
+        contentType: "text/plain", // 올바른 MIME 타입 설정
+        data: valueEml,
+        success: function(response) {
+            console.log("Response from server: " + response);
+        },
+        error: function(xhr, status, error) {
+            console.error("Error sending data to server: " + error);
+        }
+    });
+});
+$('#TELNO').change(function() {
+	var valueTel = $(this).val();
+	alert(valueTel);
+	$.ajax({
+        type: "POST",
+        url: "/updateMyInfoTel",
+        contentType: "text/plain", // 올바른 MIME 타입 설정
+        data: valueEml,
+        success: function(response) {
+            console.log("Response from server: " + response);
+        },
+        error: function(xhr, status, error) {
+            console.error("Error sending data to server: " + error);
+        }
+    });
+});
+$('#STUD_GEN').change(function() {
+	var valueGen = $(this).val();
+	alert(valueGen);
+	$.ajax({
+        type: "POST",
+        url: "/updateMyInfoGen",
+        contentType: "text/plain", // 올바른 MIME 타입 설정
+        data: valueEml,
+        success: function(response) {
+            console.log("Response from server: " + response);
+        },
+        error: function(xhr, status, error) {
+            console.error("Error sending data to server: " + error);
+        }
+    });
+});
+		</script>
+
+        	
         </div>
         
         </div>

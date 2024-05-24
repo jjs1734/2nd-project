@@ -32,5 +32,19 @@ public class GroupService {
 		return groupDAO.selectMyInfo(userId);
 	}
 
+	public void updateEmail(String userId, String value) {
+		groupDAO.updateEmail(userId, value);
+		
+	}
+
+	public void updateGender(String userId, String value) {
+		groupDAO.updateGender(userId, value);
+	}
+
+	public void updateTelNo(String userId, String value) {
+		groupDAO.updateTelNo(userId, value);
+		
+	}
+
 	
 }

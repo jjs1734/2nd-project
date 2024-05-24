@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://thymeleaf.org">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="../assets/img/favicon.png">
-  <title>
-    관리자 페이지
-  </title>
+  <title>관리자 페이지</title>
   <!--     Fonts and icons     -->
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
   <!-- Nucleo Icons -->
@@ -25,7 +22,6 @@
   <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
   <link rel="stylesheet" href="./bootstrapt/css/bootstrap.min.css" />
   <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
-  
 </head>
 
 <body class="g-sidenav-show  bg-gray-200">
@@ -81,6 +77,9 @@
   <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+  //Thymeleaf 템플릿 엔진을 사용하여 Spring MVC 컨트롤러에서 전달된 appointments 데이터를 가져옵니다.
+  const appointments = /*[[${appointments}]]*/ [];
+
   const grid1 = new tui.Grid({
       el: document.getElementById('studGrid'),
       scrollX: true,
@@ -92,12 +91,15 @@
 //        perPage: 15
 //      },
       columns: [
-        { header: '이름', name: 'STUD_NM', sortable: true, align: 'center', width: 250, filter: 'select' },
-        { header: '학번', name: 'STUD_NO', sortable: true, align: 'center', width: 150, filter: 'select' },
-        { header: '학과', name: 'SCSBJT_NM', sortable: true, align: 'center', width: 400, filter: 'select' },
-        { header: '전화번호', name: 'TELNM', sortable: true, align: 'center', width: 350, filter: 'select' },
-        { header: '이메일', name: 'STUD_EML_ADDR', sortable: true, align: 'center', width: 350, filter: 'select'}
-      ]
+        { header: '이름', name: 'name', sortable: true, align: 'center', width: 150, filter: 'select' },
+        { header: '학번', name: 'studentId', sortable: true, align: 'center', width: 200, filter: 'select' },
+        { header: '학과', name: 'department', sortable: true, align: 'center', width: 200, filter: 'select' },
+        { header: '전화번호', name: 'phone', sortable: true, align: 'center', width: 250, filter: 'select' },
+        { header: '이메일', name: 'email', sortable: true, align: 'center', width: 300, filter: 'select'},
+        { header: '상담 가능 날짜', name: 'appointmentDate', align: 'center', width: 300 },
+        { header: '개인정보 활용 동의', name: 'agree', align: 'center', width: 200 }
+      ],
+      data: appointments
     });
   
   const grid2 = new tui.Grid({
@@ -122,111 +124,9 @@
         ]
       });  
 
-	/* $(document).ready(function () {
-		
-		$('#enroll').click(function() {
-			const gcounCd = $('#gcounCd').val();
-			const cslNo = $('#cslNo').val();
-			const gcounNm = $('#gcounNm').val();
-			const gcounDt = $('#gcounDt').val();
-			const gcounBgngDt = $('#gcounBgngDt').val();
-			const gcounDdlnDt = $('#gcounDdlnDt').val();
-			const gcounLmtCount = $('#gcounLmtCount').val();
-			//const bannerImage = $('#bannerImage')[0].files[0];
-			
-			alert('gcounCd: ' + gcounCd);
-			alert('cslNo: ' + cslNo);
-			alert('gcounNm: ' + gcounNm);
-			alert('gcounDt: ' + gcounDt);
-			alert('gcounBgngDt: ' + gcounBgngDt);
-			alert('gcounDdlnDt: ' + gcounDdlnDt);
-			alert('gcounLmtCount: ' + gcounLmtCount);
-			
-			
-			
-			$.ajax({
-				url: '/admin/gcounEnroll',
-				method: 'post',
-				data: {
-					GCOUN_CD: gcounCd,
-					CSL_NO: cslNo,
-					GCOUN_NM: gcounNm,
-					GCOUN_DT: gcounDt,
-					GCOUN_BGNG_DT: gcounBgngDt,
-					GCOUN_DDLN_DT: gcounDdlnDt,
-					GCOUN_LMT_COUNT: gcounLmtCount
-					//bannerImage: bannerImage
-				},
-				success: function(response) {
-					if (response === 1) {
-						alert('등록에 성공하였습니다.');
-						$('#gcounModal').modal('hide');
-						
-						
-						//성공 시 데이터 새로 가져와서 그리드에 세팅하기
-						$.ajax({
-					  	    url: "/admin/getGcounList",
-					  	    type: "get",
-					  	    dataType: "JSON",
-					  	    contentType: "application/json; charset=UTF-8",
-					  	    success: function (result) {
-					  	      grid1.resetData(result);
-					  	    },
-					  	  });
-						
-					} else {
-						alert('등록에 실패하였습니다.');
-					}
-				},
-				error: function(error) {
-					alert('에러가 발생하였습니다.');
-				}
-			});
-			
-		});
-		
-		
-		
-  	  $.ajax({
-  	    url: "/admin/getGcounList",
-  	    type: "get",
-  	    dataType: "JSON",
-  	    contentType: "application/json; charset=UTF-8",
-  	    success: function (result) {
-  	      grid1.resetData(result);
-  	    },
-  	  });
-  	
-  	  // 상단 그리드 클릭 시 하단 그리드 생성
-	 grid1.on('click', function(ev) {
-		const { rowKey } = ev;
-		const rowData = grid1.getRow(rowKey);
-		const gcounCd = rowData.GCOUN_CD;
-		//alert(gcounCd);
-		
-		
-		$.ajax({
-			url: "/admin/getGcounStudList",
-			type: "POST",
-			data: { gcounCd: gcounCd },
-			success: function(result) {
-				grid2.resetData(result)
-			},
-		});
-	 })
 	
-	grid2.on('afterChange', function(ev) {
-		const changes = ev.changes;
-
-		const changeData = changes.map(change => ({
-              rowKey: change.rowKey,
-              columnName: change.columnName,
-              newValue: change.value
-          }));
-		alert(changeData.rowKey);
-	})
-	
-	});  */
+  
+  
   </script>
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>

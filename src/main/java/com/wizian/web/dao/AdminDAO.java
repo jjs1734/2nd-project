@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import com.wizian.web.dto.BoardDTO;
+import com.wizian.web.dto.EcounAdDTO;
 import com.wizian.web.dto.AdminDTO;
 
 @Repository
@@ -37,7 +38,7 @@ public interface AdminDAO {
 
 	void registerCounselor(Map<String, String> formData);
 
-	void registerEmpCounPro(Map<String, String> formData);
+	void registerEmpCounPro(EcounAdDTO ecounAdDTO);
 
 	 BoardDTO getPostDetail(int postId);
 	 List<BoardDTO> getReplies(int postId);
@@ -52,5 +53,6 @@ public interface AdminDAO {
 	
 	void toggleCompletionStatus(int postId);
 
+	int ecounEnroll(EcounAdDTO ecounAdDTO);
 	
 }

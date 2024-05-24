@@ -32,10 +32,6 @@
   <link id="pagestyle" href="../assets/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
   <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
   <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
-  <!-- Bootstrap CSS for modal -->
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap JS for modal -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://uicdn.toast.com/select-box/latest/toastui-select-box.css" />
   <script src="https://uicdn.toast.com/select-box/latest/toastui-select-box.js"></script>
   <!-- moment.js 로드 -->
@@ -91,6 +87,7 @@
                     <input type="text" name="email" placeholder="이메일">
                     <input type="text" name="mobile" placeholder="전화번호(- 포함 작성)">
                     <input type="text" name="scsbjtNm" placeholder="담당 학과">
+                    <input type="file" id="ecounFile" name="ecounFile" multiple>
                     <button type="submit">등록</button>
                 </form>
             </div>
@@ -220,6 +217,7 @@
 		        var email = $("input[name='email']").val(); // 올바른 이메일 변수 사용
 		        var mobile = $("input[name='mobile']").val();
 		        var scsbjtNm = $("input[name='scsbjtNm']").val();
+		        var ecounFile = $('#ecounFile');
 
 		        // 이메일 주소 유효성 검사
 		        if (!validateEmail(email)) {
@@ -232,19 +230,15 @@
 		            alert("유효한 휴대전화 번호를 입력하세요.");
 		            return;
 		        }
-
-		        // 폼 데이터 생성
-		        var formData = {
-		            cd: cd,
-		            cslNo: cslNo,
-		            cslNm: cslNm,
-		            email: email,
-		            mobile: mobile,
-		            scsbjtNm: scsbjtNm
-		        };
-
-		        
-		     // 이메일 주소 유효성 검사 함수
+				
+		     	// 업로드 파일 존재 여부 확인
+				if (!ecounFile.val()) {
+					alert('업로드 할 이미지를 선택하세요.');
+					$('#ecounFile').focus();
+					return;
+				}
+		     	
+				// 이메일 주소 유효성 검사 함수
 		        function validateEmail(email) {
 		            var re = /\S+@\S+\.\S+/;
 		            return re.test(email);
@@ -255,6 +249,43 @@
 		            var re = /^\d{3}-\d{3,4}-\d{4}$/;
 		            return re.test(mobile);
 		        }
+		     	
+				const files = ecounFile[0].files;
+		     	
+				if (files.length > 0) {
+					const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+					const fileExtension = files[0].name.split('.').pop().toLowerCase();
+
+					if (!validExtensions.includes(fileExtension)) {
+						alert(fileExtension + ' 파일은 업로드 불가합니다. jpg, jpeg, png, gif, bmp 형식의 파일을 선택해주세요.');
+						$('#ecounFile').focus();
+						return;
+					}
+				} 
+				
+		        console.log(files);
+		        
+		        const formData = new FormData();
+		        
+		     	// 파일 부분 기능 (첨부파일 읽어오는거)
+				for(var i = 0; i < files.length; i++) {
+					formData.append("file", files[i]);
+				}
+				// 폼 데이터 생성
+		        /* var formData = {
+		            cd: cd,
+		            cslNo: cslNo,
+		            cslNm: cslNm,
+		            email: email,
+		            mobile: mobile,
+		            scsbjtNm: scsbjtNm
+		        }; */
+		        formData.append("cd", cd);
+		        formData.append("CSL_NO", cslNo);
+		        formData.append("CSL_NM", cslNm);
+		        formData.append("CSL_EMAIL", email);
+		        formData.append("CSL_MOBILE", mobile);
+		        formData.append("SCSBJT_NM", scsbjtNm);
 		        
 				console.log(formData);
 				
@@ -262,8 +293,11 @@
 		       $.ajax({
 		            url: "/admin/registerEmpCounselor",
 		            type: "post",
-		            data: JSON.stringify(formData), // JSON 데이터로 변환하여 전송
-		            contentType: "application/json; charset=utf-8",
+		            //data: JSON.stringify(formData), // JSON 데이터로 변환하여 전송
+		            data: formData, // JSON 데이터로 변환하여 전송
+		            //contentType: "application/json; charset=utf-8",
+		            processData: false,
+					contentType: false,
 		            dataType: "json",
 		            success: function (result) {
 		                alert("상담사가 등록되었습니다.");

@@ -26,7 +26,7 @@
     background-color: white !important;
     color: white;
 }
-.profileMain{background-color: #f4f4f4; padding: 10px;}
+.profileMain{background-color: #f4f4f4; padding: 10px; width: 80%;}
 #sidenav{background: #B6B6B6; float:left; margin-right:20px; padding:10px; margin-top: 0px; width:200px; height:925px; text-align:center;}
 .leftnavapply {text-align: center; background-color: gray;}
 #sidenav .button {margin-bottom: 30px; color: white; font-size: 15pt; width: 140px; height: 35px; background-color: #A41034; border: none;}
@@ -64,16 +64,18 @@
             </form>
 	        <!-- Page Content-->
 	        <!-- 좌측 메뉴 nav와 container 클래스를 가로로 배열하기 위해서 div설정 -->
-	        <div class="profileMain">
-	           
+	        <div class="profileMain" style="text-align: center;">
 	           <!-- 메인 내용 -->
 	           <!-- 1번 상담사 -->
 	          <div th:each="row, iterStat : ${empCounProfile}" th:if="${iterStat.index < 12}"
 	           id="cardCss" class="card mb-3 col-md-6" style="max-width: 400px;height: 22vh; display: inline-block;">
 	             <div class="row g-0">
-	                 <div class="col-md-5" style="padding: 0px;">
-	                     <img src="images/EMP_COUN_PHOTO.jpg" class="img-fluid rounded-start" alt="..." style="height: 180px;">
-	                 </div>
+	                 <!-- <div class="col-md-5" style="padding: 0px; text-align: center; justify-content: center; display: flex;">
+						 <img class="img-fluid rounded-start" alt="..." style="height: 215px; width: 170px;" th:if="${row.ECOUN_CONTS_CN != null}" th:src="@{${row.ECOUN_CONTS_CN}}">
+	                 </div> -->
+	                 <div class="col-md-5 d-flex align-items-center justify-content-center" style="padding: 0px; text-align: center;">
+					    <img class="img-fluid rounded-start" alt="..." style="height: 22vh; width: 100%;" th:if="${row.ECOUN_CONTS_CN != null}" th:src="@{${row.ECOUN_CONTS_CN}}">
+					</div>
 	                 <div class="col-md-7" style="padding: 10px;">
 	                         <div class="card-body" style="padding: 5px;">
 	                             <p class="card-title">[[${row.CSL_NM}]]</p>

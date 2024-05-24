@@ -117,18 +117,29 @@
 	</update>
 	
 	<!-- 상담사 프로필(DB : COUNSELOR) 등록 -->
-	<insert id="registerCounselor" parameterType="Map">
+	<!-- <insert id="registerCounselor" parameterType="Map">
 		INSERT INTO COUNSELOR (CSL_NO, CSL_NM, CSL_EMAIL, CSL_MOBILE)
 		VALUES (#{cslNo}, #{cslNm}, #{email}, #{mobile})		
 		<selectKey keyProperty="CSL_NO" order="AFTER" resultType="int">
         	SELECT LAST_INSERT_ID()
     	</selectKey>
+	</insert> -->
+	
+	<!-- 취업 상담사 프로필(DB : EMP_COUN_PRO) 등록 -->
+	<!-- <insert id="registerEmpCounPro" parameterType="Map">
+		INSERT INTO EMP_COUN_PRO (CSL_NO, EMP_CSL_EM, EMP_CSL_TELNO, SCSBJT_NM)
+		VALUES (#{cslNo}, #{email}, #{mobile}, #{scsbjtNm})
+	</insert> -->
+	
+	<insert id="ecounEnroll" parameterType="EcounAdDTO">
+		INSERT INTO COUNSELOR (CSL_NO, CSL_NM, CSL_EMAIL, CSL_MOBILE)
+		VALUES (#{cslNo}, #{cslNm}, #{email}, #{mobile})		
 	</insert>
 	
 	<!-- 취업 상담사 프로필(DB : EMP_COUN_PRO) 등록 -->
-	<insert id="registerEmpCounPro" parameterType="Map">
-		INSERT INTO EMP_COUN_PRO (CSL_NO, EMP_CSL_EM, EMP_CSL_TELNO, SCSBJT_NM)
-		VALUES (#{cslNo}, #{email}, #{mobile}, #{scsbjtNm})
+	<insert id="registerEmpCounPro" parameterType="EcounAdDTO">
+		INSERT INTO EMP_COUN_PRO (CSL_NO, EMP_CSL_EM, EMP_CSL_TELNO, SCSBJT_NM, ECOUN_FILENM, ECOUN_CONTS_CN)
+		VALUES (#{cslNo}, #{email}, #{mobile}, #{scsbjtNm}, #{ECOUN_FILENM}, #{ECOUN_CONTS_CN})
 	</insert>
 	
 	
