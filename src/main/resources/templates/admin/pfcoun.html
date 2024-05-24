@@ -14,7 +14,7 @@
 	<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.3.0/tui-pagination.js"></script>
 	<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
   <title>
-    관리자 페이지
+    관리자 페이지 - 교수상담관리
   </title>
   <!--     Fonts and icons     -->
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
@@ -80,8 +80,7 @@
         	<div id="pfcounGrid"></div>
         	<br>
 
-        	<!-- 상담 수정 폼 -->
-        	<div></div>
+
         	
         </div>
    </div>
@@ -286,7 +285,7 @@
 		    const selectedTime = new Date(pfcounDT);
 		    const selectedHour = selectedTime.getHours();
 		    if (selectedHour < 9 || selectedHour > 17) {
-		        alert('상담 진행 시간을 09:00부터 17:00 사이로 선택해주세요!');
+		        alert('상담 진행 시간을 09:00부터 17:59 사이로 선택해주세요!');
 		        return false;
 		    }
 			
