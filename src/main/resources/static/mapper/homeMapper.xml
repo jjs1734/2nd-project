@@ -9,7 +9,7 @@
     </select>
     
     <select id="empCounProfile" resultType="Map">
-        SELECT e.CSL_NO, c.CSL_EMAIL, c.CSL_MOBILE, e.SCSBJT_NM, c.CSL_NM
+        SELECT e.CSL_NO, c.CSL_EMAIL, c.CSL_MOBILE, e.SCSBJT_NM, c.CSL_NM, e.ECOUN_FILENM, e.ECOUN_CONTS_CN
         FROM EMP_COUN_PRO e 
         JOIN COUNSELOR c ON e.CSL_NO = c.CSL_NO 
     </select>

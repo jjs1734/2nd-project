@@ -20,4 +20,10 @@ public interface GroupDAO {
 
 	Map<String, Object> selectMyInfo(String userId);
 
+	void updateEmail(String userId, String value);
+
+	void updateGender(String userId, String value);
+
+	void updateTelNo(String userId, String value);
+
 }

@@ -11,6 +11,7 @@ import com.wizian.web.dao.AdminDAO;
 import com.wizian.web.dao.BoardDAO;
 import com.wizian.web.dao.GroupDAO;
 import com.wizian.web.dto.BoardDTO;
+import com.wizian.web.dto.EcounAdDTO;
 import com.wizian.web.dto.AdminDTO;
 import com.wizian.web.dto.GroupDTO;
 
@@ -71,8 +72,9 @@ public class AdminService {
 		adminDAO.registerCounselor(formData);
 	}
 
-	public void registerEmpCounPro(Map<String, String> formData) {
-		adminDAO.registerEmpCounPro(formData);
+	public void registerEmpCounPro(EcounAdDTO ecounAdDTO) {
+		System.out.println(ecounAdDTO);
+		adminDAO.registerEmpCounPro(ecounAdDTO);
 	}
 
 
@@ -90,6 +92,10 @@ public class AdminService {
 
 	public List<Map<String, Object>> getGcounCslList() {
 		return adminDAO.getGcounCslList();
+	}
+
+	public int ecounEnroll(EcounAdDTO ecounAdDTO) {
+		return adminDAO.ecounEnroll(ecounAdDTO);
 	}
 	
 	

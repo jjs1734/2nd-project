@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.wizian.web.dto.AdminDTO;
 import com.wizian.web.dto.BoardDTO;
+import com.wizian.web.dto.EcounAdDTO;
 import com.wizian.web.service.AdminService;
 import com.wizian.web.service.BoardService;
 
@@ -280,25 +281,65 @@ public class AdminController {
 		return "admin/pcoun";
 	}
 
-	 @PostMapping("/admin/registerEmpCounselor")
-	    @ResponseBody
-	    public String registerCounselor(@RequestBody Map<String, String> formData) {
-	        String cd = formData.get("cd");
-	        String cslNo = formData.get("cslNo");
-	        String cslNm = formData.get("cslNm");
-	        String email = formData.get("email");
-	        String mobile = formData.get("mobile");
-	        String scsbjtNm = formData.get("scsbjtNm");
-	        
-	        System.out.println(cd);
-	        System.out.println(cslNm);
-	        System.out.println(formData);
-	        adminService.registerCounselor(formData);
-	        adminService.registerEmpCounPro(formData);
+	@PostMapping("/admin/registerEmpCounselor")
+    @ResponseBody
+    public String registerCounselor(@RequestParam("cd") String cd, @RequestParam("CSL_NO") String cslNo,
+    		@RequestParam("CSL_NM") String cslNm, @RequestParam("CSL_EMAIL") String email, @RequestParam("CSL_MOBILE") String mobile, 
+    		@RequestParam("SCSBJT_NM") String scsbjtNm,
+    		 @RequestPart("file") MultipartFile file) throws Exception {
+		
+		System.out.println(cd);
+		System.out.println(cslNo);
+		System.out.println(cslNm);
+		System.out.println(email);
+		System.out.println(mobile);
+		System.out.println(scsbjtNm);
+		System.out.println(file);
+		
+		// DTO 객체 생성 및 설정
+        EcounAdDTO ecounAdDTO = new EcounAdDTO();
+        ecounAdDTO.setCslNo(cslNo);
+        ecounAdDTO.setCslNm(cslNm);
+        ecounAdDTO.setEmail(email);
+        ecounAdDTO.setMobile(mobile);
+        ecounAdDTO.setScsbjtNm(scsbjtNm);
+        
+        // 저장 경로 지정
+        String path = System.getProperty("user.dir") + "/src/main/resources/static/ecounFiles";
+        //String path = "/src/main/resources/static/ecounFiles";
+        
+		File directory = new File(path);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        
+        // 랜덤 이름 생성
+        UUID uuid = UUID.randomUUID();
+        
+        // 파일 이름 생성
+        String fileName = uuid + "_" + file.getOriginalFilename();
+        
+        File saveFile = new File(path, fileName);
+        file.transferTo(saveFile);
+        
+        ecounAdDTO.setECOUN_FILENM(fileName);
+        ecounAdDTO.setECOUN_CONTS_CN("/ecounFiles/" + fileName);
+        
+        System.out.println(fileName);
+        
+        adminService.ecounEnroll(ecounAdDTO);
+        adminService.registerEmpCounPro(ecounAdDTO);
+        
+        //System.out.println(cd);
+        //System.out.println(cslNm);
+        //System.out.println(formData);
+        //System.out.println(file);
+        //adminService.registerCounselor(formData);
+        //adminService.registerEmpCounPro(formData);
 
-	        // 데이터베이스에 상담사 등록 로직 추가
-	        	
-	        return "success";
-	    }
+        // 데이터베이스에 상담사 등록 로직 추가
+        	
+        return "success";
+    }
 	
 }
