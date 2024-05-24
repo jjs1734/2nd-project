@@ -164,7 +164,6 @@ public class AdminController {
 			adminService.pfEmailUpdate(map);
 			//System.out.println("삽입성공3");
 		}else {
-			//EMP_STTS_CD
 			map.put("counNum", counNum);
 			map.put("fieldValue", fieldValue);
 			adminService.pfNcdUpdate(map);
