@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wizian.web.mapper.AppointmentMapper">
+
+    <insert id="saveAppointment" parameterType="com.wizian.web.dto.Appointment">
+        INSERT INTO appointment (name, student_id, department, phone, email, appointment_date, agree)
+        VALUES (#{name}, #{studentId}, #{department}, #{phone}, #{email}, #{appointmentDate}, #{agree})
+    </insert>
+
+    <select id="getAllAppointments" resultType="com.wizian.web.dto.Appointment">
+        SELECT * FROM appointment
+    </select>
+
+</mapper>

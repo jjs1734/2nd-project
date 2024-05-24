@@ -1,6 +1,5 @@
 package com.wizian.web.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,11 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wizian.web.dao.AdminDAO;
-import com.wizian.web.dao.BoardDAO;
-import com.wizian.web.dao.GroupDAO;
-import com.wizian.web.dto.BoardDTO;
 import com.wizian.web.dto.AdminDTO;
-import com.wizian.web.dto.GroupDTO;
+import com.wizian.web.dto.BoardDTO;
 
 @Service
 public class AdminService {
@@ -46,6 +42,8 @@ public class AdminService {
 
 	public List<BoardDTO> getReplies(int postId) {
 		return adminDAO.getReplies(postId);
+	}
+	
 	public List<Map<String, Object>> getEcounStudList(String cslNo) {
 		return adminDAO.getEcounStudList(cslNo);
 	}
