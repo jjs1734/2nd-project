@@ -16,11 +16,34 @@
 	</select>
 	
 	<insert id="groupEnroll" parameterType="GroupDTO">
-		INSERT INTO GROUP_COUN_APPLICANT (STUD_NO, GCOUN_CD)
-		VALUES(#{STUD_NO}, #{GCOUN_CD})
-		<!-- MyBatis에서 INSERT의 경우 성공적으로 수행된 행의 수를 반환할 수 있도록 설정 -->
-    <selectKey keyProperty="id" resultType="int" order="AFTER">
-        SELECT LAST_INSERT_ID()
-    </selectKey>
+		INSERT INTO GROUP_COUN_APPLICANT (STUD_NO, GCOUN_CD, GCOUN_CURRENT_DT)
+		VALUES(#{STUD_NO}, #{GCOUN_CD}, #{GCOUN_CURRENT_DT})
 	</insert>
+	
+	<!-- 마이페이지 정보 보기 -->
+	<select id="selectMyInfo" resultType="Map" parameterType="String">
+		SELECT p.PF_NM, p.PF_TELNO, p.PF_EMAIL, s.NTN_CD, s.SCSBJT_NM, s.STUD_NM, s.TELNO, s.STUD_EML_ADDR, s.COL_REG, s.STUD_BRDT, s.STUD_GEN , s.STUD_NO
+		FROM STUD_INFO s
+		JOIN PF_INFO p ON s.PF_NO = p.PF_NO
+		WHERE STUD_NO = #{userId} 
+	</select>
+	
+	<update id="updateEmail" parameterType="String">
+		UPDATE STUD_INFO
+    	SET STUD_EML_ADDR = #{value}
+    	WHERE STUD_NO = #{userId}
+	</update>
+	
+	<update id="updateGender" parameterType="String">
+		UPDATE STUD_INFO
+    	SET STUD_GEN = #{value}
+    	WHERE STUD_NO = #{userId}
+	</update>	
+	
+	<update id="updateTelNo" parameterType="String">
+		UPDATE STUD_INFO
+    	SET TELNO = #{value}
+    	WHERE STUD_NO = #{userId}
+	</update>	
+	
 </mapper>

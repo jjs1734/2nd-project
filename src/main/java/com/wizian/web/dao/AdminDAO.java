@@ -7,8 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import com.wizian.web.dto.BoardDTO;
+import com.wizian.web.dto.EcounAdDTO;
 import com.wizian.web.dto.AdminDTO;
-import com.wizian.web.dto.GroupDTO;
 
 @Repository
 @Mapper
@@ -28,8 +28,18 @@ public interface AdminDAO {
 	
 	 int countIncompletePostsByStudentNo(String studentNo);
 
-	
-	
+	void updateCounCn(Map<String, Object> map);
+
+	void updateCounYmd(Map<String, Object> map);
+
+	void updateCounCd(Map<String, Object> map);
+
+	void updateSttsCd(Map<String, Object> map);
+
+	void registerCounselor(Map<String, String> formData);
+
+	void registerEmpCounPro(EcounAdDTO ecounAdDTO);
+
 	 BoardDTO getPostDetail(int postId);
 	 List<BoardDTO> getReplies(int postId);
 	List<Map<String, Object>> getEcounStudList(String cslNo);
@@ -38,5 +48,8 @@ public interface AdminDAO {
 
 	int gcounEnroll(AdminDTO adminDTO);
 
+	List<Map<String, Object>> counselorList();
+
+	int ecounEnroll(EcounAdDTO ecounAdDTO);
 	
 }

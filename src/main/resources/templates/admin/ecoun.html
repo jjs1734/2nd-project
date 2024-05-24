@@ -6,6 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <!-- tui-date-picker와 tui-time-picker의 CSS 파일 링크 추가 -->
+  <link href="/css/tui-date-picker.css" rel="stylesheet" />
+  <link href="/css/tui-time-picker.css" rel="stylesheet" />
+  <!-- tui-date-picker와 tui-time-picker의 JavaScript 파일 추가 -->
+  <script src="https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.js"></script>
+  <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.js"></script>
+  <script src="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.js"></script>
+  <!-- 이하 생략 -->
   <title>
     관리자 페이지
   </title>
@@ -24,10 +32,16 @@
   <link id="pagestyle" href="../assets/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
   <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
   <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
-  <!-- Bootstrap CSS for modal -->
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap JS for modal -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://uicdn.toast.com/select-box/latest/toastui-select-box.css" />
+  <script src="https://uicdn.toast.com/select-box/latest/toastui-select-box.js"></script>
+  <!-- moment.js 로드 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <!-- Tempus Dominus Bootstrap 4 datetimepicker CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet">
+  <!-- Tempus Dominus Bootstrap 4 datetimepicker JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.3.5/jquery.timepicker.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.3.5/jquery.timepicker.min.js"></script>
   
 </head>
 
@@ -61,6 +75,22 @@
       <div class="row min-vh-80 h-100">
         <div class="col-12">
        		<h4>취업 상담사 목록</h4>
+       		<!-- 상담사 등록 폼 토글 버튼 -->
+            <button id="showFormBtn">상담사 등록</button>
+            <!-- 상담사 등록 폼 -->
+            <div id="counselorForm" style="display: none;">
+                <h4>상담사 등록</h4>
+                <form>
+                    <input type="text" name="cd" placeholder="상담 코드">
+                    <input type="text" name="cslNo" placeholder="상담사 코드">
+                    <input type="text" name="cslNm" placeholder="상담사 이름">
+                    <input type="text" name="email" placeholder="이메일">
+                    <input type="text" name="mobile" placeholder="전화번호(- 포함 작성)">
+                    <input type="text" name="scsbjtNm" placeholder="담당 학과">
+                    <input type="file" id="ecounFile" name="ecounFile" multiple>
+                    <button type="submit">등록</button>
+                </form>
+            </div>
         	<div id="ecounGrid"></div>
         	<br>
         	<h4>신청자 목록</h4>
@@ -69,25 +99,6 @@
         </div>
    </div>
    
-	<!-- 모달 창 추가 -->
-	<div id="editModal" class="modal fade" tabindex="-1" role="dialog">
-	  <div class=".modal-dialog-scrollable" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title">신청자 수정</h5>
-	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-	      </div>
-	      <div class="modal-body">
-			바디
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-	        <button type="button" class="btn btn-primary" id="saveChangesBtn">저장</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-	   
     <!-- footer -->
     
     
@@ -99,7 +110,12 @@
   <script src="../assets/js/core/bootstrap.min.js"></script>
   <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script type="text/javascript" src="https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.js"></script>
+  <script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.3.0/tui-pagination.js"></script>
+  <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+  
   <script>
+  var counNum;
   const grid1 = new tui.Grid({
       el: document.getElementById('ecounGrid'),
       scrollX: true,
@@ -110,7 +126,7 @@
 //      pageOptions: {
 //        perPage: 15
 //      },
-      columns: [
+      columns: [	
         { header: '상담 코드', name: 'CD', sortable: true, align: 'center', width: 150, filter: 'select' },
         { header: '상담사 코드', name: 'CSL_NO', sortable: true, align: 'center', width: 150, filter: 'select' },
         { header: '상담사', name: 'CSL_NM', sortable: true, align: 'center', width: 150, filter: 'select' },
@@ -131,107 +147,255 @@
 //          perPage: 15
 //        },
         columns: [
-		    { header: '상담신청번호', name: 'COUN_NUM', sortable: true, align: 'center', width: 150, filter: 'select' },
+		    { header: '상담신청번호', name: 'COUN_NUM', sortable: true, align: 'center', width: 150, filter: 'select', },
 		    { header: '이전신청번호', name: 'COUN_NUM2', sortable: true, align: 'center', width: 130, filter: {type: 'text', showApplyBtn: true, showCleatBtn: true} },
 		    { header: '학번', name: 'STUD_NO', sortable: true, align: 'center', width: 120, filter: 'select' },
 		    { header: '스케줄번호', name: 'CAL_NUM', sortable: true, align: 'center', width: 100, filter: {type: 'text', showApplyBtn: true, showClearBtn: true} },
 		    { header: '예약일자', name: 'EMP_COUN_RSVT_YMD', sortable: true, align: 'center', width: 120, filter: 'select' },
 		    { header: '예약시간(시)', name: 'EMP_COUN_RSVT_CD', sortable: true, align: 'center', width: 150, filter: 'select' },
-		    { header: '실상담일자', name: 'EMP_COUN_YMD', sortable: true, align: 'center', width: 120, filter: 'select' },
-		    { header: '실상담시간(시)', name: 'EMP_COUN_CD', sortable: true, align: 'center', width: 160, filter: 'select' },
+		    {
+	            header: '상담일자',
+	            name: 'EMP_COUN_YMD',
+	            sortable: true,
+	            align: 'center',
+	            width: 120,
+	            filter: 'select',
+	            editor: {
+	                type: 'datePicker',
+	                options: {
+	                    format: 'yyyy-MM-dd', // 날짜 형식 설정
+                    	language: 'ko' // 언어 설정 (한글)
+	                }
+	            }
+        	},
+		    { header: '상담시간(시)', name: 'EMP_COUN_CD', sortable: true, align: 'center', width: 140, filter: 'select', editor: {
+	        	type: 'select',
+	        	options: {
+	        		listItems: [
+	        			{ text: '09(시)', value: '09' },
+		                { text: '10(시)', value: '10' },
+		                { text: '11(시)', value: '11' },
+		                { text: '12(시)', value: '12' },
+		                { text: '13(시)', value: '13' },
+		                { text: '14(시)', value: '14' },
+		                { text: '15(시)', value: '15' },
+		                { text: '16(시)', value: '16' },
+		                { text: '17(시)', value: '17' },
+	        		]
+	        	}
+	        } },
 		    { header: '상담요청내용', name: 'USR_CN', sortable: true, align: 'center', width: 200, filter: 'select' },
-		    { header: '상담사코멘트', name: 'COUN_CN', sortable: true, align: 'center', width: 200, filter: 'select' },
-		    { header: '상태', name: 'EMP_STTS_CD', sortable: true, align: 'center', width: 100, filter: 'select' }
+		    { header: '상담사코멘트', name: 'COUN_CN', sortable: true, align: 'center', width: 200, filter: 'select', editor: 'text' },
+		    { header: '상태', name: 'EMP_STTS_CD', sortable: true, align: 'center', width: 100, filter: 'select', editor: {
+	        	type: 'select',
+	        	options: {
+	        		listItems: [
+	        			{ text: '10(예약중)', value: '10(예약중)' },
+		                { text: '20(승인)', value: '20(승인)' },
+		                { text: '30(거절)', value: '30(거절)' },
+		                { text: '40(상담완료)', value: '40(상담완료)' },
+		                { text: '50(추가상담)', value: '50(추가상담)' }
+	        		]
+	        	}
+	        } }
 		]
-      });  
+      });
 
 	$(document).ready(function () {
 		
-  	  $.ajax({
-  	    url: "/admin/getEcounList",
-  	    type: "get",
-  	    dataType: "JSON",
-  	    contentType: "application/json; charset=UTF-8",
-  	    success: function (result) {
-    	  result.forEach(row => {
-            row.CD = "CO003:30"; // 상담 코드 하드코딩
-          });
-  	      grid1.resetData(result);
-  	      console.log(result);
-  	    },
-  	  });
-  	  
-  	
-	 grid1.on('click', function(ev) {
-		const { rowKey } = ev;
-		const rowData = grid1.getRow(rowKey);
-		const cslNo = rowData.CSL_NO;
-		//alert(rowData);
-		//alert(cslNo);
+		$("#showFormBtn").click(function () {
+		       $("#counselorForm").toggle(); // 폼 보이기/숨기기 전환
+		   });
 		
-		$.ajax({
-			url: "/admin/getEcounStudList",
-			type: "post",
-			data: { cslNo: cslNo },
-			success: function(result) {
-				result.forEach(row => {
-		            if(row.EMP_STTS_CD == 10){
-		            	row.EMP_STTS_CD = row.EMP_STTS_CD + "(예약중)"; // 상담 코드 하드코딩
-		            }else if(row.EMP_STTS_CD == 20){
-		            	row.EMP_STTS_CD = row.EMP_STTS_CD + "(승인)"; // 상담 코드 하드코딩
-		            }else if(row.EMP_STTS_CD == 30){
-		            	row.EMP_STTS_CD = row.EMP_STTS_CD + "(거절)"; // 상담 코드 하드코딩
-		            }else if(row.EMP_STTS_CD == 40){
-		            	row.EMP_STTS_CD = row.EMP_STTS_CD + "(상담완료)"; // 상담 코드 하드코딩
-		            }else if(row.EMP_STTS_CD == 50){
-		            	row.EMP_STTS_CD = row.EMP_STTS_CD + "(추가상담)"; // 상담 코드 하드코딩
-		            }
-		          });
-				grid2.resetData(result)
-			},
-			error: function(xhr, status, error) {
-	            console.error("Error fetching data: ", error);
-	        }
-		});
-		// 추가적인 동작: 예를 들어, 알림으로 클릭된 데이터 표시 (옵션)
-	    console.log(`상담 코드: ${cd}, 상담사 코드: ${cslNo}, 이메일: ${cslEmail}`);
-	    // alert(`상담 코드: ${cd}, 상담사 코드: ${cslNo}, 이메일: ${cslEmail}`);		
-	 })
-	 
-	 grid2.on('click', function(ev) {
-		const { rowKey } = ev;
-		const rowData = grid2.getRow(rowKey);
-		const counNum = rowData.COUN_NUM;
-		alert(counNum);
-		
-		// 모달에 데이터를 로드하기 위해 각 입력 필드에 데이터를 할당
-	    /* $('#editModal input[name="COUN_NUM"]').val(rowData.COUN_NUM);
-	    $('#editModal input[name="COUN_NUM2"]').val(rowData.COUN_NUM2);
-	    $('#editModal input[name="STUD_NO"]').val(rowData.STUD_NO);
-	    $('#editModal input[name="CAL_NUM"]').val(rowData.CAL_NUM);
-	    $('#editModal input[name="EMP_COUN_RSVT_YMD"]').val(rowData.EMP_COUN_RSVT_YMD);
-	    $('#editModal input[name="EMP_COUN_RSVT_CD"]').val(rowData.EMP_COUN_RSVT_CD);
-	    $('#editModal input[name="EMP_COUN_YMD"]').val(rowData.EMP_COUN_YMD);
-	    $('#editModal input[name="EMP_COUN_CD"]').val(rowData.EMP_COUN_CD);
-	    $('#editModal input[name="USR_CN"]').val(rowData.USR_CN);
-	    $('#editModal input[name="COUN_CN"]').val(rowData.COUN_CN);
-	    $('#editModal input[name="EMP_STTS_CD"]').val(rowData.EMP_STTS_CD);
-		 */
-	    // 모달 열기
-	    $('#editModal').modal('show');
-		
-		$.ajax({
-			url: "/admin/getEcounStudModify",
-			type: "post",
-			data: { counNum: counNum },
-			success: function(result) {
-				grid2.resetData(result)
-			},
-		});
-	 })
-	 
-	
-	}); 
+		   // 상담사 등록 폼 제출 시
+		   $("#counselorForm").submit(function (event) {
+		       event.preventDefault(); // 기본 동작 방지
+		    // 각 입력 필드의 값을 가져옴
+		        var cd = $("input[name='cd']").val();
+		        var cslNo = $("input[name='cslNo']").val();
+		        var cslNm = $("input[name='cslNm']").val();
+		        var email = $("input[name='email']").val(); // 올바른 이메일 변수 사용
+		        var mobile = $("input[name='mobile']").val();
+		        var scsbjtNm = $("input[name='scsbjtNm']").val();
+		        var ecounFile = $('#ecounFile');
+
+		        // 이메일 주소 유효성 검사
+		        if (!validateEmail(email)) {
+		            alert("유효한 이메일 주소를 입력하세요.");
+		            return;
+		        }
+
+		        // 휴대전화 번호 유효성 검사
+		        if (!validateMobile(mobile)) {
+		            alert("유효한 휴대전화 번호를 입력하세요.");
+		            return;
+		        }
+				
+		     	// 업로드 파일 존재 여부 확인
+				if (!ecounFile.val()) {
+					alert('업로드 할 이미지를 선택하세요.');
+					$('#ecounFile').focus();
+					return;
+				}
+		     	
+				// 이메일 주소 유효성 검사 함수
+		        function validateEmail(email) {
+		            var re = /\S+@\S+\.\S+/;
+		            return re.test(email);
+		        }
+
+		         // 휴대전화 번호 유효성 검사 함수
+		        function validateMobile(mobile) {
+		            var re = /^\d{3}-\d{3,4}-\d{4}$/;
+		            return re.test(mobile);
+		        }
+		     	
+				const files = ecounFile[0].files;
+		     	
+				if (files.length > 0) {
+					const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+					const fileExtension = files[0].name.split('.').pop().toLowerCase();
+
+					if (!validExtensions.includes(fileExtension)) {
+						alert(fileExtension + ' 파일은 업로드 불가합니다. jpg, jpeg, png, gif, bmp 형식의 파일을 선택해주세요.');
+						$('#ecounFile').focus();
+						return;
+					}
+				} 
+				
+		        console.log(files);
+		        
+		        const formData = new FormData();
+		        
+		     	// 파일 부분 기능 (첨부파일 읽어오는거)
+				for(var i = 0; i < files.length; i++) {
+					formData.append("file", files[i]);
+				}
+				// 폼 데이터 생성
+		        /* var formData = {
+		            cd: cd,
+		            cslNo: cslNo,
+		            cslNm: cslNm,
+		            email: email,
+		            mobile: mobile,
+		            scsbjtNm: scsbjtNm
+		        }; */
+		        formData.append("cd", cd);
+		        formData.append("CSL_NO", cslNo);
+		        formData.append("CSL_NM", cslNm);
+		        formData.append("CSL_EMAIL", email);
+		        formData.append("CSL_MOBILE", mobile);
+		        formData.append("SCSBJT_NM", scsbjtNm);
+		        
+				console.log(formData);
+				
+		       // 서버로 폼 데이터를 전송하여 상담사 등록
+		       $.ajax({
+		            url: "/admin/registerEmpCounselor",
+		            type: "post",
+		            //data: JSON.stringify(formData), // JSON 데이터로 변환하여 전송
+		            data: formData, // JSON 데이터로 변환하여 전송
+		            //contentType: "application/json; charset=utf-8",
+		            processData: false,
+					contentType: false,
+		            dataType: "json",
+		            success: function (result) {
+		                alert("상담사가 등록되었습니다.");
+		                // 등록 후 목록을 다시 불러오는 등의 작업 수행
+		                // 예: grid1.resetData(result);
+		            },
+		           error: function (xhr, status, error) {
+		               console.error("Error registering counselor: ", error);
+		           }
+		       });
+		   });
+			
+	  	  $.ajax({
+	  	    url: "/admin/getEcounList",
+	  	    type: "get",
+	  	    dataType: "JSON",
+	  	    contentType: "application/json; charset=UTF-8",
+	  	    success: function (result) {
+	    	  result.forEach(row => {
+	            row.CD = "CO003:30"; // 상담 코드 하드코딩
+	          });
+	  	      grid1.resetData(result);
+	  	      console.log(result);
+	  	    },
+	  	  });
+	  	
+		 grid1.on('click', function(ev) {
+			const { rowKey } = ev;
+			const rowData = grid1.getRow(rowKey);
+			const cslNo = rowData.CSL_NO;
+			//alert(rowData);
+			//alert(cslNo);
+			
+			$.ajax({
+				url: "/admin/getEcounStudList",
+				type: "post",
+				data: { cslNo: cslNo },
+				success: function(result) {
+					/* result.forEach(row => {
+			            if(row.EMP_STTS_CD == 10){
+			            	row.EMP_STTS_CD = row.EMP_STTS_CD + "(예약중)"; // 상담 코드 하드코딩
+			            }else if(row.EMP_STTS_CD == 20){
+			            	row.EMP_STTS_CD = row.EMP_STTS_CD + "(승인)"; // 상담 코드 하드코딩
+			            }else if(row.EMP_STTS_CD == 30){
+			            	row.EMP_STTS_CD = row.EMP_STTS_CD + "(거절)"; // 상담 코드 하드코딩
+			            }else if(row.EMP_STTS_CD == 40){
+			            	row.EMP_STTS_CD = row.EMP_STTS_CD + "(상담완료)"; // 상담 코드 하드코딩
+			            }else if(row.EMP_STTS_CD == 50){
+			            	row.EMP_STTS_CD = row.EMP_STTS_CD + "(추가상담)"; // 상담 코드 하드코딩
+			            }
+			          });
+ */					grid2.resetData(result)
+				},
+				error: function(xhr, status, error) {
+		            console.error("Error fetching data: ", error);
+		        }
+			});
+			// 추가적인 동작: 예를 들어, 알림으로 클릭된 데이터 표시 (옵션)
+		    //console.log(`상담 코드: ${cd}, 상담사 코드: ${cslNo}, 이메일: ${cslEmail}`);
+		    // alert(`상담 코드: ${cd}, 상담사 코드: ${cslNo}, 이메일: ${cslEmail}`);		
+		 })
+grid2.on('afterChange', function(ev) {
+    const { changes } = ev;
+    changes.forEach(change => {
+        const { rowKey, columnName, value } = change;
+        const rowData = grid2.getRow(rowKey);
+        const counNum = rowData.COUN_NUM;
+        //alert(counNum);
+        //console.log(counNum);
+     	// 변경된 칼럼이 "상담일자", "상담시간(시)", "상담사코멘트", "상태" 중 하나인지 확인
+        if (["EMP_COUN_YMD", "EMP_COUN_CD", "COUN_CN", "EMP_STTS_CD"].includes(columnName)) {
+            console.log("Changed column:", columnName); // 변경된 칼럼 확인
+            console.log("Row data:", rowData); // 해당 행의 데이터 확인
+            console.log("value:", value); // 해당 행의 데이터 확인
+	        console.log(counNum);
+        
+        // 수정된 데이터를 서버로 전송
+        $.ajax({
+            url: "/admin/getEcounStudModify",
+            type: "post",
+           // contentType: "application/json",
+            data: {
+                counNum : counNum, // 고유 식별자
+                fieldName: columnName, // 수정된 컬럼 이름
+                fieldValue: value // 수정된 값
+            },
+            success: function(response) {
+                console.log('Data updated successfully');
+            },
+            error: function(xhr, status, error) {
+                console.error("Error updating data: ", error);
+            }
+        });
+        }
+    });
+});
+		 
+}); 
   </script>
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>

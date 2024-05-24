@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wizian.web.dao.AdminDAO;
+import com.wizian.web.dao.BoardDAO;
+import com.wizian.web.dao.GroupDAO;
+import com.wizian.web.dto.BoardDTO;
+import com.wizian.web.dto.EcounAdDTO;
 import com.wizian.web.dto.AdminDTO;
 import com.wizian.web.dto.BoardDTO;
 
@@ -43,14 +47,35 @@ public class AdminService {
 	public List<BoardDTO> getReplies(int postId) {
 		return adminDAO.getReplies(postId);
 	}
-	
 	public List<Map<String, Object>> getEcounStudList(String cslNo) {
 		return adminDAO.getEcounStudList(cslNo);
 	}
 
-	public List<Map<String, Object>> getGcountCslList() {
-		return adminDAO.getGcounCslList();
+	public void updateCounCn(Map<String, Object> map) {
+		adminDAO.updateCounCn(map);
 	}
+
+	public void updateCounYmd(Map<String, Object> map) {
+		adminDAO.updateCounYmd(map);
+	}
+
+	public void updateCounCd(Map<String, Object> map) {
+		adminDAO.updateCounCd(map);
+	}
+
+	public void updateSttsCd(Map<String, Object> map) {
+		adminDAO.updateSttsCd(map);
+	}
+
+	public void registerCounselor(Map<String, String> formData) {
+		adminDAO.registerCounselor(formData);
+	}
+
+	public void registerEmpCounPro(EcounAdDTO ecounAdDTO) {
+		System.out.println(ecounAdDTO);
+		adminDAO.registerEmpCounPro(ecounAdDTO);
+	}
+
 
 	public int gcounEnroll(AdminDTO adminDTO) {
 		return adminDAO.gcounEnroll(adminDTO);
@@ -59,6 +84,18 @@ public class AdminService {
 	public int getIncompleteConsultCount(String studentNo) {
         return adminDAO.countIncompletePostsByStudentNo(studentNo);
     }
+
+	public List<Map<String, Object>> counselorList() {
+		return adminDAO.counselorList();
+	}
+
+	public List<Map<String, Object>> getGcounCslList() {
+		return adminDAO.getGcounCslList();
+	}
+
+	public int ecounEnroll(EcounAdDTO ecounAdDTO) {
+		return adminDAO.ecounEnroll(ecounAdDTO);
+	}
 	
 	
 

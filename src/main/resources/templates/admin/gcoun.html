@@ -85,12 +85,12 @@
 					<h1 class="modal-title fs-5" id="gcounModalHeader">집단상담 등록</h1>
 				</div>
 				<div class="modal-body">
-					<div class="mb-3 row">
+					<!-- <div class="mb-3 row">
 						<label class="col-sm-4 col-form-label">집단상담 코드</label>
 						<div class="col-sm-8">
 							<input id="gcounCd" type="text" placeholder="GC00 형식으로 작성">
 						</div>
-					</div>
+					</div> -->
 					<div class="mb-3">
 						<label class="col-sm-4 col-form-label">담당 상담사</label>
 						<div class="col-sm-8">
@@ -103,13 +103,21 @@
 					<div class="mb-3">
 						<label class="col-sm-4 col-form-label">프로그램명</label>
 						<div class="col-sm-8">
-							<input id="gcounNm" type="text" placeholder="프로그램명">
+							<input id="gcounNm" type="text" placeholder="프로그램명" maxlength="100" class="w-50">
+							<small id="gcounNmCount" class="form-text text-muted">0/100</small>
 						</div>					
 					</div>
 					<div class="mb-3">
 						<label class="col-sm-4 col-form-label">일시</label>
 						<div class="col-sm-8">
 							<input id="gcounDt" type="datetime-local" placeholder="일시">
+						</div>
+					</div>
+					<div class="mb-3">
+						<label class="col-sm-4 col-form-label">장소</label>
+						<div class="col-sm-8">
+							<input id="place" type="text" placeholder="장소" maxlength="100" class="w-50">
+							<small id="placeCount" class="form-text text-muted">0/100</small>
 						</div>
 					</div>
 					<div class="mb-3">
@@ -125,9 +133,9 @@
 						</div>
 					</div>
 					<div class="mb-3">
-						<label class="col-sm-4 col-form-label">배너 이미지</label>
+						<label class="col-sm-4 col-form-label">배너 이미지 <p style="color: red;">(900px * 400px 사이즈의 이미지를 권장합니다.)</p> </label>
 						<div class="col-sm-8">
-							<input id="telNo" type="file" placeholder="번호">
+							<input id="gcounFile" type="file" multiple>
 						</div>
 					</div>
 				</div>
@@ -196,50 +204,197 @@
           { header: '이름', name: 'STUD_NM', sortable: true, align: 'center', width: 150, filter: {type: 'text', showApplyBtn: true, showCleatBtn: true} },
           { header: '학과', name: 'SCSBJT_NM', sortable: true, align: 'center', width: 200, filter: 'select' },
           { header: '신청 내역', name: 'GCOUN_STA_NM', sortable: true, align: 'center', width: 200, filter: 'select' },
+          { header: '신청 시간', name: 'GCOUN_CURRENT_DT', sortable: true, align: 'center', width: 200, filter: 'select' },
           { header: '담당 상담사', name: 'CSL_NM', sortable: true, align: 'center', width: 200, filter: 'select' }
         ]
       });  
 
 	$(document).ready(function () {
 		
+		// 모달 열기 기능
 		$('#gcounModalBtn').click(function(e){
 			e.preventDefault();
 			$('#gcounModal').modal("show");
 		});
 		
+		function updateCharCount(input, countDisplay, maxLength) {
+	        const currentLength = $(input).val().length;
+	        $(countDisplay).text(`${currentLength}/${maxLength}`);
+	    }
+
+	    function enforceMaxLength(input, maxLength) {
+	        const value = $(input).val();
+	        if (value.length > maxLength) {
+	            $(input).val(value.slice(0, maxLength));
+	        }
+	    }
+
+	    const textInputs = [
+	        { id: '#gcounNm', countId: '#gcounNmCount', maxLength: 100 },
+	        { id: '#place', countId: '#placeCount', maxLength: 100 }
+	    ];
+
+	    textInputs.forEach(function(input) {
+	        const $input = $(input.id);
+	        const $countDisplay = $(input.countId);
+	        const maxLength = input.maxLength;
+
+	        $input.on('input', function() {
+	            enforceMaxLength($input, maxLength);
+	            updateCharCount($input, $countDisplay, maxLength);
+	        });
+
+	        // 페이지 로드 시 초기 글자 수 업데이트
+	        updateCharCount($input, $countDisplay, maxLength);
+	    });
+		
+		
+		
+		
+		// 모달 내의 등록하기 버튼 기능
 		$('#enroll').click(function() {
-			const gcounCd = $('#gcounCd').val();
+
 			const cslNo = $('#cslNo').val();
 			const gcounNm = $('#gcounNm').val();
 			const gcounDt = $('#gcounDt').val();
+			const place = $('#place').val();
 			const gcounBgngDt = $('#gcounBgngDt').val();
 			const gcounDdlnDt = $('#gcounDdlnDt').val();
 			const gcounLmtCount = $('#gcounLmtCount').val();
-			//const bannerImage = $('#bannerImage')[0].files[0];
+			const gcounFile = $('#gcounFile');
 			
-			alert('gcounCd: ' + gcounCd);
-			alert('cslNo: ' + cslNo);
-			alert('gcounNm: ' + gcounNm);
-			alert('gcounDt: ' + gcounDt);
-			alert('gcounBgngDt: ' + gcounBgngDt);
-			alert('gcounDdlnDt: ' + gcounDdlnDt);
-			alert('gcounLmtCount: ' + gcounLmtCount);
+			// 입력된 값 비교허기 위해서 Date 값 생성
+			const bgngDt = new Date(gcounBgngDt);
+			const ddlnDt = new Date(gcounDdlnDt);
+			const gcDt = new Date(gcounDt);
+
+			// 현재 날짜 값 생성
+			const currentDate = new Date();
+			currentDate.setHours(0, 0, 0, 0);
 			
+			if(!cslNo) {
+				alert('상담사를 선택해주세요.');
+				$('#cslNo').focus();
+				return;
+			}
 			
+			if(!gcounNm){
+				alert('프로그램명을 입력해주세요.');
+				$('#gcounNm').focus();
+				return;
+			}
+			
+			if(!gcounDt) {
+				alert('일시를 입력해주세요.');
+				$('#gcounDt').focus();
+				return;
+			}
+			
+			if(!place) {
+				alert('장소를 입력해주세요.');
+				$('#place').focus();
+				return;
+			}
+			
+			if(!gcounBgngDt) {
+				alert('모집 시작일을 입력해주세요.');
+				$('#gcounBgngDt').focus();
+				return;
+			}
+			
+			// 모집 시작일이 오늘 날짜보다 빠를 시 알림
+			if (currentDate > bgngDt) {
+				alert('모집 시작일은 금일보다 빠를 수 없습니다.');
+				$('#gcounBgngDt').focus();
+				return;
+			}
+
+			if(!gcounDdlnDt) {
+				alert('모집 마감일을 입력해주세요.');
+				$('#gcounDdlnDt').focus();
+				return;
+			}
+
+			// 모집 마감일보다 모집일이 더 늦을 시 알림
+			if (bgngDt > ddlnDt) {
+				alert('모집 마감일은 모집 시작일 이후이어야 합니다.');
+				$('#gcounDdlnDt').focus();
+				return;
+			}
+			
+			// 상담 일시보다 마감일이 더 늦을 시 알림
+			if (gcDt < ddlnDt) {
+				alert('상담 일시는 모집 마감일보다 이후이어야 합니다.');
+				$('#gcounDt').focus();
+				return;
+			}
+			
+			if(!gcounLmtCount) {
+				alert('정원을 입력해주세요.');
+				$('#gcounLmtCount').focus();
+				return;
+			}
+
+			// 정원 숫자인지 확인 기능
+			if (!/^\d+$/.test(gcounLmtCount)) {
+				alert('정원을 올바르게 입력해주세요.');
+				$('#gcounLmtCount').focus();
+	            return;
+	        }
+			
+			// 정원 0명인지 확인
+			if (gcounLmtCount == 0) {
+				alert('정원은 최소 1명 이상이어야 합니다.');
+				$('#gcounLmtCount').focus();
+				return;
+			}
+			if (gcounLmtCount > 500) {
+				alert('정원은 500명을 초과할 수 없습니다.');
+				$('#gcounLmtCount').focus();
+				return;
+			}
+			
+			// 업로드 파일 존재 여부 확인
+			if (!gcounFile.val()) {
+				alert('업로드 할 이미지를 선택하세요.');
+				$('#gcounFile').focus();
+				return;
+			}
+			
+			const files = gcounFile[0].files;
+			
+			if (files.length > 0) {
+				const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+				const fileExtension = files[0].name.split('.').pop().toLowerCase();
+
+				if (!validExtensions.includes(fileExtension)) {
+					alert(fileExtension + ' 파일은 업로드 불가합니다. jpg, jpeg, png, gif, bmp 형식의 파일을 선택해주세요.');
+					$('#gcounFile').focus();
+					return;
+				}
+			} 
+			
+			const formData = new FormData();
+			
+			// 파일 부분 기능
+			for(var i = 0; i < files.length; i++) {
+				formData.append("file", files[i]);
+			}
+			
+			formData.append("CSL_NO", cslNo);
+			formData.append("GCOUN_NM", gcounNm);
+			formData.append("GCOUN_DT", gcounDt);
+			formData.append("GCOUN_DTL_CN", place);
+			formData.append("GCOUN_BGNG_DT", gcounBgngDt);
+			formData.append("GCOUN_DDLN_DT", gcounDdlnDt);
+			formData.append("GCOUN_LMT_COUNT", gcounLmtCount);
 			
 			$.ajax({
 				url: '/admin/gcounEnroll',
 				method: 'post',
-				data: {
-					GCOUN_CD: gcounCd,
-					CSL_NO: cslNo,
-					GCOUN_NM: gcounNm,
-					GCOUN_DT: gcounDt,
-					GCOUN_BGNG_DT: gcounBgngDt,
-					GCOUN_DDLN_DT: gcounDdlnDt,
-					GCOUN_LMT_COUNT: gcounLmtCount
-					//bannerImage: bannerImage
-				},
+				data: formData,
+				processData: false,
+				contentType: false,
 				success: function(response) {
 					if (response === 1) {
 						alert('등록에 성공하였습니다.');
@@ -253,6 +408,16 @@
 					  	    dataType: "JSON",
 					  	    contentType: "application/json; charset=UTF-8",
 					  	    success: function (result) {
+								$('#cslNo').val('');
+								$('#gcounNm').val('');
+								$('#gcounDt').val('');
+								$('#place').val('');
+								$('#gcounBgngDt').val('');
+								$('#gcounDdlnDt').val('');
+								$('#gcounLmtCount').val('');
+								$('#gcounFile').val('');
+								$('#gcounNmCount').text('0/100'); // 프로그램명 글자 수 초기화
+					            $('#placeCount').text('0/100'); // 장소 글자 수 초기화
 					  	      grid1.resetData(result);
 					  	    },
 					  	  });
@@ -285,7 +450,6 @@
 		const { rowKey } = ev;
 		const rowData = grid1.getRow(rowKey);
 		const gcounCd = rowData.GCOUN_CD;
-		//alert(gcounCd);
 		
 		
 		$.ajax({

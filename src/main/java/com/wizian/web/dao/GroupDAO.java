@@ -17,6 +17,13 @@ public interface GroupDAO {
 	List<String> mainGroupImg();
 
 	int groupEnroll(GroupDTO groupDto);
-	
+
+	Map<String, Object> selectMyInfo(String userId);
+
+	void updateEmail(String userId, String value);
+
+	void updateGender(String userId, String value);
+
+	void updateTelNo(String userId, String value);
 
 }

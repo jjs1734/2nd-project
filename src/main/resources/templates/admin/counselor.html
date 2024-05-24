@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://thymeleaf.org">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <title>
+    관리자 페이지 - 학생 정보
+  </title>
+  <!--     Fonts and icons     -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
+  <!-- Nucleo Icons -->
+  <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- TOAST UI Pagination CSS -->
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+
+<!-- TOAST UI Pagination JS -->
+<script src="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.js"></script>
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <!-- CSS Files -->
+  <link id="pagestyle" href="../assets/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
+  <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
+</head>
+<body class="g-sidenav-show  bg-gray-200">
+  
+  <!-- 좌측 메뉴 -->
+  <div th:replace="~{admin/sidenav :: sidenav}"></div>
+  
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+   
+    <!-- Navbar -->
+    <nav th:fragment="navbar" class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <h6 class="font-weight-bolder mb-0">학생 관리</h6>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+            <div class="input-group input-group-outline">
+              <label class="form-label">Type here...</label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+   
+   
+   <div class="container-fluid py-4">
+      <div class="row min-vh-80 h-100">
+        <div class="col-12">
+        
+        	<div id="grid"></div>
+        	<button type="button" onclick="grid.request('updateData')">저장</button>
+        
+        </div>
+   </div>
+   
+    <!-- footer -->
+    
+    
+  </div>
+  </main>
+    <div th:replace="~{admin/settingBtn :: setBtn}"></div>
+  <!--   Core JS Files   -->
+  <script src="../assets/js/core/popper.min.js"></script>
+  <script src="../assets/js/core/bootstrap.min.js"></script>
+  <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+  <script>
+  tui.Grid.setLanguage('ko', {
+	  display: {
+	    noData: '데이터가 없습니다',
+	    loadingData: '데이터를 불러오는 중입니다',
+	  },
+	  net: {
+	    confirmCreate: '정말로 데이터를 추가하시겠습니까?',
+	    confirmUpdate: '정말로 데이터를 수정하시겠습니까?',
+	    confirmDelete: '정말로 데이터를 삭제하시겠습니까?',
+	    confirmModify: '정말로 데이터를 변경하시겠습니까?',
+	    noDataToCreate: '추가할 데이터가 없습니다',
+	    noDataToUpdate: '수정할 데이터가 없습니다',
+	    noDataToDelete: '삭제할 데이터가 없습니다',
+	    noDataToModify: '변경할 데이터가 없습니다',
+	  },
+	  filter: {
+	    contains: '포함',
+	    eq: '같음',
+	    ne: '같지 않음',
+	    start: '시작',
+	    end: '끝',
+	    after: '이후',
+	    afterEq: '이후 또는 같음',
+	    before: '이전',
+	    beforeEq: '이전 또는 같음',
+	    selctAll: '전체 선택'
+	  }
+	});
+  
+      const grid = new tui.Grid({
+        el: document.getElementById('grid'),
+        scrollX: false,
+        scrollY: true,
+        bodyHeight: 700,
+        minBodyHeight: 30,
+//        rowHeaders: ['rowNum'],
+//        pageOptions: {
+//          perPage: 15
+//        },
+        columns: [
+          { header: '학번', name: 'STUD_NO', sortable: true, align: 'center', width: 200, filter: {type: 'text', showApplyBtn: true, showClearBtn: true} },
+          { header: '이름', name: 'STUD_NM', sortable: true, align: 'center', width: 150, filter: {type: 'text', showApplyBtn: true, showCleatBtn: true} },
+          { header: '학과', name: 'SCSBJT_NM', sortable: true, align: 'center', width: 200, filter: 'select' },
+          { header: '지도교수', name: 'PF_NM', sortable: true, align: 'center', width: 150, filter: 'select' },
+          { header: '전화번호', name: 'TELNO', sortable: true, align: 'center', width: 200, filter: {type: 'text'} },
+          { header: '이메일', name: 'STUD_EML_ADDR', sortable: true, filter: {type: 'text', showApplyBtn: true, showClearBtn: true} },
+          { header: '학적상태', name: 'COL_REG', sortable: true, align: 'center', width: 100, filter: 'select' },
+          { header: '생년월일', name: 'STUD_BRDT', sortable: true, align: 'center', width: 200, filter: {type: 'date', option: {format: 'yyyyMMdd'}} },
+          { header: '성별', name: 'STUD_GEN', sortable: true, align: 'center', width: 100, filter: 'select' }
+        ]
+      });
+      
+      $(document).ready(function () {
+    	  $.ajax({
+    	    url: "/admin/studentList",
+    	    type: "get",
+    	    dataType: "JSON",
+    	    contentType: "application/json; charset=UTF-8",
+    	    success: function (result) {
+    	      grid.resetData(result);
+    	    },
+    	  });
+    	}); 
+     </script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="../assets/js/material-dashboard.min.js?v=3.0.0"></script>
+</body>
+
+</html>
