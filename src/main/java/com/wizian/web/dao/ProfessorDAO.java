@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import com.wizian.web.dto.PfRsvDTO;
 import com.wizian.web.dto.ProfessorDTO;
 
 @Repository
@@ -17,5 +18,9 @@ public interface ProfessorDAO {
 	List<Map<String, Object>> pfList(String depart);
 
 	List<Map<String, Object>> getScList(String pf_no);
+
+	int pfDelUpdate(int pfs_no);
+
+	int pfCounReservation(PfRsvDTO pfRsv);
 
 }

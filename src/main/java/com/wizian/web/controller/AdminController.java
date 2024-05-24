@@ -2,8 +2,11 @@ package com.wizian.web.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,9 +26,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.wizian.web.dto.AdminDTO;
 import com.wizian.web.dto.BoardDTO;
+import com.wizian.web.dto.PfRsvDTO;
 import com.wizian.web.dto.EcounAdDTO;
 import com.wizian.web.service.AdminService;
-import com.wizian.web.service.BoardService;
 
 @Controller
 public class AdminController {
@@ -76,6 +79,112 @@ public class AdminController {
 		return "/admin/counselor";
 	}
 	
+	@GetMapping("/admin/professor")
+	public String professor() {
+		return "/admin/professor";
+	}
+	
+	//지도교수 상담
+	@GetMapping("/admin/pfcoun")
+	public String pfcoun() {
+		return "/admin/pfcoun";
+	}
+	
+	@ResponseBody
+	@PostMapping("/admin/pfcounEnroll")
+	public int pfcounEnroll(
+		@RequestParam("PF_NO") String pfNo,
+		@RequestParam("STUD_NO") String studNo,
+		@RequestParam("PF_CONTENTS") String pfContents,
+		@RequestParam("PF_COUN_DT") String pfcounDT,
+		@RequestParam("PF_COMMENT") String pfComm,
+		@RequestParam("PF_COUN_STATE_CD") String pfStCD){
+		//System.out.println(pfNo);
+		//System.out.println(studNo);
+		//System.out.println(pfContents);
+		//System.out.println(pfcounDT);
+		//System.out.println(pfComm);
+		//System.out.println(pfStCD);
+		
+		//date 타입으로 변환
+		String[] dateTime = pfcounDT.split("T");
+		String dateStr = dateTime[0];
+		System.out.println(dateStr);
+		String time = dateTime[1].substring(0,2);
+		System.out.println(time);
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = null;
+		try {
+			date = dateFormat.parse(dateStr);
+			System.out.println(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		//DTO에 저장
+		PfRsvDTO pfRsv = new PfRsvDTO();
+		pfRsv.setPF_NO(pfNo);
+		pfRsv.setSTUD_NO(studNo);
+		pfRsv.setPF_CONTENTS(pfContents);
+		pfRsv.setPF_COUN_RSVT_YMD(date);
+		pfRsv.setPF_COUN_RSVT_TIME(time);
+		pfRsv.setPF_COUN_YMD(date);
+		pfRsv.setPF_COUN_TIME_CD(time);
+		pfRsv.setPF_COUN_COMMENT(pfComm);
+		pfRsv.setPF_COUN_STATE_CD(pfStCD);
+		
+		int pfCounResult = adminService.pfCounEnroll(pfRsv);
+		if (pfCounResult==1) { System.out.println("성공");
+		} else {System.out.println("실패");}
+		//메소드 실행
+		
+		
+		
+		return pfCounResult;
+	}
+	
+	@ResponseBody
+	@GetMapping("/admin/getPfcounList")
+	public List<Map<String, Object>> getPfcounList() {
+		List<Map<String, Object>> getPfcounList = adminService.getPfcounList();
+		return getPfcounList;
+	}
+	
+	@ResponseBody
+	@PostMapping("/admin/pfcounModify")
+	public void pfcounModify(
+		@RequestParam("counNum") int counNum,
+        @RequestParam(value = "fieldName", required = false) String fieldName,
+        @RequestParam(value = "fieldValue", required = false) String fieldValue) {
+		Map<String, Object> map = new HashMap<>();
+			System.out.println(fieldName);
+			System.out.println(fieldValue);
+		if (fieldName.equals("PF_COUN_COMMENT")) {
+			map.put("counNum", counNum);
+			map.put("fieldValue", fieldValue);
+			adminService.pfCmtUpdate(map);
+			//System.out.println("삽입성공1");
+		}else if(fieldName.equals("PF_COUN_YMD")) {
+			map.put("counNum", counNum);
+			map.put("fieldValue", fieldValue);
+			adminService.pfCounDateUpdate(map);
+			//System.out.println("삽입성공2");
+		}else if(fieldName.equals("PF_COUN_TIME_CD")) {
+			map.put("counNum", counNum);
+			map.put("fieldValue", fieldValue);
+			adminService.pfCounTimeUpdate(map);
+			//System.out.println("삽입성공3");
+		}else {
+			//EMP_STTS_CD
+			map.put("counNum", counNum);
+			map.put("fieldValue", fieldValue);
+			adminService.pfStateUpdate(map);
+			//System.out.println("삽입성공4");
+		}
+	}
+	
+	
 	@GetMapping("/admin/counselorList")
 	public List<Map<String, Object>> counselorList(){
 		
@@ -101,20 +210,14 @@ public class AdminController {
 	
 	// 취업상담
 	@GetMapping("/admin/ecoun")
-	public String ecoun() {
-		
+	public String ecoun() {		
 		return "admin/ecoun";
 	}
 	
 	//개인상담
 	@GetMapping("/admin/indicoun")
-	public String indicoun() {
-		
+	public String indicoun() {	
 		return "admin/indicoun";
-	
-		
-		
-		
 	}
 	
 	
@@ -189,30 +292,30 @@ public class AdminController {
             @RequestParam(value = "fieldValue", required = false) String fieldValue) {
 
 		
-	Map<String, Object> map = new HashMap<>();
-	
-	if (fieldName.equals("COUN_CN")) {
-		map.put("counNum", counNum);
-		map.put("fieldValue", fieldValue);
-		adminService.updateCounCn(map);
-		//System.out.println("삽입성공1");
-	}else if(fieldName.equals("EMP_COUN_YMD")) {
-		map.put("counNum", counNum);
-		map.put("fieldValue", fieldValue);
-		adminService.updateCounYmd(map);
-		//System.out.println("삽입성공2");
-	}else if(fieldName.equals("EMP_COUN_CD")) {
-		map.put("counNum", counNum);
-		map.put("fieldValue", fieldValue);
-		adminService.updateCounCd(map);
-		//System.out.println("삽입성공3");
-	}else {
-		//EMP_STTS_CD
-		map.put("counNum", counNum);
-		map.put("fieldValue", fieldValue);
-		adminService.updateSttsCd(map);
-		//System.out.println("삽입성공4");
-	}
+		Map<String, Object> map = new HashMap<>();
+		
+		if (fieldName.equals("COUN_CN")) {
+			map.put("counNum", counNum);
+			map.put("fieldValue", fieldValue);
+			adminService.updateCounCn(map);
+			//System.out.println("삽입성공1");
+		}else if(fieldName.equals("EMP_COUN_YMD")) {
+			map.put("counNum", counNum);
+			map.put("fieldValue", fieldValue);
+			adminService.updateCounYmd(map);
+			//System.out.println("삽입성공2");
+		}else if(fieldName.equals("EMP_COUN_CD")) {
+			map.put("counNum", counNum);
+			map.put("fieldValue", fieldValue);
+			adminService.updateCounCd(map);
+			//System.out.println("삽입성공3");
+		}else {
+			//EMP_STTS_CD
+			map.put("counNum", counNum);
+			map.put("fieldValue", fieldValue);
+			adminService.updateSttsCd(map);
+			//System.out.println("삽입성공4");
+		}
 	}
 
 	//System.out.println(counNum);

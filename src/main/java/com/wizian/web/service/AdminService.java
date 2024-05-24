@@ -12,7 +12,8 @@ import com.wizian.web.dao.GroupDAO;
 import com.wizian.web.dto.BoardDTO;
 import com.wizian.web.dto.EcounAdDTO;
 import com.wizian.web.dto.AdminDTO;
-import com.wizian.web.dto.BoardDTO;
+import com.wizian.web.dto.GroupDTO;
+import com.wizian.web.dto.PfRsvDTO;
 
 @Service
 public class AdminService {
@@ -47,6 +48,7 @@ public class AdminService {
 	public List<BoardDTO> getReplies(int postId) {
 		return adminDAO.getReplies(postId);
 	}
+	
 	public List<Map<String, Object>> getEcounStudList(String cslNo) {
 		return adminDAO.getEcounStudList(cslNo);
 	}
@@ -95,6 +97,28 @@ public class AdminService {
 
 	public int ecounEnroll(EcounAdDTO ecounAdDTO) {
 		return adminDAO.ecounEnroll(ecounAdDTO);
+	public List<Map<String, Object>> getPfcounList() {
+		return adminDAO.getPfcounList();
+	}
+
+	public int pfCounEnroll(PfRsvDTO pfRsv) {
+		return adminDAO.pfCounEnroll(pfRsv);
+	}
+
+	public void pfCmtUpdate(Map<String, Object> map) {
+		adminDAO.pfCmtupdate(map);
+	}
+
+	public void pfCounDateUpdate(Map<String, Object> map) {
+		adminDAO.pfCounDateUpdate(map);
+	}
+
+	public void pfCounTimeUpdate(Map<String, Object> map) {
+		adminDAO.pfCounTimeUpdate(map);
+	}
+
+	public void pfStateUpdate(Map<String, Object> map) {
+		adminDAO.pfStateUpdate(map);
 	}
 	
 	
