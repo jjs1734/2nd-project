@@ -30,6 +30,8 @@ import com.wizian.web.dto.PfRsvDTO;
 import com.wizian.web.dto.EcounAdDTO;
 import com.wizian.web.service.AdminService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class AdminController {
 	
@@ -50,11 +52,18 @@ public class AdminController {
 	}
 	
 	@GetMapping("/admin/gcoun")
-	public String gcoun(Model model) {
+	public String gcoun(Model model, HttpSession session) {
 		
-	List<Map<String, Object>> getGcounCslList = adminService.getGcounCslList();
-	model.addAttribute("cslList" ,getGcounCslList);
+		String userId = (String) session.getAttribute("userId");
+		String grade = (String) session.getAttribute("grade");
 		
+		if(userId == null || grade.equals("학생") ) {
+			return "redirect:/login";
+		}
+		
+		List<Map<String, Object>> getGcounCslList = adminService.getGcounCslList();
+		model.addAttribute("cslList" ,getGcounCslList);
+	
 		
 		return "admin/gcoun";
 	}

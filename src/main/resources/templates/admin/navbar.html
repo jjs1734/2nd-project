@@ -6,13 +6,17 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Template</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0">Template</h6>
+          <h6 class="font-weight-bolder mb-0">[[${session.grade}]]</h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
             <div class="input-group input-group-outline">
-              <label class="form-label">Type here...</label>
-              <input type="text" class="form-control">
+              <form action="/login" method="get" style="display:inline;" th:if="${session.userId == null}">
+ 				 <button type="submit" class="btn btn-info btn-sm" style="width: 80px;">로그인</button>
+			  </form>
+			  <form action="/logout" method="post" style="display:inline;" th:if="${session.userId != null}">
+  				<button type="submit" class="btn btn-danger btn-sm" style="width: 80px;">로그아웃</button>
+			  </form>
             </div>
           </div>
         </div>
