@@ -43,7 +43,7 @@ public class MainController {
 	
 	@GetMapping("/mypage")
 	public String mypage(HttpSession session, Model model) {
-		
+		System.out.println("!!!");
 		String userId = (String) session.getAttribute("userId");
 		//String grade = (String) session.getAttribute("grade");
 		System.out.println(userId);
@@ -58,7 +58,7 @@ public class MainController {
 		Map<String, Object> selectMyInfo = groupService.selectMyInfo(userId);
 		System.out.println(selectMyInfo);
 		model.addAttribute("selectMyInfo", selectMyInfo);
-		
+		System.out.println("!!!!!!!");
 		return "mypage";
 	}
 	
