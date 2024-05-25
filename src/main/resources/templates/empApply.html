@@ -1,604 +1,541 @@
-	<!DOCTYPE html>
-	<html lang="ko" xmlns:th="http://thymeleaf.org">
-	    <head>
-	        <meta charset="utf-8" />
-	        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-	        <meta name="description" content="" />
-	        <meta name="author" content="" />
-	        <title>Small Business - Start Bootstrap Template</title>
-	        <!-- Favicon-->
-	        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-	        <!-- Core theme CSS (includes Bootstrap)-->
-	        <link href="./css/styles.css" rel="stylesheet" />
-	        <link href="./css/shinjin.css" rel="stylesheet" />
-	        
-	        <!-- Bootstrap CSS -->
-		    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-		    <!-- Bootstrap JS -->
-		    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-		    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-		    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-		    <script src="./dist/index.global.js"></script>
-		    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
-		    <!-- 모달 -->
-		    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-			<!-- 풀 캘린더 -->
-			<link href="/path/to/fullcalendar/main.css" rel="stylesheet" />
-	<style>
-	.leftnavapply{
-	    text-align: center; /* 텍스트를 가운데 정렬합니다. */
-		background-color: gray;
-	}
-	.modal-header{
-	    text-align: center; /* 텍스트를 가운데 정렬합니다. */
-		
-	}
-	.profileMain{
-		background-color: #f4f4f4;
-	}
-	.leftnavapply {
-	text-align: center; /* 텍스트를 가운데 정렬합니다. */
-	background-color: gray;
-	}
+   <!DOCTYPE html>
+   <html lang="ko" xmlns:th="http://thymeleaf.org">
+    <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Small Business - Start Bootstrap Template</title>
+    <!-- Favicon-->
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="./css/styles.css" rel="stylesheet" />
+    <link href="./css/shinjin.css" rel="stylesheet" />
 
-	.modal-header {
-		text-align: center; /* 텍스트를 가운데 정렬합니다. */
-	}
-	
-	.profileMain {
-		background-color: #f4f4f4;
-	}
-	
-	#confirmButton {
-	            position: absolute; /* 절대 위치 설정 */
-	            top: 1000px; /* 위쪽 여백 설정 */
-	            right: 400px; /* 오른쪽 여백 설정 */
-	            z-index: 1000; /* 다른 요소 위에 표시하기 위해 z-index 설정 */
-	            /* 추가적으로 원하는 스타일 설정 */
-	        }
-	</style>
-		    
-	<meta charset="UTF-8">
-	<title>상담 신청</title>
-	</head>
-	<body>
-		<!-- 메뉴-->
-	        <div th:replace="~{menu :: Menu}"></div>
-				
-			<div class="leftnavapply">
-				<h1>신청서 작성 :[[${param.CSL_NO}]]</h1>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+         
+   <style>
+   .leftnavapply {
+       width: 1100px;
+       margin: 0 auto; /* 좌우 마진을 자동으로 설정하여 가운데 정렬합니다. */
+       text-align: center; /* 텍스트를 가운데 정렬합니다. */
+       background-color: white !important;
+       color: white;
+   }
+   .profileMain{background-color: #f4f4f4; padding: 10px;}
+    #sidenav{background: #B6B6B6; float:left; margin-right:20px; padding:10px; margin-top: 0px; width:290px; height:780px; text-align:center;}
+   .button{margin-bottom:30px; color:white; font-size:15pt; width:140px; height:35px; background-color:#A41034; border: none;}
+   #content{background: #B6B6B6; float:left; padding:10px; margin-top:40px; width:1000px; height:780px;}
+   
+   .modal-header{
+       text-align: center; /* 텍스트를 가운데 정렬합니다. */
+   }
+   .modal-header {
+      text-align: center; /* 텍스트를 가운데 정렬합니다. */
+   }
+   #confirmButton {
+               position: absolute; /* 절대 위치 설정 */
+               top: 1000px; /* 위쪽 여백 설정 */
+               right: 400px; /* 오른쪽 여백 설정 */
+               z-index: 1000; /* 다른 요소 위에 표시하기 위해 z-index 설정 */
+               /* 추가적으로 원하는 스타일 설정 */
+           }
+   </style>
+          
+   <meta charset="UTF-8">
+   <title>상담 신청</title>
+   </head>
+   <body>
+    <!-- 메뉴-->
+    <div th:replace="~{menu :: Menu}"></div>
+
+    <div class="leftnavapply">
+        <h1>상담 신청서 작성</h1>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="empModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="empModalLabel">상담 일정</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id='calendar'></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveButton">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        // 모달이 열릴 때 캘린더를 다시 렌더링
+        $('#empModal').on('shown.bs.modal', function () {
+            $("#calendar").fullCalendar('render'); // FullCalendar 렌더링
+            $("#calendar").fullCalendar('refetchEvents'); // 이벤트 다시 가져오기
+        });
+
+        var myModal = document.getElementById('empModal');
+        var saveButton = document.getElementById('saveButton');
+
+        var selectedTitle = "";
+        var selectedStart = null;
+        var selectedTime = null;
+
+        saveButton.addEventListener('click', function() {
+            var empContent = document.getElementById('empContent');
+            var empDate = document.getElementById('empDate');
+            var empTime = document.getElementById('empTime');
+            empContent.value = `${selectedTitle}`;
+            empDate.value = `${selectedStart}`;
+            if (selectedTime && selectedTime.length >= 2) {
+                empTime.value = selectedTime.substring(0, 2);
+            } else {
+                empTime.value = selectedTime;
+            }
+            var modal = document.getElementById('empModal');
+            var bootstrapModal = bootstrap.Modal.getInstance(modal);
+            bootstrapModal.hide();
+        });
+    </script>
+         
+         <div class="d-flex justify-content-center" style="margin: 0 340px;">
+              <!-- 좌측 메뉴 nav -->
+              <!-- <div th:replace="~{leftmenu :: LeftMenu}"></div> -->
+              <div id="sidenav">
+		        <form th:action="@{/employment}" >
+					<p style="margin-top:20px; margin-bottom:80px; font-weight:bold; font-size:20pt;">취업 상담</p>
+					<button class="button" type="submit" onclick="openPage('/employment')">상담 소개</button><br>
+	            </form>
+	            <form th:action="@{/empCounProfile}" >
+					<button class="button" type="submit" onclick="openPage('/empCounProfile')">상담 신청</button><br>
+				</form>
 			</div>
-			
-			<div class="d-flex justify-content-center" style="margin: 0 400px;">
-		        <!-- 좌측 메뉴 nav -->
-		        <div th:replace="~{leftmenu :: LeftMenu}"></div>
-		        <!-- Page Content-->
-		        
-		        <!--상담 신청서 main 부분 -->
-		        <div class="profileMain">
-					<div class="modal-header">
-	        			<h3 class="modal-title" id="formModalLabel">신 청 서</h3>
-	      			</div>
-					<form id="formAwesome" action="/insertApply" method="post">
-					<!-- <form id="formAwesome"> -->
-						<div class="modal-body">
-						 <div class="form-group row">
-						    <label for="empName" class="col-sm-3 col-form-label">
-						        이 름
-						    </label>
-						    <div class="col-sm-3">
-						        <input type="text" class="form-control" id="empName" th:value="${empUserInfo.STUD_NM}" readonly>
-						        <!-- 로그인한 session값 가져오기
-						        <input type="text" class="form-control" id="empName" placeholder="John" value="${session.user.name}" required>
-						         -->
-						    </div>
-						    <label for="empCounName" class="col-sm-3 col-form-label">
-						        상 담 사
-						    </label>
-						    <div class="col-sm-3">
-						        <input type="text" class="form-control" id="empCounName" th:value="${selectEmpCoun['CSL_NM']}" readonly>
-						        <input type="hidden" id="CSL_NO" name="CSL_NO" th:value="${selectEmpCoun['CSL_NO']}"/>
-						    </div>
-						</div>
-						
-						<div class="form-group row">
-						    <label for="empDate" class="col-sm-3 col-form-label">
-						        상담 가능 날짜
-						    </label>
-						    <div class="col-sm-3">
-						    <!-- CSL_NO 값 보내기 전 코드   <a href="/empCal?CSL_NO=${selectEmpCoun[0]['CSL_NO']}">날짜 선택하기</a> -->
-						    <button id="shwoEmpCal" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#empModal">
-							  날짜 선택
-							</button>
-							<input type="text" class="form-control" id="empDate" name="empDate" placeholder="예약 날짜" readonly>
-							<!-- <input type="text" class="form-label" id="empDate" name="empDate" placeholder="예약 날짜 선택" data-bs-toggle="modal" data-bs-target="#empModal" readonly> -->
-						    <!-- CSLNO 보내기 -->
-						    <!-- <a id="empCalLinkK" th:data-csl-no="@{${selectEmpCoun[0]['CSL_NO']}}" th:href="@{'/empCal?CSL_NO=' + ${selectEmpCoun[0]['CSL_NO']}}">날짜 선택하기</a> -->
-						        <!-- <input type="text" class="form-control" id="empDate" placeholder="예약 날짜" th:value="${selectEmpCoun1['DATE_PART'] + ' ' + selectEmpCoun1['Selected_DATE']}" required>-->
-						        <!-- <input type="text" class="form-control" id="empDate" placeholder="예약 날짜" required> -->
-						    </div>
-						    <label for="empTime" class="col-sm-3 col-form-label">
-						        상담 시간(시)
-						    </label>
-						    <div class="col-sm-3">
-						        <input type="text" class="form-control" name="empTime" id="empTime" placeholder="시간" readonly>
-						    </div>
-					    </div>
-						<div class="form-group row">
-						    <label for="phoneNum" class="col-sm-3 col-form-label">
-						        연 락 처
-						    </label>
-						    <div class="col-sm-3">
-						        <input type="text" class="form-control" id="phoneNum" placeholder="John" th:value="${empUserInfo['TELNO']}" required>
-						    </div>
-						    <label for="lastName" class="col-sm-3 col-form-label">
-						        학 과
-						    </label>
-						    <div class="col-sm-3">
-						        <input type="text" class="form-control" id="lastName" placeholder="학과" th:value="${empUserInfo.SCSBJT_NM}" readonly>
-						    </div>
-						</div>
-						<div class="form-group row">
-						    <label for="email" class="col-sm-3 col-form-label">
-						        E-mail
-						    </label>
-						    <div class="col-sm-3">
-						        <input type="text" class="form-control" id="email" placeholder="E-mail" th:value="${empUserInfo.STUD_EML_ADDR}" required>
-						    </div>
-						    
-						    <label for="colleageNum" class="col-sm-3 col-form-label">
-						        학 번
-						    </label>
-						    <div class="col-sm-3">
-						        <input type="text" class="form-control" id="colleageNum" th:value="${empUserInfo.STUD_NO}"  placeholder="중앙대학교" readonly>
-						    </div>
-						</div>
-						<div class="form-group row">
-						    <label for="empContent" class="col-sm-3 col-form-label">
-						        상 담 내 용
-						    </label>
-						    <div class="col-sm-12">
-						        <textarea class="form-control" id="empContent" name="empContent" placeholder="상담 내용을 입력해주세요." required rows="5" style="background-color: lightgray;"></textarea>
-						    </div>
-						</div>
-						<div class="form-group row">
-							<h3>첨 부 파 일</h3>
-						    <label for="empResume" class="col-sm-3 col-form-label">
-						        이 력 서
-						    </label>
-						    <div class="col-sm-12">
-						        <input type="file" class="form-control" id="empResume" style="background-color: lightgray;">
-						    </div>
-						    <label for="portfolio" class="col-sm-3 col-form-label">
-						        포 트 폴 리 오
-						    </label>
-						    <div class="col-sm-12">
-						        <input type="file" class="form-control" id="portfolio" style="background-color: lightgray;">
-						    </div>	
-						    
-						    <label for="empEtc" class="col-sm-3 col-form-label">
-						        기 타
-						    </label>
-						    <div class="col-sm-12">
-						        <input type="file" class="form-control" id="empEtc" style="background-color: lightgray;">
-						    </div>
-						</div>
-						  <div class="form-group row">
-						    <label for="awesomeness" class="col-sm-6 col-form-label">
-						      귀하께서 작성한게 맞습니까?</label>
-						    <div class="col-sm-6">
-						      <select class="form-control" id="awesomeness">
-						        <option>No</option>
-						        <option>Yes</option>
-						      </select>
-						    </div>
-						  </div>
-						  <div class="form-check">
-						    <input class="form-check-input" type="checkbox" value="" id="awesomeCheck" required>
-						    <label class="form-check-label" for="awesomeCheck">
-						      I confirm that I am an awesome person.
-						    </label>
-						  </div>
-						</div>
-						<div class="modal-footer">
-						  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-						  <button type="submit" class="btn btn-primary" id="submitApply">Submit</button>
-						</div>
-					</form>
-				</div>
-			</div>
-			
-			<script type="text/javascript">
-			document.getElementById('empDate').addEventListener('click', function() {
-			    document.getElementById('shwoEmpCal').click();
-			    
-			    var delay = 750; // 밀리초 단위의 시간 지연 설정 (여기서는 750밀리초)
+              
+              <!-- Page Content-->
+              <!--상담 신청서 main 부분 -->
+              <div class="profileMain">
+               <div class="modal-header">
+                    <h3 class="modal-title" id="formModalLabel">신 청 서</h3>
+                  </div>
+               <form id="formAwesome" action="/insertApply" method="post">
+               <!-- <form id="formAwesome"> -->
+                  <div class="modal-body">
+                   <div class="form-group row">
+                      <label for="empName" class="col-sm-3 col-form-label">
+                          이 름
+                      </label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" id="empName" th:value="${empUserInfo.STUD_NM}" readonly>
+                          <!-- 로그인한 session값 가져오기
+                          <input type="text" class="form-control" id="empName" placeholder="John" value="${session.user.name}" required>
+                           -->
+                      </div>
+                      <label for="empCounName" class="col-sm-3 col-form-label">
+                          상 담 사
+                      </label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" id="empCounName" th:value="${selectEmpCoun['CSL_NM']}" readonly>
+                          <input type="hidden" id="CSL_NO" name="CSL_NO" th:value="${selectEmpCoun['CSL_NO']}"/>
+                      </div>
+                  </div>
+                  
+                  <div class="form-group row">
+                      <label for="empDate" class="col-sm-3 col-form-label">
+                          상담 가능 날짜
+                      </label>
+                      <div class="col-sm-3">
+                      <!-- CSL_NO 값 보내기 전 코드   <a href="/empCal?CSL_NO=${selectEmpCoun[0]['CSL_NO']}">날짜 선택하기</a> -->
+                      <button id="shwoEmpCal" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#empModal">
+                       날짜 선택
+                     </button>
+                     <input type="text" class="form-control" id="empDate" name="empDate" placeholder="예약 날짜" readonly>
+                     <!-- <input type="text" class="form-label" id="empDate" name="empDate" placeholder="예약 날짜 선택" data-bs-toggle="modal" data-bs-target="#empModal" readonly> -->
+                      <!-- CSLNO 보내기 -->
+                      <!-- <a id="empCalLinkK" th:data-csl-no="@{${selectEmpCoun[0]['CSL_NO']}}" th:href="@{'/empCal?CSL_NO=' + ${selectEmpCoun[0]['CSL_NO']}}">날짜 선택하기</a> -->
+                          <!-- <input type="text" class="form-control" id="empDate" placeholder="예약 날짜" th:value="${selectEmpCoun1['DATE_PART'] + ' ' + selectEmpCoun1['Selected_DATE']}" required>-->
+                          <!-- <input type="text" class="form-control" id="empDate" placeholder="예약 날짜" required> -->
+                      </div>
+                      <label for="empTime" class="col-sm-3 col-form-label">
+                          상담 시간(시)
+                      </label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" name="empTime" id="empTime" placeholder="시간" readonly>
+                      </div>
+                   </div>
+                  <div class="form-group row">
+                      <label for="phoneNum" class="col-sm-3 col-form-label">
+                          연 락 처
+                      </label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" id="phoneNum" placeholder="John" th:value="${empUserInfo['TELNO']}" required>
+                      </div>
+                      <label for="lastName" class="col-sm-3 col-form-label">
+                          학 과
+                      </label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" id="lastName" placeholder="학과" th:value="${empUserInfo.SCSBJT_NM}" readonly>
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                      <label for="email" class="col-sm-3 col-form-label">
+                          E-mail
+                      </label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" id="email" placeholder="E-mail" th:value="${empUserInfo.STUD_EML_ADDR}" required>
+                      </div>
+                      
+                      <label for="colleageNum" class="col-sm-3 col-form-label">
+                          학 번
+                      </label>
+                      <div class="col-sm-3">
+                          <input type="text" class="form-control" id="colleageNum" th:value="${empUserInfo.STUD_NO}"  placeholder="중앙대학교" readonly>
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                      <label for="empContent" class="col-sm-3 col-form-label">
+                          상 담 내 용
+                      </label>
+                      <div class="col-sm-12">
+                          <textarea class="form-control" id="empContent" name="empContent" placeholder="상담 내용을 입력해주세요." required rows="5" style="background-color: lightgray;"></textarea>
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                     <h3>첨 부 파 일</h3>
+                      <label for="empResume" class="col-sm-3 col-form-label">
+                          이 력 서
+                      </label>
+                      <div class="col-sm-12">
+                          <input type="file" class="form-control" id="empResume" style="background-color: lightgray;">
+                      </div>
+                      <label for="portfolio" class="col-sm-3 col-form-label">
+                          포 트 폴 리 오
+                      </label>
+                      <div class="col-sm-12">
+                          <input type="file" class="form-control" id="portfolio" style="background-color: lightgray;">
+                      </div>   
+                      
+                      <label for="empEtc" class="col-sm-3 col-form-label">
+                          기 타
+                      </label>
+                      <div class="col-sm-12">
+                          <input type="file" class="form-control" id="empEtc" style="background-color: lightgray;">
+                      </div>
+                  </div>
+                    <div class="form-group row">
+                      <label for="awesomeness" class="col-sm-6 col-form-label">
+                        귀하께서 작성한게 맞습니까?</label>
+                      <div class="col-sm-6">
+                        <select class="form-control" id="awesomeness">
+                          <option>No</option>
+                          <option>Yes</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="awesomeCheck" required>
+                      <label class="form-check-label" for="awesomeCheck">
+                        I confirm that I am an awesome person.
+                      </label>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="submitApply">Submit</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+         
+         <script type="text/javascript">
+         document.getElementById('empDate').addEventListener('click', function() {
+             document.getElementById('shwoEmpCal').click();
+             
+             var delay = 750; // 밀리초 단위의 시간 지연 설정 (여기서는 750밀리초)
 
-			    // setTimeout 함수를 사용하여 일정 시간이 지난 후에 모달을 보여주는 코드 실행
-			    setTimeout(function() {
-			        $('#empModal').modal('show'); // 모달 보여주는 코드
-			    }, delay);
-			    
-			});
-			<!-- 연락처 및 이메일은 로그인한 정보와 실제 유저와 다를 수 있으니 변경이 가능하도록 설정 -->
-	        // 서버에서 받은 로그인한 사용자의 연락처
-		    //var loggedInUserContact = "010-1234-5678"; // 이 부분은 서버에서 실제 값으로 대체되어야 합니다.
-		
-		    // 이메일 주소의 유효성을 정규 표현식을 사용하여 검사하는 함수
-		    function validateEmail(email) {
-		        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		        return emailPattern.test(email);
-		    }
-		
-		    // 페이지 로드 시 실행되는 함수
-		    window.onload = function() {
-		        // 입력 필드 요소를 가져옵니다.
-		        var inputField = document.getElementById('phoneNum');
-		
-		        // 로그인한 사용자의 연락처를 입력 필드의 기본값으로 설정합니다.
-		        inputField.value = loggedInUserContact;
-		
-		        // 입력 필드에 숫자만 입력되도록 이벤트 리스너를 추가합니다.
-		        inputField.addEventListener('input', function(event) {
-		            // 입력된 값에서 숫자가 아닌 문자를 제거합니다.
-		            var cleanedValue = event.target.value.replace(/\D/g, '');
-		
-		            // 입력 필드의 값을 업데이트합니다.
-		            event.target.value = cleanedValue;
-		        });
-		
-		        // 입력 필드 요소를 가져옵니다.
-		        var emailInput = document.getElementById('email');
-		
-		        // 입력 필드에 포커스를 잃을 때마다 이메일 유효성을 검사하는 이벤트 리스너를 추가합니다.
-		        emailInput.addEventListener('blur', function(event) {
-		            var email = event.target.value;
-		
-		            // 이메일 유효성을 검사합니다.
-		            if (!validateEmail(email)) {
-		                // 이메일이 유효하지 않을 경우 사용자에게 경고 메시지를 표시합니다.
-		
-		                // 입력 필드의 값을 초기화합니다.
-		                event.target.value = '';
-		                // 입력 필드에 포커스를 맞춥니다.
-		                event.target.focus();
-		            }
-		        });
-		        /*
-		        $(document).ready(function(){
-		            // 폼이 제출되었을 때의 이벤트 리스너 추가
-		            $('#formAwesome').submit(function(event) {
-		                // 폼이 기본 제출 동작을 방지
-		                event.preventDefault();
-		                
-		                // 폼 데이터 가져오기
-		                var formData = $(this).serialize();
-		                
-		                // AJAX 요청 보내기
-		                $.ajax({
-		                    type: 'POST', // HTTP 요청 방식 (POST)
-		                    url: 'insertApply', // 서버 엔드포인트 URL
-		                    data: formData, // 전송할 데이터
-		                    success: function(response) {
-		                        // 성공적으로 응답을 받았을 때의 처리
-		                        console.log('서버 응답:', response);
-		                        alert('데이터가 성공적으로 전송되었습니다.');
-		                    },
-		                    error: function(xhr, status, error) {
-		                        // 오류가 발생했을 때의 처리
-		                        console.error('AJAX 오류:', error);
-		                        alert('데이터 전송 중 오류가 발생했습니다.');
-		                    }
-		                });
-		            });
-		        });
-		        */
-		        /*
-		     // 폼 요소를 가져옵니다.
-		        var form = document.getElementById('formAwesome');
+             // setTimeout 함수를 사용하여 일정 시간이 지난 후에 모달을 보여주는 코드 실행
+             setTimeout(function() {
+                 $('#empModal').modal('show'); // 모달 보여주는 코드
+             }, delay);
+             
+         });
+         <!-- 연락처 및 이메일은 로그인한 정보와 실제 유저와 다를 수 있으니 변경이 가능하도록 설정 -->
+           // 서버에서 받은 로그인한 사용자의 연락처
+          //var loggedInUserContact = "010-1234-5678"; // 이 부분은 서버에서 실제 값으로 대체되어야 합니다.
+      
+          // 이메일 주소의 유효성을 정규 표현식을 사용하여 검사하는 함수
+          function validateEmail(email) {
+              var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+              return emailPattern.test(email);
+          }
+      
+          // 페이지 로드 시 실행되는 함수
+          window.onload = function() {
+              // 입력 필드 요소를 가져옵니다.
+              var inputField = document.getElementById('phoneNum');
+      
+              // 로그인한 사용자의 연락처를 입력 필드의 기본값으로 설정합니다.
+              inputField.value = loggedInUserContact;
+      
+              // 입력 필드에 숫자만 입력되도록 이벤트 리스너를 추가합니다.
+              inputField.addEventListener('input', function(event) {
+                  // 입력된 값에서 숫자가 아닌 문자를 제거합니다.
+                  var cleanedValue = event.target.value.replace(/\D/g, '');
+      
+                  // 입력 필드의 값을 업데이트합니다.
+                  event.target.value = cleanedValue;
+              });
+      
+              // 입력 필드 요소를 가져옵니다.
+              var emailInput = document.getElementById('email');
+      
+              // 입력 필드에 포커스를 잃을 때마다 이메일 유효성을 검사하는 이벤트 리스너를 추가합니다.
+              emailInput.addEventListener('blur', function(event) {
+                  var email = event.target.value;
+      
+                  // 이메일 유효성을 검사합니다.
+                  if (!validateEmail(email)) {
+                      // 이메일이 유효하지 않을 경우 사용자에게 경고 메시지를 표시합니다.
+      
+                      // 입력 필드의 값을 초기화합니다.
+                      event.target.value = '';
+                      // 입력 필드에 포커스를 맞춥니다.
+                      event.target.focus();
+                  }
+              });
+          };
+         </script>
+         
+         <script type="text/javascript">
+         
+         document.addEventListener('DOMContentLoaded', function() {
+              var events = [];
+             // DB에서 예약된 일정 가져오기    
+              $.ajax({
+                  type: 'POST',
+                  url: '/empCalList',
+                  data: { 'cslNum': CSL_NO },
+                  dataType: 'json',
+                  async: false,
+                  success: function(response) {
+                      console.log('서버로부터의 응답:', response);
+                      for (var i = 0; i < response.length; i++) {
+                          var res = response[i];
+                          var dateTime = res.DATE + 'T' + res.EMP_COUN_CD + ':00';
+                          var eventCal = {
+                              title: '예약',   // 예약자 이름을 제목으로 설정
+                              //title: res.USR_CN,   // 예약자 이름을 제목으로 설정
+                              start: dateTime,  // 예약 날짜를 시작일로 설정
+                              dbEvent: true,  // DB에서 가져온 이벤트임을 나타내는 플래그
+                              color: 'green'
+                              // 다른 필요한 속성도 추가 가능
+                          };
+                          console.log(eventCal);
+                          events.push(eventCal);
+                      }
+                      // FullCalendar를 초기화하고 렌더링합니다.
+                      initializeFullCalendar(events);
+                  },
+                  
+                  error: function () {
+                      // 에러 처리
+                      console.log('서버로부터 데이터를 불러오는 데 실패했습니다.');
+                  }
+              });
+          });
+         
+         // 풀캘린더 시작.
+          function initializeFullCalendar(events) {
+             console.log("!!!" + events);
+             var calendarEl = document.getElementById('calendar');
+             var calendar = new FullCalendar.Calendar(calendarEl, {
+                 //eventBackgroundColor: 'red',
+                 initialView : 'timeGridWeek',
+                  slotMinTime : '08:00:00',
+                  slotMaxTime : '18:00:00', // 오후 8시까지
+                  slotDuration : '01:00:00', // 시간 단위를 1시간으로 설정
+                  allDaySlot : false,
+                  expandRows : true,
+                  duration: { days: 5 },
+                  //contentHeight: 800,
+                  height: 600,
+                  locale: 'ko',
+                  navLinks : true,
+                  editable : true,
+                  selectable : true,
+                  droppable : true, // this allows things to be dropped onto the calendar
+                  headerToolbar: {
+                      left: 'prev,next',
+                      center: 'title',
+                      right: 'dayGridMonth,timeGridWeek'
+                  },
+                  events: events,
+                   /*
+                    * 드래그로 이벤트 추가하기 신진수가 한거
+                    */
+                    
+                    
+                   select: function (arg) { // 캘린더에서 이벤트를 생성할 수 있다.
+	                  var isEventAdded = false; // 이벤트가 추가되었는지 여부를 저장하는 변수
+                      if (arg.start.getDay() === 0 || arg.start.getDay() === 6) {
+                           // 일요일 또는 토요일을 선택하려고 할 때
+                           return;
+                       }	
+                      //var title = prompt('일정을 입력해주세요.');
+                     //if (confirm(arg.start.toLocaleString() + '부터 ' + arg.end.toLocaleString() + '까지 해당 시간대로 예약하시겠습니까?')) {
+                    	 
+                    if (isEventAdded) {
+				        // 이미 이벤트가 추가되었다면 알림을 표시하고 함수를 종료합니다.
+				        alert("이미 예약된 이벤트가 있습니다.");
+				        return;
+				    }
+                    	 
+                     if (confirm(arg.start.toLocaleString() + '시로 예약하시겠습니까?')) {
+                        var startHour = arg.start.getHours();
+                         var empCounCd = startHour.toString().padStart(2, '0'); // 2자리로 만들기 위해 0으로 패딩
+                         var title = prompt('상담 내용을 입력해주세요.');
+                         //var title = "예약";
+                         var events = new Array(); // Json 데이터를 받기 위한 배열 선언
+                         var obj = new Object();
+                         events.push(obj);
+                         //events.push(...generateHourlyEvents(formattedDate, convertedTimes));
+                         console.log(CSL_NO);
+                         
+                         selectedTitle = title;
+                            //selectedStart = arg.start.toLocaleDateString();
+                         selectedStart = arg.start.toISOString().split('T')[0];
+                            selectedTime = empCounCd.toString().padStart(2, '0') + ':00';
+                         
+                        var eventData = {
+                                title: title,
+                               start: arg.start,
+                               end: arg.end,
+                               CSL_NO: CSL_NO,
+                               empCounCd: empCounCd
+                           };
+                         console.log(eventData);
+                         
+                           // 캘린더에 이벤트 추가
+                             calendar.addEvent({
+                                 title: title, // 하드코딩된 "예약" 값을 할당
+                                 start: arg.start,
+                                 end: arg.end
+                             });
+                         /*
+                            $.ajax({
+                                url: 'insertEmpCal',
+                                method: 'POST',
+                                dataType: 'json', // 'json'으로 수정
+                                contentType: 'application/json',
+                                data: JSON.stringify(eventData),
+                                success: function(response){
+                                    alert("예약 성공!" + eventData.CSL_NO);
+                                    console.log('예약이 완료되었습니다.');
+                                    
+                                   // 캘린더에 이벤트 추가
+                                   calendar.addEvent({
+                                       title: "예약", // 하드코딩된 "예약" 값을 할당
+                                       start: arg.start,
+                                       end: arg.end
+                                   });
+                                   
+                                   if (response.success) {
+                                       alert("예약 성공!");
+                                       var redirectUrl = response.redirect;
+                                       var dateOnly = response.dateOnly;
+                                       CSL_NO = CSL_NO;
+                                       console.log(CSL_NO);
+                                       //window.location.href = response.redirect; // 리다이렉트 URL로 이동
+                                       window.location.href = response.redirect + "?CSL_NO=" + CSL_NO; // CSL_NO 값을 URL에 추가하여 리다이렉트
+                                   } else {
+                                       alert("예약 실패!");
+                                   }
+                                    
+                                },
+                                error: function(xhr, status, error){
+                                    alert("예약 실패", error);
+                                    console.error('예약 중 오류가 발생했습니다:', error);
+                                }
+                            });
+                            */
+                         }
+                   },
 
-		        // 폼이 제출될 때 이벤트 리스너를 추가합니다.
-		        form.addEventListener('submit', function(event) {
-		            // 폼의 기본 동작을 취소합니다.
-		            event.preventDefault();
+                   
+                   /**
+                    * 이벤트 선택해서 삭제하기
+                    */
+                   eventClick : function(info) {
+                      if (info.event.extendedProps.dbEvent) {
+                             return false; // DB에서 가져온 이벤트는 삭제되지 않도록 막음
+                         }
+                         if (confirm("'" + info.event.title + "' 님의 일정을 삭제하시겠습니까 ?")) {
+                             // 확인 클릭 시
+                             info.event.remove();
+                         }
 
-		            // POST 요청을 보낼 URL을 설정합니다.
-		            var url = '/insertApply';
+                      console.log(info.event);   
+                      var events = new Array(); // Json 데이터를 받기 위한 배열 선언
+                      var obj = new Object();
+                      obj.title = info.event._def.title;
+                      obj.start = info.event._instance.range.start;
+                      events.push(obj);
 
-		            // 폼 데이터를 FormData 객체로 가져옵니다.
-		            var formData = new FormData(form);
+                      console.log(events);
+                      $(function deleteData() {
+                         $.ajax({
+                            url : "/full-calendar/calendar-admin-update",
+                            method : "DELETE",
+                            dataType : "json",
+                            data : JSON.stringify(events),
+                            contentType : 'application/json',
+                         })
+                      })
+                   },
 
-		            // fetch API를 사용하여 POST 요청을 보냅니다.
-		            fetch(url, {
-		                method: 'POST',
-		                body: formData
-		            })
-		            .then(function(response) {
-		                // 응답을 처리합니다.
-		                if (response.ok) {
-		                    // 요청이 성공적으로 처리된 경우
-		                    console.log('POST 요청이 성공적으로 완료되었습니다.');
-		                    // 추가적인 처리가 필요한 경우 여기에 작성합니다.
-		                } else {
-		                    // 요청이 실패한 경우
-		                    console.error('POST 요청이 실패하였습니다.');
-		                }
-		            })
-		            .catch(function(error) {
-		                // 오류를 처리합니다.
-		                console.error('POST 요청 중 오류가 발생하였습니다:', error);
-		            });
-		        });
-*/
-		        
-		    };
-			</script>
-			
-			<!-- Modal -->
-			<div class="modal fade" id="empModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-			  <div class="modal-dialog modal-xl modal-dialog-scrollable">
-			    <div class="modal-content">
-			      <div class="modal-header">
-			        <h5 class="modal-title" id="empModalLabel">상담 일정</h5>
-			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			      </div>
-			      <div class="modal-body">
-        			<div id='calendar'></div>
-			      </div>
-			      <div class="modal-footer">
-			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-			        <button type="button" class="btn btn-primary" id="saveButton">Save changes</button>
-			      </div>
-			    </div>
-			  </div>
-			</div>
-			
-			<script type="text/javascript">
-			// 모달 요소를 가져옵니다.
-			var myModal = document.getElementById('empModal');
-			
-			// 모달 요소에 이벤트 리스너를 추가합니다.
-			
-			
-			/*
-			$('#empModal').on('shown.bs.modal', function() {
-				$("#calendar").fullCalendar('render');
-				//$("#calendar").fullCalendar('refetchEvents');
-				calendar.refetchEvents();
-            });
-			*/
-			
-			var saveButton = document.getElementById('saveButton');
-	        
-			var selectedTitle = "";
-			var selectedStart = null;
-			var selectedTime = null;
-			
-			
-	        saveButton.addEventListener('click', function() {
-	            // 필요한 데이터를 저장하는 로직을 여기에 추가할 수 있습니다.
-	            // "상담 내용" 텍스트 에어리어에 title과 start 값을 설정
-			    var empContent = document.getElementById('empContent');
-	            var empDate = document.getElementById('empDate');
-	            var empTime = document.getElementById('empTime');
-			    empContent.value = `${selectedTitle}`;
-			    empDate.value = `${selectedStart}`;
-			    //empTime.value = `${selectedTime}`;
-    			
-			 	// selectedTime이 유효한 문자열인지 확인 후 앞 두 자리를 추출하여 설정
-			    if (selectedTime && selectedTime.length >= 2) {
-			        empTime.value = selectedTime.substring(0, 2);
-			    } else {
-			        empTime.value = selectedTime; // 혹시나 selectedTime이 null이거나 짧은 경우 그대로 설정
-			    }
-			    
-	            // 모달 닫기
-	            var modal = document.getElementById('empModal');
-	            var bootstrapModal = bootstrap.Modal.getInstance(modal); // 모달 인스턴스를 가져옴
-	            bootstrapModal.hide(); // 모달을 닫음
-	        });
-			
-			document.addEventListener('DOMContentLoaded', function() {
-		        var events = [];
-		    	// DB에서 예약된 일정 가져오기    
-		        $.ajax({
-		            type: 'POST',
-		            url: '/empCalList',
-		            data: { 'cslNum': CSL_NO },
-		            dataType: 'json',
-		            async: false,
-		            success: function(response) {
-		                console.log('서버로부터의 응답:', response);
-		                for (var i = 0; i < response.length; i++) {
-		                    var res = response[i];
-		                    var dateTime = res.DATE + 'T' + res.EMP_COUN_CD + ':00';
-		                    var eventCal = {
-		                        title: '예약',   // 예약자 이름을 제목으로 설정
-		                        //title: res.USR_CN,   // 예약자 이름을 제목으로 설정
-		                        start: dateTime,  // 예약 날짜를 시작일로 설정
-		                        dbEvent: true,  // DB에서 가져온 이벤트임을 나타내는 플래그
-		                        color: 'green'
-		                        // 다른 필요한 속성도 추가 가능
-		                    };
-		                    console.log(eventCal);
-		                    events.push(eventCal);
-		                }
-		                // FullCalendar를 초기화하고 렌더링합니다.
-		                initializeFullCalendar(events);
-		            },
-		            
-		            error: function () {
-		                // 에러 처리
-		                console.log('서버로부터 데이터를 불러오는 데 실패했습니다.');
-		            }
-		        });
-		    });
-			
-			// 풀캘린더 시작.
-		    function initializeFullCalendar(events) {
-		    	console.log("!!!" + events);
-		    	var calendarEl = document.getElementById('calendar');
-		        var calendar = new FullCalendar.Calendar(calendarEl, {
-		        	//eventBackgroundColor: 'red',
-		        	initialView : 'timeGridWeek',
-		            slotMinTime : '08:00:00',
-		            slotMaxTime : '18:00:00', // 오후 8시까지
-		            slotDuration : '01:00:00', // 시간 단위를 1시간으로 설정
-		            allDaySlot : false,
-		            expandRows : true,
-		            duration: { days: 5 },
-		            //contentHeight: 800,
-		            height: 600,
-		            locale: 'ko',
-		            navLinks : true,
-		            editable : true,
-		            selectable : true,
-		            droppable : true, // this allows things to be dropped onto the calendar
-		            headerToolbar: {
-		                left: 'prev,next',
-		                center: 'title',
-		                right: 'dayGridMonth,timeGridWeek,dayGridDay'
-		            },
-		            events: events,
-		    			/*
-		    			 * 드래그로 이벤트 추가하기 신진수가 한거
-		    			 */
-		    			select: function (arg) { // 캘린더에서 이벤트를 생성할 수 있다.
-		    				if (arg.start.getDay() === 0 || arg.start.getDay() === 6) {
-		    			        // 일요일 또는 토요일을 선택하려고 할 때
-		    			        return;
-		    			    }
-		    			   //var title = prompt('일정을 입력해주세요.');
-		    			  //if (confirm(arg.start.toLocaleString() + '부터 ' + arg.end.toLocaleString() + '까지 해당 시간대로 예약하시겠습니까?')) {
-		    			  if (confirm(arg.start.toLocaleString() + '시로 예약하시겠습니까?')) {
-		    				  var startHour = arg.start.getHours();
-		    			      var empCounCd = startHour.toString().padStart(2, '0'); // 2자리로 만들기 위해 0으로 패딩
-		    			      var title = prompt('상담 내용을 입력해주세요.');
-		    			      //var title = "예약";
-		    			      var events = new Array(); // Json 데이터를 받기 위한 배열 선언
-		    			      var obj = new Object();
-		    			      events.push(obj);
-		    			      //events.push(...generateHourlyEvents(formattedDate, convertedTimes));
-		    			      console.log(CSL_NO);
-		    			      
-		    			      selectedTitle = title;
-		                      //selectedStart = arg.start.toLocaleDateString();
-		    			      selectedStart = arg.start.toISOString().split('T')[0];
-		                      selectedTime = empCounCd.toString().padStart(2, '0') + ':00';
-		    			      
-		    				  var eventData = {
-		    						    title: title,
-		    							start: arg.start,
-		    							end: arg.end,
-		    							CSL_NO: CSL_NO,
-		    							empCounCd: empCounCd
-		    			   	  };
-		    			      console.log(eventData);
-		    			      
-		    			   	  // 캘린더에 이벤트 추가
-  			                  calendar.addEvent({
-  			                      title: title, // 하드코딩된 "예약" 값을 할당
-  			                      start: arg.start,
-  			                      end: arg.end
-  			                  });
-		    			      /*
-		    			   		$.ajax({
-		    			   		    url: 'insertEmpCal',
-		    			   		    method: 'POST',
-		    			   		    dataType: 'json', // 'json'으로 수정
-		    			   		    contentType: 'application/json',
-		    			   		    data: JSON.stringify(eventData),
-		    			   		    success: function(response){
-		    			   		        alert("예약 성공!" + eventData.CSL_NO);
-		    			   		        console.log('예약이 완료되었습니다.');
-		    			   		        
-		    			   		 		// 캘린더에 이벤트 추가
-		    			                calendar.addEvent({
-		    			                    title: "예약", // 하드코딩된 "예약" 값을 할당
-		    			                    start: arg.start,
-		    			                    end: arg.end
-		    			                });
-		    			   		 		
-		    			                if (response.success) {
-		    			                    alert("예약 성공!");
-		    			                    var redirectUrl = response.redirect;
-		    			                    var dateOnly = response.dateOnly;
-		    			                    CSL_NO = CSL_NO;
-		    			                    console.log(CSL_NO);
-		    			                    //window.location.href = response.redirect; // 리다이렉트 URL로 이동
-		    			                    window.location.href = response.redirect + "?CSL_NO=" + CSL_NO; // CSL_NO 값을 URL에 추가하여 리다이렉트
-		    			                } else {
-		    			                    alert("예약 실패!");
-		    			                }
-		    			   		        
-		    			   		    },
-		    			   		    error: function(xhr, status, error){
-		    			   		        alert("예약 실패", error);
-		    			   		        console.error('예약 중 오류가 발생했습니다:', error);
-		    			   		    }
-		    			   		});
-		    			   		*/
-		    			   	}
-		    			},
+                });
+                calendar.render();
+             }
+                 myModal.addEventListener('show.bs.modal', function () {
+                   // 모달이 표시될 때 캘린더 크기 업데이트
+                   console.log("updateSize() 작동테스트");
+                   //calendar.refetchEvents();
+                   //calendar.updateSize();
+                   //calendar.refetch();
+               });
+              
+             // Bootstrap 모달이 열렸을 때 캘린더를 렌더링
+               /* $('#empModal').on('shown.bs.modal', function () {
+                  $("#calendar").fullCalendar('render');
+                  $("#calendar").fullCalendar('refetchEvents');
+                  $("#calendar").fullCalendar('refetch');
+                  calendar.refetchEvents();   
+               }); */
+              
 
-		    			
-		    			/**
-		    			 * 이벤트 선택해서 삭제하기
-		    			 */
-		    			eventClick : function(info) {
-		    				if (info.event.extendedProps.dbEvent) {
-		    	                return false; // DB에서 가져온 이벤트는 삭제되지 않도록 막음
-		    	            }
-		    	            if (confirm("'" + info.event.title + "' 님의 일정을 삭제하시겠습니까 ?")) {
-		    	                // 확인 클릭 시
-		    	                info.event.remove();
-		    	            }
-
-		    				console.log(info.event);	
-		    				var events = new Array(); // Json 데이터를 받기 위한 배열 선언
-		    				var obj = new Object();
-		    				obj.title = info.event._def.title;
-		    				obj.start = info.event._instance.range.start;
-		    				events.push(obj);
-
-		    				console.log(events);
-		    				$(function deleteData() {
-		    					$.ajax({
-		    						url : "/full-calendar/calendar-admin-update",
-		    						method : "DELETE",
-		    						dataType : "json",
-		    						data : JSON.stringify(events),
-		    						contentType : 'application/json',
-		    					})
-		    				})
-		    			},
-
-		    		});
-			        
-		    		calendar.render();
-		    	}
-			        myModal.addEventListener('show.bs.modal', function () {
-					    // 모달이 표시될 때 캘린더 크기 업데이트
-					    console.log("updateSize() 작동테스트");
-			    		//calendar.refetchEvents();
-					    //calendar.updateSize();
-			    		//calendar.refetch();
-					});
-		        /*
-		    	// Bootstrap 모달이 열렸을 때 캘린더를 렌더링
-	            $('#empModal').on('shown.bs.modal', function () {
-	            	$("#calendar").fullCalendar('render');
-	            	//$("#calendar").fullCalendar('refetchEvents');
-	            	$("#calendar").fullCalendar('refetch');
-	            	//calendar.refetchEvents();	
-	            });
-		        */
-
-			
-	     	//모달이 완전히 닫혔을 때 이벤트 핸들러 추가
+         
+           //모달이 완전히 닫혔을 때 이벤트 핸들러 추가
             /*
-	     	var empModal = document.getElementById('empModal');
+           var empModal = document.getElementById('empModal');
             empModal.addEventListener('hidden.bs.modal', function () {
                 // 백드롭 요소를 제거
                 var backdrop = document.querySelector('.modal-backdrop');
@@ -607,25 +544,41 @@
                 }
             });
             */
-			
-			var date = null;
-		    var CSL_NO = document.getElementById('CSL_NO').value;
-			/* $('#empModal').on('shown.bs.modal', function () {
-				$("#calendar").fullCalendar('render');
-	    	}); */
-			
-			</script>
-	        <!-- 푸터-->
-	        <div th:replace="~{footer :: Footer}"></div>
-	        
-	        <!-- Bootstrap core JS-->
-	        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-	        <!-- Core theme JS-->
-	        <script src="./js/scripts.js"></script>
-	        
-	        <script type="text/javascript">
-		</script>
+         
+         var date = null;
+          var CSL_NO = document.getElementById('CSL_NO').value;
+         /* $('#empModal').on('shown.bs.modal', function () {
+            $("#calendar").fullCalendar('render');
+          }); */
+         
+         </script>
+         
+         <script type="text/javascript">
+             $('#empModal').on('shown.bs.modal', function () {
+                 var calendarEl = document.getElementById('calendar');
+                 var calendar = FullCalendar.Calendar.getInstance(calendarEl);
+                 if (!calendar) {
+                     // 캘린더가 존재하지 않는다면 새로 생성
+                     initializeFullCalendar([]);
+                 } else {
+                     // 이미 존재하는 캘린더가 있다면 이벤트를 다시 가져오고 렌더링
+                     calendar.render();
+                     calendar.refetchEvents();
+                 }
+             });
+         </script>
+         
+           <!-- 푸터-->
+           <div th:replace="~{footer :: Footer}"></div>
+           
+           <!-- Bootstrap core JS-->
+           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+           <!-- Core theme JS-->
+           <script src="./js/scripts.js"></script>
+           
+           <script type="text/javascript">
+      </script>
 
-	        
-	</body>
-	</html>
+           
+   </body>
+   </html>

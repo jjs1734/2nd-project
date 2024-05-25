@@ -9,7 +9,7 @@
     </select>
     
     <select id="empCounProfile" resultType="Map">
-        SELECT e.CSL_NO, c.CSL_EMAIL, c.CSL_MOBILE, e.SCSBJT_NM, c.CSL_NM
+        SELECT e.CSL_NO, c.CSL_EMAIL, c.CSL_MOBILE, e.SCSBJT_NM, c.CSL_NM, e.ECOUN_FILENM, e.ECOUN_CONTS_CN
         FROM EMP_COUN_PRO e 
         JOIN COUNSELOR c ON e.CSL_NO = c.CSL_NO 
     </select>
@@ -29,19 +29,34 @@
     </select>
     
     <!-- 취업 상담사 스케줄 테이블에 정보 넣기 -->
-    <insert id="insertCalFinal" parameterType="EventData">
-        INSERT INTO EMP_COUN_CAL (CSL_NO, EMP_COUN_CD, DATE, USR_CN) 
-        VALUES (#{CSL_NO}, #{empTime}, #{empDate}, #{empContent})
+    <!-- <insert id="insertCalFinal" parameterType="EventData">
+        INSERT INTO EMP_COUN_CAL (CSL_NO, EMP_COUN_CD, EMP_DATE, USR_CN, DATE) 
+        VALUES (#{CSL_NO}, #{empTime}, #{empDate}, #{empContent}, now())
         <selectKey keyProperty="CAL_NUM" order="AFTER" resultType="int">
             SELECT LAST_INSERT_ID()
         </selectKey>
-    </insert>
+    </insert> -->
     
     <!-- 취업 상담사에 정보 넣기 -->
-    <insert id="insertTabFinal" parameterType="String">
+    <!-- <insert id="insertTabFinal" parameterType="String">
         INSERT INTO EMP_COUN_TAB (CAL_NUM, STUD_NO, EMP_COUN_RSVT_YMD, EMP_COUN_RSVT_CD, EMP_COUN_YMD, EMP_COUN_CD, USR_CN, COUN_CN, EMP_STTS_CD) 
-        VALUES (#{CAL_NUM}, #{userId}, #{empCounRswtYmd}, #{empCounRswtCd}, #{empCounYmd}, #{empCounCd}, #{usrCn}, #{counCn}, #{empSttsCd})
-    </insert>
+        VALUES (#{CAL_NUM}, #{userId}, #{empCounRswtYmd}, #{empCounRswtCd}, #{empCounYmd}, #{empCounCd}, #{usrCn}, #{counCn}, 10)
+    </insert> -->
+    
+    <!-- 취업 상담사 스케줄 테이블에 정보 넣기 -->
+	<insert id="insertCalFinal" parameterType="EventData">
+    	INSERT INTO EMP_COUN_CAL (CSL_NO, EMP_COUN_CD, DATE, EMP_DATE) 
+    	VALUES (#{CSL_NO}, #{empTime}, NOW(), #{empDate})
+    	<selectKey keyProperty="CAL_NUM" order="AFTER" resultType="int">
+        	SELECT LAST_INSERT_ID()
+    	</selectKey>
+	</insert>
+	
+	<!-- 취업 상담사에 정보 넣기 -->
+	<insert id="insertTabFinal" parameterType="EventData">
+    	INSERT INTO EMP_COUN_TAB (CAL_NUM, STUD_NO, EMP_COUN_RSVT_YMD, EMP_COUN_RSVT_CD, USR_CN, EMP_STTS_CD) 
+    	VALUES (#{CAL_NUM}, #{userId}, #{empDate}, #{empTime}, #{empContent}, 10)
+	</insert>
     
     <!-- DB에 DATE타입이 CHAR여서 DATE로 변경해주는거 수정 -->
     <select id="updateCal" parameterType="String" resultType="Map">
@@ -105,10 +120,10 @@
 	    WHERE CSL_NO = #{cslNo}
 	</select> -->
 
-    <!-- <select id="empCalList" parameterType="String" resultType="Map">
+    <select id="empCalList" parameterType="String" resultType="Map">
         SELECT CSL_NO, DATE, EMP_COUN_CD, USR_CN 
         FROM EMP_COUN_CAL 
         WHERE CSL_NO = #{cslNo1}
-    </select> -->
+    </select>
 
 </mapper>

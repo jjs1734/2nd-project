@@ -1,6 +1,5 @@
 package com.wizian.web.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,8 +10,11 @@ import com.wizian.web.dao.AdminDAO;
 import com.wizian.web.dao.BoardDAO;
 import com.wizian.web.dao.GroupDAO;
 import com.wizian.web.dto.BoardDTO;
+import com.wizian.web.dto.EcounAdDTO;
 import com.wizian.web.dto.AdminDTO;
 import com.wizian.web.dto.GroupDTO;
+import com.wizian.web.dto.PFSdataDTO;
+import com.wizian.web.dto.PfRsvDTO;
 
 @Service
 public class AdminService {
@@ -72,8 +74,8 @@ public class AdminService {
 		adminDAO.registerCounselor(formData);
 	}
 
-	public void registerEmpCounPro(Map<String, String> formData) {
-		adminDAO.registerEmpCounPro(formData);
+	public int registerEmpCounPro(EcounAdDTO ecounAdDTO) {
+		return adminDAO.registerEmpCounPro(ecounAdDTO);
 	}
 
 
@@ -89,9 +91,66 @@ public class AdminService {
 		return adminDAO.counselorList();
 	}
 
+	public List<Map<String, Object>> getGcounCslList() {
+		return adminDAO.getGcounCslList();
+	}
+
+	public int ecounEnroll(EcounAdDTO ecounAdDTO) {
+		return adminDAO.ecounEnroll(ecounAdDTO);
+	}
+	
 	public List<Map<String, Object>> getPfcounList() {
 		return adminDAO.getPfcounList();
 	}
+
+	public int pfCounEnroll(PfRsvDTO pfRsv) {
+		return adminDAO.pfCounEnroll(pfRsv);
+	}
+
+	public void pfCmtUpdate(Map<String, Object> map) {
+		adminDAO.pfCmtupdate(map);
+	}
+
+	public void pfCounDateUpdate(Map<String, Object> map) {
+		adminDAO.pfCounDateUpdate(map);
+	}
+
+	public void pfCounTimeUpdate(Map<String, Object> map) {
+		adminDAO.pfCounTimeUpdate(map);
+	}
+
+	public void pfStateUpdate(Map<String, Object> map) {
+		adminDAO.pfStateUpdate(map);
+	}
+
+	public List<Map<String, Object>> getPfList() {
+		return adminDAO.getPfList();
+	}
+
+	public List<Map<String, Object>> getPfscList(String pfNo) {
+		return adminDAO.getPfscList(pfNo);
+	}
+
+	public int pfscEnroll(PFSdataDTO pfsDTO) {
+		return adminDAO.pfscEnroll(pfsDTO);
+	}
+
+	public void pfNmUpdate(Map<String, Object> map) {
+		adminDAO.pfNmUpdate(map);
+	}
+
+	public void pfTelUpdate(Map<String, Object> map) {
+		adminDAO.pfTelUpdate(map);
+	}
+
+	public void pfEmailUpdate(Map<String, Object> map) {
+		adminDAO.pfEmailUpdate(map);
+	}
+
+	public void pfNcdUpdate(Map<String, Object> map) {
+		adminDAO.pfNcdUpdate(map);
+	}
+
 	
 	
 

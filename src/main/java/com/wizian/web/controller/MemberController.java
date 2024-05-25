@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.wizian.web.dto.MemberDTO;
 import com.wizian.web.service.MemberService;
 
 import jakarta.servlet.http.HttpSession;
@@ -21,9 +22,10 @@ public class MemberController {
 	
 	@GetMapping("/login")
 	public String login(HttpSession session, Model model) {
-		String userId = (String)session.getAttribute("userId");
+		String userId = (String) session.getAttribute("userId");
 		
 		if(userId != null) { // 로그인 된 상태
+		
 			return "redirect:/main";
 		}
 		
@@ -32,27 +34,31 @@ public class MemberController {
 	
 	@PostMapping("/login")
 	public String login(@RequestParam("id") String id, @RequestParam("pw") String pw, HttpSession session) {
-		System.out.println("아이디 입력값: " + id + " 비밀번호 입력값 : " + pw);
-		String userId = memberService.login(id, pw);
-		if(userId == null) {
+		//System.out.println("아이디 입력값: " + id + " 비밀번호 입력값 : " + pw);
+		MemberDTO user = memberService.login(id, pw);
+		if(user.getLOGIN_ID() == null) {
 			//System.out.println("로그인 실패");
 			return "redirect:/login";
 		}
-		session.setAttribute("userId", userId);
-		//System.out.println("로그인 성공");
-		return "redirect:/main";
+		session.setAttribute("userId", user.getLOGIN_ID());
+		//세션에 등급 저장
+		session.setAttribute("grade", user.getADMIN_YN());
+
+		if(user.getADMIN_YN().equals("학생")) {
+			return "redirect:/main";
+		} else {
+			return "redirect:/admin/main";
+		}
+
 	}
 	
 	@PostMapping("/logout")
 	public String logout(HttpSession session) {
-		System.out.println("로그아웃 실행");
+	//	System.out.println("로그아웃 실행");
 		session.invalidate();
 		
 		return "redirect:/main";
+	
 	}
 	
-	@GetMapping("/loginreal")
-	public String loginreal() {
-		return "loginreal";
-	}
 }

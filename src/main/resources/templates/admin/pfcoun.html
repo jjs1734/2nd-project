@@ -14,7 +14,7 @@
 	<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.3.0/tui-pagination.js"></script>
 	<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
   <title>
-    관리자 페이지
+    관리자 페이지 - 교수상담관리
   </title>
   <!--     Fonts and icons     -->
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
@@ -24,6 +24,7 @@
   <!-- Font Awesome Icons -->
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- Sweetalert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>  
   <!-- Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
@@ -74,13 +75,12 @@
         <div class="col-12">
        		<div style="display: flex; align-items: center;">
        			<h4 style="margin-right: 10px;">교수 상담 목록</h4>
-       			<button id="pfcounModalBtn" class="btn btn-info btn-sm" data-bs-toggle="modal">교수 상담 추가하기</button>
+       			<button id="pfcounModalBtn" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#pfcounModal">교수 상담 추가하기</button>
        		</div>
         	<div id="pfcounGrid"></div>
         	<br>
 
-        	<!-- 상담 수정 폼 -->
-        	<div></div>
+
         	
         </div>
    </div>
@@ -92,61 +92,79 @@
   </main>
     <div th:replace="~{admin/settingBtn :: setBtn}"></div>
     
-  <!-- Modal -->
-	<div class="modal fade" id="pfcounModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-		aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <!-- 상담 추가 Modal -->
+	<div class="modal fade" id="pfcounModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 		<div class="modal-dialog modal-xl modal-dialog-centered">
 			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="gcounModalHeader">상담 추가 등록</h1>
-				</div>
-				<div class="modal-body">
-
-					<div class="mb-3">
-						<label class="col-sm-4 col-form-label">교수</label>
-						<div class="col-sm-8">
+				<form id="pfcounForm">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="gcounModalHeader">상담 추가 등록</h1>
+					</div>
+					<div class="modal-body">
+						<div class="mb-3">
+							<label class="col-sm-4 col-form-label">교수</label>
+							<div class="col-sm-8">
 							<input id="pfNo" type="text" placeholder="교수번호를 입력해주세요">
+							</div>
 						</div>
-					</div>
-					<div class="mb-3">
-						<label class="col-sm-4 col-form-label">학생</label>
-						<div class="col-sm-8">
-							<input id="studNo" type="text" placeholder="학번을 입력해주세요">
+						<div class="mb-3">
+							<label class="col-sm-4 col-form-label">학생</label>
+							<div class="col-sm-8">
+								<input id="studNo" type="text" placeholder="학번을 입력해주세요">
+							</div>
 						</div>
-					</div>
-					<div class="mb-3">
-						<label class="col-sm-4 col-form-label">상담 신청 내용</label>
-						<div class="col-sm-8">
-							<textarea id="pfContents" rows="5" style="width:100%; resize:none;"></textarea>
-						</div>					
-					</div>
-					<div class="mb-3">
-						<label class="col-sm-4 col-form-label">상담 진행 일시</label>
-						<div class="col-sm-8">
-							<input id="pfcounDT" type="datetime-local" placeholder="일시">
+						<div class="mb-3">
+							<label class="col-sm-4 col-form-label">상담 신청 내용</label>
+							<div class="col-sm-8">
+								<textarea id="pfContents" rows="5" style="width:100%; resize:none;" placeholder="반드시 상담 내용을 작성해주세요!"></textarea>
+							</div>
 						</div>
-					</div>
-					<div class="mb-3">
-						<label class="col-sm-4 col-form-label">상담 결과</label>
-						<div class="col-sm-8">
-							<textarea id="pfComment" rows="5" style="width:100%; resize:none;"></textarea>
-						</div>					
-					</div>
-					<div class="mb-3">
-						<label class="col-sm-4 col-form-label">상담 진행 상태</label>
-						<p>| 10(예약중)/20(승인)/30(거절)/40(상담완료)/50(추가상담)</p>
-						<div class="col-sm-8">
-							<input id="pfCounStateCD" type="text" placeholder="상담 진행 코드 입력">
+						<div class="mb-3">
+				            <label class="col-sm-4 col-form-label">상담 진행 일시</label>
+				            <div class="col-sm-8">
+				              <input id="pfcounDT" type="datetime-local" placeholder="일시">
+				            </div>
+				        </div>
+						<div class="mb-3">
+							<label class="col-sm-4 col-form-label">상담 결과</label>
+							<div class="col-sm-8">
+								<textarea id="pfComment" rows="5" style="width:100%; resize:none;" placeholder="반드시 상담에 대한 코멘트를 작성해주세요!"></textarea>
+							</div>
 						</div>
+						<div class="mb-3">
+							<label class="col-sm-4 col-form-label">상담 진행 상태</label>
+							<p>| 10(예약중)/20(승인)/30(거절)/40(상담완료)/50(추가상담)</p>
+							<div class="col-sm-8">
+								<input id="pfCounStateCD" type="text" placeholder="상담 진행 코드 입력">
+							</div>
+						</div>
+	        		</div>
+			        <div class="modal-footer">
+			          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+			          <button type="button" id="enroll" class="btn btn-primary">등록</button>
 					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-					<button type="button" id="enroll" class="btn btn-primary">등록</button>
-				</div>
+				</form>
 			</div>
 		</div>
-	</div>    
+	</div>
+	
+	<div class="modal" id="coModal" tabindex="-1">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title"></h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body" id="coModalBody">
+	        
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
     
     
   <!--   Core JS Files   -->
@@ -237,6 +255,11 @@
 			$('#pfcounModal').modal("show");
 		});
 		
+		$('#pfcounModal').on('hidden.bs.modal', function () {
+	        $('#pfcounForm')[0].reset(); // 폼 초기화
+	        $('.modal-backdrop').remove(); // 백드롭 제거
+	    });
+		
 		
 		// 모달 내의 등록하기 버튼 기능
 		$('#enroll').click(function() {
@@ -244,10 +267,28 @@
 			const pfNo = $('#pfNo').val();
 			const studNo = $('#studNo').val();
 			const pfContents = $('#pfContents').val();
+			console.log(pfContents);
 			const pfcounDT = $('#pfcounDT').val();
 			console.log(pfcounDT);
 			const pfComment = $('#pfComment').val();
 			const pfCounStateCD = $('#pfCounStateCD').val();
+			
+			//유효성 검사
+			if(pfContents == null || pfContents ==""){
+				alert('상담 내용을 작성해주세요');
+				return false;
+			}else if(pfComment == null || pfComment ==""){
+				alert('상담 코멘트를 작성해주세요!');
+				return false;
+			}
+			
+		    const selectedTime = new Date(pfcounDT);
+		    const selectedHour = selectedTime.getHours();
+		    if (selectedHour < 9 || selectedHour > 17) {
+		        alert('상담 진행 시간을 09:00부터 17:59 사이로 선택해주세요!');
+		        return false;
+		    }
+			
 			
 			let formData = new FormData();
 			
@@ -257,6 +298,7 @@
 			formData.append("PF_COUN_DT", pfcounDT);
 			formData.append("PF_COMMENT", pfComment);
 			formData.append("PF_COUN_STATE_CD", pfCounStateCD);
+			console.log(formData);
 			
 			$.ajax({
 				url: '/admin/pfcounEnroll',
@@ -268,7 +310,7 @@
 					if (response === 1) {
 						alert('등록에 성공하였습니다.');
 						$('#pfcounModal').modal('hide');
-						
+						$('.modal-backdrop').remove();
 						//성공 시 데이터 새로 가져와서 그리드에 세팅하기
 						$.ajax({
 					  	    url: "/admin/getPfcounList",
@@ -306,17 +348,17 @@
   	    },
   	  });
   	
-  	  //하단에 폼으로 생성할지 진수오빠 방식으로 할지 고민해보자
-/*   	grid.on('afterChange', function(ev) {
+  	 
+   	grid.on('afterChange', function(ev) {
   	    const { changes } = ev;
   	    changes.forEach(change => {
   	        const { rowKey, columnName, value } = change;
-  	        const rowData = grid2.getRow(rowKey);
+  	        const rowData = grid.getRow(rowKey);
   	        const counNum = rowData.PF_COUN_NO;
   	        //alert(counNum);
   	        //console.log(counNum);
   	     	// 변경된 칼럼이 "상담일자", "상담시간(시)", "상담사코멘트", "상태" 중 하나인지 확인
-  	        if (["PF_COUN_YMD", "PF_COUN_TIME_CD", "PF_COUN_COMMENT", "EMP_STTS_CD"].includes(columnName)) {
+  	        if (["PF_COUN_YMD", "PF_COUN_TIME_CD", "PF_COUN_COMMENT", "PF_COUN_STATE_CD"].includes(columnName)) {
   	            console.log("Changed column:", columnName); // 변경된 칼럼 확인
   	            console.log("Row data:", rowData); // 해당 행의 데이터 확인
   	            console.log("value:", value); // 해당 행의 데이터 확인
@@ -341,8 +383,20 @@
   	        });
   	        }
   	    });
-  	}); */
+  	});
 	
+ // 모달을 위한 클릭 이벤트 처리
+    grid.on('dblclick', function(ev) {
+      var rowKey = ev.rowKey;
+      var columnName = ev.columnName;
+      var cellValue = grid.getValue(rowKey, columnName);
+
+      if (columnName === 'PF_CONTENTS' || columnName === 'PF_COUN_COMMENT') {
+        document.getElementById('coModalBody').innerText = cellValue;
+        var coModal = new bootstrap.Modal(document.getElementById('coModal'));
+        coModal.show();
+      }
+    });
 
 	}); 
   </script>

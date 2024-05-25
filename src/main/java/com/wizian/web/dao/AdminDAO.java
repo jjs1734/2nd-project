@@ -7,6 +7,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import com.wizian.web.dto.BoardDTO;
+import com.wizian.web.dto.PfRsvDTO;
+import com.wizian.web.dto.EcounAdDTO;
+import com.wizian.web.dto.PFSdataDTO;
 import com.wizian.web.dto.AdminDTO;
 
 @Repository
@@ -37,7 +40,7 @@ public interface AdminDAO {
 
 	void registerCounselor(Map<String, String> formData);
 
-	void registerEmpCounPro(Map<String, String> formData);
+	int registerEmpCounPro(EcounAdDTO ecounAdDTO);
 
 	 BoardDTO getPostDetail(int postId);
 	 List<BoardDTO> getReplies(int postId);
@@ -49,7 +52,33 @@ public interface AdminDAO {
 
 	List<Map<String, Object>> counselorList();
 
+	int ecounEnroll(EcounAdDTO ecounAdDTO);
 	List<Map<String, Object>> getPfcounList();
+
+	int pfCounEnroll(PfRsvDTO pfRsv);
+
+	void pfCmtupdate(Map<String, Object> map);
+
+	void pfCounDateUpdate(Map<String, Object> map);
+
+	void pfCounTimeUpdate(Map<String, Object> map);
+
+	void pfStateUpdate(Map<String, Object> map);
+
+	List<Map<String, Object>> getPfList();
+
+	List<Map<String, Object>> getPfscList(String pfNo);
+
+	int pfscEnroll(PFSdataDTO pfsDTO);
+
+	void pfNmUpdate(Map<String, Object> map);
+
+	void pfTelUpdate(Map<String, Object> map);
+
+	void pfEmailUpdate(Map<String, Object> map);
+
+	void pfNcdUpdate(Map<String, Object> map);
+
 
 	
 }
