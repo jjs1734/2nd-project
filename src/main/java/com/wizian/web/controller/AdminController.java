@@ -15,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,20 +24,16 @@ import com.wizian.web.dto.AdminDTO;
 import com.wizian.web.dto.BoardDTO;
 import com.wizian.web.dto.EcounAdDTO;
 import com.wizian.web.service.AdminService;
-import com.wizian.web.service.BoardService;
+import com.wizian.web.util.Util;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class AdminController {
 	
-	 //private final AdminService service;
-
-		/*
-		 * @Autowired public AdminController(AdminService service) { this.service =
-		 * service; }
-		 */
-	    
 	@Autowired
 	private AdminService adminService;
+	@Autowired
+	private Util util;
 	
 	@GetMapping("/admin/main")
 	public String mypage() {
@@ -76,6 +71,7 @@ public class AdminController {
 		return "/admin/counselor";
 	}
 	
+	@ResponseBody
 	@GetMapping("/admin/counselorList")
 	public List<Map<String, Object>> counselorList(){
 		
@@ -112,9 +108,6 @@ public class AdminController {
 		
 		return "admin/indicoun";
 	
-		
-		
-		
 	}
 	
 	
@@ -282,19 +275,15 @@ public class AdminController {
 	}
 
 	@PostMapping("/admin/registerEmpCounselor")
-    @ResponseBody
-    public String registerCounselor(@RequestParam("cd") String cd, @RequestParam("CSL_NO") String cslNo,
+    public void registerCounselor(@RequestParam("cd") String cd, @RequestParam("CSL_NO") String cslNo,
     		@RequestParam("CSL_NM") String cslNm, @RequestParam("CSL_EMAIL") String email, @RequestParam("CSL_MOBILE") String mobile, 
-    		@RequestParam("SCSBJT_NM") String scsbjtNm,
-    		 @RequestPart("file") MultipartFile file) throws Exception {
+    		@RequestParam("SCSBJT_NM") String scsbjtNm, @RequestPart("ecounFile") MultipartFile ecounFile, HttpServletResponse response) throws Exception {
 		
-		System.out.println(cd);
-		System.out.println(cslNo);
-		System.out.println(cslNm);
-		System.out.println(email);
-		System.out.println(mobile);
-		System.out.println(scsbjtNm);
-		System.out.println(file);
+		String fileUrl = null;
+		
+		if(ecounFile != null && !ecounFile.isEmpty()) {
+			fileUrl = util.fileUploadAws(ecounFile);
+		}
 		
 		// DTO 객체 생성 및 설정
         EcounAdDTO ecounAdDTO = new EcounAdDTO();
@@ -303,43 +292,26 @@ public class AdminController {
         ecounAdDTO.setEmail(email);
         ecounAdDTO.setMobile(mobile);
         ecounAdDTO.setScsbjtNm(scsbjtNm);
+        ecounAdDTO.setFileUrl(fileUrl);
         
-        // 저장 경로 지정
-        String path = System.getProperty("user.dir") + "/src/main/resources/static/ecounFiles";
-        //String path = "/src/main/resources/static/ecounFiles";
+        int result1 = adminService.ecounEnroll(ecounAdDTO);
+        int result2 = adminService.registerEmpCounPro(ecounAdDTO);
         
-		File directory = new File(path);
-        if (!directory.exists()) {
-            directory.mkdirs();
+        if (result1 == 1 && result2 == 1) {
+            try {
+            	System.out.println("성공 반환");
+                response.getWriter().write("success"); // 성공을 나타내는 문자열을 반환
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                System.out.println("실패 반환");
+                response.getWriter().write("false"); // 실패를 나타내는 문자열을 반환
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        
-        // 랜덤 이름 생성
-        UUID uuid = UUID.randomUUID();
-        
-        // 파일 이름 생성
-        String fileName = uuid + "_" + file.getOriginalFilename();
-        
-        File saveFile = new File(path, fileName);
-        file.transferTo(saveFile);
-        
-        ecounAdDTO.setECOUN_FILENM(fileName);
-        ecounAdDTO.setECOUN_CONTS_CN("/ecounFiles/" + fileName);
-        
-        System.out.println(fileName);
-        
-        adminService.ecounEnroll(ecounAdDTO);
-        adminService.registerEmpCounPro(ecounAdDTO);
-        
-        //System.out.println(cd);
-        //System.out.println(cslNm);
-        //System.out.println(formData);
-        //System.out.println(file);
-        //adminService.registerCounselor(formData);
-        //adminService.registerEmpCounPro(formData);
-
-        // 데이터베이스에 상담사 등록 로직 추가
-        	
-        return "success";
     }
 	
 }

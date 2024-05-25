@@ -10,17 +10,80 @@
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        <link href="css/mypage.css" rel="stylesheet" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         
-        
 		<style>
-			#sidenav{background: #B6B6B6; float:left; margin-right:20px; padding:10px; margin-top:40px; width:200px; height:780px; text-align:center;}
-			.button{margin-bottom:30px; color:white; font-size:15pt; width:140px; height:35px; background-color:#A41034; border: none;}
-			#content{background: #B6B6B6; float:left; padding:10px; margin-top:40px; width:1000px; height:780px;}
-			.card{width:15rem; margin-left:20px; margin-right:20px; height:150px;}
-			.card-header{font-size:13pt; color:white; text-align:center; background-color:#808285;}
-		</style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
 
+        #sidenav {
+            background: #B6B6B6;
+            /* color: #fff; */
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+            float: left;
+            margin-right: 20px;
+            padding: 10px;
+            margin-top: 40px;
+            width: 200px;
+            height: auto;
+            text-align: center;
+        }
+
+        .button {
+            margin-bottom: 30px;
+            color: white;
+            font-size: 15pt;
+            width: 140px;
+            height: 35px;
+            background-color: #A41034;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #004494;
+            cursor: pointer;
+        }
+
+        #content {
+            background: #ffffff;
+            float: left;
+            padding: 20px;
+            margin-top: 40px;
+            width: 1000px;
+            height: 780px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-family: Arial, sans-serif;
+            overflow-y: auto;
+        }
+
+        .form-control {
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            #sidenav, #content {
+                width: 100%;
+                margin-top: 20px;
+                float: none;
+            }
+        }
+    </style>
     </head>
     <body>
         <!-- 메뉴-->
@@ -142,10 +205,10 @@
                            -->
                       </div>
                       <label for="empCounName" class="col-sm-3 col-form-label">
-                          국 가 코 드
+                          국 가 명
                       </label>
                       <div class="col-sm-3">
-                          <input type="text" class="form-control" id="NTN_CD" th:value="${selectMyInfo.get('NTN_CD')}" readonly>
+                          <input type="text" class="form-control" id="NTN_NM" th:value="${selectMyInfo.get('NTN_NM')}" readonly>
                           <!-- <input type="hidden" id="CSL_NO" name="CSL_NO" th:value="${selectEmpCoun['CSL_NO']}"/> -->
                       </div>
                   </div>
@@ -171,6 +234,19 @@ $('#STUD_EML_ADDR').change(function() {
 });
 $('#TELNO').change(function() {
 	var valueTel = $(this).val();
+	
+	// 숫자만 입력되었는지 검사
+    if (!validateMobile(valueTel)) {
+        alert("숫자만 입력해주세요.");
+        return;
+    }
+
+    // 숫자만 입력 유효성 검사 함수
+    function validateMobile(valueTel) {
+        var re = /^\d+$/;
+        return re.test(valueTel);
+    }
+	
 	alert(valueTel);
 	$.ajax({
         type: "POST",

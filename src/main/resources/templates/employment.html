@@ -21,16 +21,28 @@
 	    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         
 <style>
-#sidenav{background: #B6B6B6; float:left; margin-right:20px; padding:10px; margin-top:40px; width:200px; height:780px; text-align:center;}
+.leftnavapply {
+    width: 1100px;
+    margin: 0 auto; /* 좌우 마진을 자동으로 설정하여 가운데 정렬합니다. */
+    text-align: center; /* 텍스트를 가운데 정렬합니다. */
+    background-color: white !important;
+    color: white;
+}
+.profileMain{background-color: #f4f4f4; padding: 10px; width: 80%;}
+#sidenav{background: #B6B6B6; float:left; margin-right:20px; padding:10px; margin-top: 0px; width:200px; height:780px; text-align:center;}
 .leftnavapply {text-align: center; background-color: gray;}
-.button{margin-bottom:30px; color:white; font-size:15pt; width:140px; height:35px; background-color:#A41034; border: none;}
-#content{background: #B6B6B6; float:left; padding:10px; margin-top:40px; width:1000px; height:780px;}
+#sidenav .button {margin-bottom: 30px; color: white; font-size: 15pt; width: 140px; height: 35px; background-color: #A41034; border: none;}
+#content{background: #B6B6B6; float:left; padding:10px; width:1000px; height:780px;}
 </style>
        
 </head>
 <body>
 	<!-- 메뉴-->
         <div th:replace="~{menu :: Menu}"></div>
+        
+        <div class="leftnavapply">
+		  <h1>상담 소개</h1>
+	 	</div>
         
         <!-- Page Content-->
         <div class="container px-4 px-lg-5">
@@ -39,18 +51,58 @@
 		
 	        <!-- 좌측 메뉴 nav -->
 	        <!-- <div th:replace="~{leftmenu :: LeftMenu}"></div> -->
-	        <form th:action="@{/empCounProfile}" >
 	        <div id="sidenav">
+	        <form th:action="@{/employment}" >
 				<p style="margin-top:20px; margin-bottom:80px; font-weight:bold; font-size:20pt;">취업 상담</p>
-				<button class="button" type="submit" onclick="openPage('/empCounProfile')">상담사 소개</button><br>
-				<button class="button" type="submit" onclick="openPage('/psycoun_type')">상담 신청</button><br>
-				<button class="button" type="submit" onclick="openPage('/psycoun_app')"></button>
-			</div>
+				<button class="button" type="submit" onclick="openPage('/employment')">상담 소개</button><br>
             </form>
+            <form th:action="@{/empCounProfile}" >
+				<button class="button" type="submit" onclick="openPage('/empCounProfile')">상담 신청</button><br>
+			</form>
+			</div>
 	        
 	        <div id="content">
-        		메인 내용
-        	</div>
+				<section id="top"><br>
+					<p style="margin-top:20px; margin-bottom:20px; font-size:23pt; font-weight:bold;">&nbsp| 취업 상담</p>
+		            <p style="font-size:13pt">&nbsp;&nbsp;&nbsp;개인의 성격, 정신건강, 진로에 대한 다양한 검사를 통해 자신에 대한 분명한 이해를 하도록 도와드립니다.<br>
+		            &nbsp;&nbsp;&nbsp;심리검사는 무료로 실시됩니다.</p>
+				</section>
+				
+				<p style="margin-top:100px; margin-bottom:20px; font-size:23pt; font-weight:bold;">&nbsp| 이용절차</p>
+				<section id="bottom" style="display: flex;">
+					<div class="card">
+						<div class="card-header">상담사 선택</div>
+						<ul class="list-group list-group-flush" style="font-size:11pt">
+							<li class="list-group-item">- 본인 학과를 담당하는<br>&nbsp; 상담사를 선택</li>
+						</ul>
+					</div>
+					<div class="arrow" style="display:flex; align-items:center; color:#A41034;">
+					<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+		  			<path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+					</svg>
+					</div>
+						
+					<div class="card">
+						<div class="card-header">신청서 작성</div>
+						<ul class="list-group list-group-flush" style="font-size:11pt">
+							<li class="list-group-item">- 원하는 날짜와 시간을 선택<br>- 상담 내용 작성</li>
+						</ul>
+					</div>
+					<div class="arrow" style="display:flex; align-items:center; color:#A41034;">
+					<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+		  			<path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+					</svg>
+					</div>
+					
+					<div class="card">
+		            	<div class="card-header">상담</div>
+						<ul class="list-group list-group-flush" style="font-size:11pt">
+							<li class="list-group-item">- 상담일에 상담 진행</li>
+						</ul>
+		            </div>
+					
+				</section>
+			</div>
         </div>
         </div>	
         <!-- 푸터-->

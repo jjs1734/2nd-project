@@ -53,7 +53,7 @@ public class EmploymentController {
 			return "employment";
 		} else {
 			System.out.println("세션이 존재하지 않음");
-			return "main";
+			return "login";
 		}
 	}
 	

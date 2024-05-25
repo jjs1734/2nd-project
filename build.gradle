@@ -22,6 +22,15 @@ repositories {
 }
 
 dependencies {
+
+	// 아마존
+   implementation 'com.amazonaws:aws-java-sdk-s3:1.12.121'
+   implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+   //jackson추가(컨트롤러에서 json형식의 파일을 받을때)
+   implementation 'com.fasterxml.jackson.core:jackson-databind'
+   // 아마존
+   //implementation 'org.springframework.cloud:spring-cloud-starter-aws'
+   implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	implementation 'com.google.code.gson:gson:2.11.0'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'

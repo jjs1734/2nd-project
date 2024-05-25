@@ -72,9 +72,8 @@ public class AdminService {
 		adminDAO.registerCounselor(formData);
 	}
 
-	public void registerEmpCounPro(EcounAdDTO ecounAdDTO) {
-		System.out.println(ecounAdDTO);
-		adminDAO.registerEmpCounPro(ecounAdDTO);
+	public int registerEmpCounPro(EcounAdDTO ecounAdDTO) {
+		return adminDAO.registerEmpCounPro(ecounAdDTO);
 	}
 
 

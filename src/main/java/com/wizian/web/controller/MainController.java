@@ -45,7 +45,16 @@ public class MainController {
 	public String mypage(HttpSession session, Model model) {
 		
 		String userId = (String) session.getAttribute("userId");
+		//String grade = (String) session.getAttribute("grade");
 		System.out.println(userId);
+		//System.out.println(grade);
+		if (userId == null) {
+			return "redirect:/login";
+		}
+//		if (grade != "학생") {
+//			return "redirect:/main";
+//		}
+		
 		Map<String, Object> selectMyInfo = groupService.selectMyInfo(userId);
 		System.out.println(selectMyInfo);
 		model.addAttribute("selectMyInfo", selectMyInfo);

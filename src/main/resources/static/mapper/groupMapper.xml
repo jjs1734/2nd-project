@@ -22,9 +22,10 @@
 	
 	<!-- 마이페이지 정보 보기 -->
 	<select id="selectMyInfo" resultType="Map" parameterType="String">
-		SELECT p.PF_NM, p.PF_TELNO, p.PF_EMAIL, s.NTN_CD, s.SCSBJT_NM, s.STUD_NM, s.TELNO, s.STUD_EML_ADDR, s.COL_REG, s.STUD_BRDT, s.STUD_GEN , s.STUD_NO
+		SELECT p.PF_NM, p.PF_TELNO, p.PF_EMAIL, n.NTN_NM, s.SCSBJT_NM, s.STUD_NM, s.TELNO, s.STUD_EML_ADDR, s.COL_REG, s.STUD_BRDT, s.STUD_GEN , s.STUD_NO
 		FROM STUD_INFO s
-		JOIN PF_INFO p ON s.PF_NO = p.PF_NO
+		JOIN PF_INFO p ON s.PF_NO = p.PF_NO 
+		JOIN NATIONAL_INFO n ON s.NTN_CD = n.NTN_CD
 		WHERE STUD_NO = #{userId} 
 	</select>
 	

@@ -38,7 +38,7 @@ public interface AdminDAO {
 
 	void registerCounselor(Map<String, String> formData);
 
-	void registerEmpCounPro(EcounAdDTO ecounAdDTO);
+	int registerEmpCounPro(EcounAdDTO ecounAdDTO);
 
 	 BoardDTO getPostDetail(int postId);
 	 List<BoardDTO> getReplies(int postId);
