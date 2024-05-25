@@ -123,6 +123,10 @@ public class AdminService {
 		adminDAO.pfStateUpdate(map);
 	}
 
+	public List<Map<String, Object>> getGcounCslList2(String userId) {
+		return adminDAO.getGcounCslList2(userId);
+	}
+
 	public List<Map<String, Object>> getPfList() {
 		return adminDAO.getPfList();
 	}

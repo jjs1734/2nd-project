@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.hibernate.resource.transaction.internal.SynchronizationRegistryStandardImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -53,14 +54,27 @@ public class AdminController {
 		
 		String userId = (String) session.getAttribute("userId");
 		String grade = (String) session.getAttribute("grade");
+		System.out.println(userId);
+		System.out.println(grade);
 		
 		if(userId == null || grade.equals("학생") ) {
 			return "redirect:/login";
 		}
 		
-		List<Map<String, Object>> getGcounCslList = adminService.getGcounCslList();
-		model.addAttribute("cslList" ,getGcounCslList);
-	
+		if (userId != null) {
+			if (grade.equals("관리자")) {
+				List<Map<String, Object>> getGcounCslList = adminService.getGcounCslList();
+				model.addAttribute("cslList" ,getGcounCslList);
+			} else if (grade.equals("상담사")) {
+				List<Map<String, Object>> getGcounCslList2 = adminService.getGcounCslList2(userId);
+				model.addAttribute("cslList", getGcounCslList2);
+			} else if (grade.equals("교수")) {
+				return "redirect://admin/main";
+			}
+			
+		}
+		
+		
 		
 		return "admin/gcoun";
 	}

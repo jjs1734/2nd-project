@@ -65,6 +65,7 @@ public interface AdminDAO {
 
 	void pfStateUpdate(Map<String, Object> map);
 
+	List<Map<String, Object>> getGcounCslList2(String userId);
 	List<Map<String, Object>> getPfList();
 
 	List<Map<String, Object>> getPfscList(String pfNo);
