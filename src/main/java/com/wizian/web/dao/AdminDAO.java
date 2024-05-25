@@ -64,5 +64,7 @@ public interface AdminDAO {
 
 	void pfStateUpdate(Map<String, Object> map);
 
+	List<Map<String, Object>> getGcounCslList2(String userId);
+
 	
 }

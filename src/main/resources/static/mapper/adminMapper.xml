@@ -42,6 +42,13 @@
 		SELECT CSL_NO, CSL_NM
 		FROM COUNSELOR
 	</select>
+
+	<select id="getGcounCslList2" resultType="Map" parameterType="String">
+		SELECT CSL_NO, CSL_NM
+		FROM COUNSELOR c
+		JOIN USER u ON c.USER_NO = u.USER_NO
+		WHERE u.LOGIN_ID = #{userId}
+	</select>
 	
 	<insert id="gcounEnroll" parameterType="AdminDTO">
 		INSERT INTO GROUP_COUN_INFO (CSL_NO, GCOUN_NM, GCOUN_DT, GCOUN_BGNG_DT, GCOUN_DDLN_DT, GCOUN_LMT_COUNT, GCOUN_DTL_CN, GCOUN_CONTS_CN, GCOUN_FILENM)
