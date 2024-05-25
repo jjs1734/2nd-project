@@ -52,8 +52,10 @@ public class BoardService {
     }
     
     public int submitReply(Map<String, Object> map) {
+        System.out.println("submitReply - map: " + map); // 로그 추가
         return boardDAO.submitReply(map);
     }
+
 
     public List<BoardDTO> getReplies(int postId) {
         return boardDAO.getReplies(postId);
