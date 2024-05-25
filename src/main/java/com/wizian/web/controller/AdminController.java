@@ -25,6 +25,9 @@ import com.wizian.web.dto.AdminDTO;
 import com.wizian.web.dto.BoardDTO;
 import com.wizian.web.dto.EcounAdDTO;
 import com.wizian.web.service.AdminService;
+import com.wizian.web.service.BoardService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class AdminController {
@@ -36,6 +39,8 @@ public class AdminController {
 		 * service; }
 		 */
 	    
+	@Autowired
+	private BoardService boardService;
 	@Autowired
 	private AdminService adminService;
 	
@@ -341,16 +346,31 @@ public class AdminController {
         return "success";
     }
 	
+	
+	
+	@ResponseBody
+	@PostMapping("/admin/toggleCompletionStatus")
+	public ResponseEntity<Void> toggleCompletionStatus(@RequestParam("postId") int postId) {
+	    System.out.println("Toggling completion status for post: " + postId);
+	    adminService.toggleCompletionStatus(postId);
+	    return ResponseEntity.ok().build();  // HTTP 200 OK로 응답
+	}
+
 	 
-	 @ResponseBody
-	    @PostMapping("/admin/toggleCompletionStatus")
-	    public ResponseEntity<String> toggleCompletionStatus(@RequestParam("postId") int postId) {
-	        adminService.toggleCompletionStatus(postId);
-	        return ResponseEntity.ok("Status toggled successfully");
 	 
+	 @PostMapping("admin/submitReply")
+		public String submitReply(@RequestBody Map<String, Object> map, HttpSession session) {
+		    String userId = (String) session.getAttribute("userId");
+		    if (userId == null) {
+		        return "redirect:/login";
+		    }
+		    map.put("writer", userId);
+		    map.put("pstg_ymd", LocalDate.now().toString());
+		    map.put("bbs_sn", 1); // BBS_SN 값을 1로 고정
+		    int result = boardService.submitReply(map);
+		    return "redirect:/indiboard_detail?no=" + map.get("postId");
+		}
 	 
-	 
-	 
-}
+
 	 
 }

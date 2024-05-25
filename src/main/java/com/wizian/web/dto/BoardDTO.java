@@ -9,9 +9,11 @@ public class BoardDTO {
 	//
 	public int PST_SN; // 게시글 일련번호
 	public int BBS_SN; // 게시판 일련번호
-
+	public int PST_SN_OLD;
+	
 	// String 타입 필드
 	public String PST_CAT; // 게시글 주제
+	
 	public String PST_TTL; // 게시글 제목
 	public String PST_CN; // 게시글 내용
 	public String WRITER; // 작성자

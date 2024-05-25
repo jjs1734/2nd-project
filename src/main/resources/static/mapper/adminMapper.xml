@@ -59,8 +59,11 @@
 	</select>
 	
 	<select id="getBoardListByStudentNo" parameterType="String" resultType="Map">
-        SELECT PST_SN, PST_TTL, WRITER, PST_COMP FROM ICOUN_POSTS WHERE WRITER = #{studentNo}
-    </select>
+    SELECT BBS_SN, PST_SN, PST_TTL, WRITER, PST_COMP 
+    FROM ICOUN_POSTS 
+    WHERE WRITER = #{studentNo} AND BBS_SN = 1
+</select>
+
 	
 	<select id="getPostDetail" parameterType="int" resultType="com.wizian.web.dto.BoardDTO">
         SELECT PST_SN, PST_CAT, PST_TTL, PST_CN, WRITER, PSTG_YMD, MDFCN_YMD, PST_COMP, BBS_SN

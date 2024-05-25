@@ -19,7 +19,7 @@
 	<!-- 상세 조회 쿼리 -->
 	<select id="detail" parameterType="int"
 		resultType="com.wizian.web.dto.BoardDTO">
-		SELECT PST_SN, PST_CAT, PST_TTL, PST_CN, WRITER, PSTG_YMD,
+		SELECT PST_SN,PST_SN_OLD PST_CAT, PST_TTL, PST_CN, WRITER, PSTG_YMD,
 		MDFCN_YMD,
 		PST_COMP, BBS_SN
 		FROM ICOUN_POSTS
@@ -76,18 +76,13 @@
 	</select>
 
 
+<insert id="submitReply" parameterType="java.util.Map">
+    INSERT INTO ICOUN_POSTS
+    (BBS_SN, PST_SN_OLD, PST_TTL, PST_CAT, PST_CN, WRITER, PSTG_YMD, MDFCN_YMD, PST_COMP, COUNSL, PST_DEL)
+    VALUES (#{bbs_sn}, #{postId}, #{title}, #{category}, #{content}, #{writer}, #{pstg_ymd}, #{mdfcn_ymd}, '미완료', #{counselor}, '1')
+</insert>
 
-	<!-- 답글 작성 쿼리 -->
-	<insert id="submitReply" parameterType="java.util.Map">
-		INSERT INTO ICOUN_POSTS
-		(PST_SN_OLD, PST_TTL, PST_CAT, PST_CN, WRITER,
-		PSTG_YMD, MDFCN_YMD,
-		PST_COMP, COUNSL, PST_DEL)
-		VALUES (#{originalPostId}, #{title},
-		#{category}, #{content}, #{writer},
-		CURRENT_DATE, CURRENT_DATE, '미완료',
-		#{counselor}, '1')
-	</insert>
+
 
 	<!-- 답글 목록 조회 쿼리 -->
 	<select id="getReplies" parameterType="int"

@@ -14,7 +14,7 @@ public class AdminDTO {
 
 	// 집단 상담
 	private String GCOUN_CD, GCOUN_STA_NM, GCOUN_ATND_YN, GCOUN_STUD_RV, GCOUN_CSL_RV, GCOUN_DTL_CN;
-	private int GCOUN_LMT_COUNT;
+	private int GCOUN_LMT_COUNT, BBS_SN;
 	private String CSL_NO, GCOUN_NM, GCOUN_PROG_STA_NM;
 	
 	private LocalDateTime GCOUN_DT, GCOUN_CURRENT_DT;

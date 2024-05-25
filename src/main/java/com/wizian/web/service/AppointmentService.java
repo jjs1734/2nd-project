@@ -1,6 +1,6 @@
 package com.wizian.web.service;
 
-import com.wizian.web.dto.Appointment; 
+import com.wizian.web.dto.Appointment;  
 import com.wizian.web.repository.AppointmentRepository;
 
 
