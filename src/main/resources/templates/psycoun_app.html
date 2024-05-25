@@ -183,7 +183,6 @@
 			</div>
 		</div>
 		
-		
 	    <div id="calendar"></div>
 	    
 	<!-- 날짜 선택 풀캘린더 modal -->
@@ -272,6 +271,37 @@
     
 	//확인 버튼 클릭시 Alert창 닫고 모달 닫기
 	document.getElementById("confirmButton").addEventListener("click", CloseModalAndOpenAlert);
+	
+	
+	//신청하기 버튼 클릭시
+	document.getElementById("openModalButton").addEventListener("click", function() {
+    // 폼 데이터를 가져옵니다.
+    var formData = {
+        name: document.getElementById("name").value,
+        studentId: document.getElementById("studentId").value,
+        department: document.getElementById("department").value,
+        phone: document.getElementById("phone").value,
+        email: document.getElementById("email").value,
+        appointmentDate: document.getElementById("appointmentDate").value,
+        agree: document.getElementById("agree").checked
+    };
+
+    // AJAX 요청을 보냅니다.
+    $.ajax({
+        type: "POST",
+        url: "/submit", // 데이터를 전송할 URL을 지정합니다.
+        contentType: "application/json",
+        data: JSON.stringify(formData),
+        success: function(response) {
+            // 요청이 성공했을 때의 처리를 작성합니다.
+            window.location.href = "/pcoun"; // 관리자 페이지로 리다이렉트합니다.
+        },
+        error: function(xhr, status, error) {
+            // 요청이 실패했을 때의 처리를 작성합니다.
+            console.error(error);
+        }
+    });
+});
     
 	
 	//=================================================================================================================================================
@@ -367,7 +397,9 @@
 
              	// 사용자가 입력한 일정 정보 가져오기
                 var title = $('#eventTitle').val();
-                
+                selectedTitle = title;
+			    selectedStart = arg.start.toISOString().split('T')[0];
+                selectedTime = empCounCd.toString().padStart(2, '0') + ':00';
 
                 // 새 이벤트 생성
                 var newEvent = {
@@ -412,12 +444,11 @@
          	
          	
          	
-            var selectedDateTime = null; // 상담 날짜 예약 모달에서 선택한 날짜와 시간 저장 변수
-
+            
+			var selectedDateTime = null; // 상담 날짜 예약 모달에서 선택한 날짜와 시간 저장 변수
          	// 일정 추가 모달이 열릴 때 선택한 날짜와 시간 기억
             calendar.on('dateClick', function(info) {
             	 selectedDateTime = info.date;
-            	 
             	 $('#eventModal').modal('show');
 
             	 var start = new Date(info.date);

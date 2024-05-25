@@ -1,6 +1,5 @@
 package com.wizian.web.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +13,8 @@ import com.wizian.web.dto.BoardDTO;
 import com.wizian.web.dto.EcounAdDTO;
 import com.wizian.web.dto.AdminDTO;
 import com.wizian.web.dto.GroupDTO;
+import com.wizian.web.dto.PFSdataDTO;
+import com.wizian.web.dto.PfRsvDTO;
 
 @Service
 public class AdminService {
@@ -48,6 +49,7 @@ public class AdminService {
 	public List<BoardDTO> getReplies(int postId) {
 		return adminDAO.getReplies(postId);
 	}
+	
 	public List<Map<String, Object>> getEcounStudList(String cslNo) {
 		return adminDAO.getEcounStudList(cslNo);
 	}
@@ -96,6 +98,59 @@ public class AdminService {
 	public int ecounEnroll(EcounAdDTO ecounAdDTO) {
 		return adminDAO.ecounEnroll(ecounAdDTO);
 	}
+	
+	public List<Map<String, Object>> getPfcounList() {
+		return adminDAO.getPfcounList();
+	}
+
+	public int pfCounEnroll(PfRsvDTO pfRsv) {
+		return adminDAO.pfCounEnroll(pfRsv);
+	}
+
+	public void pfCmtUpdate(Map<String, Object> map) {
+		adminDAO.pfCmtupdate(map);
+	}
+
+	public void pfCounDateUpdate(Map<String, Object> map) {
+		adminDAO.pfCounDateUpdate(map);
+	}
+
+	public void pfCounTimeUpdate(Map<String, Object> map) {
+		adminDAO.pfCounTimeUpdate(map);
+	}
+
+	public void pfStateUpdate(Map<String, Object> map) {
+		adminDAO.pfStateUpdate(map);
+	}
+
+	public List<Map<String, Object>> getPfList() {
+		return adminDAO.getPfList();
+	}
+
+	public List<Map<String, Object>> getPfscList(String pfNo) {
+		return adminDAO.getPfscList(pfNo);
+	}
+
+	public int pfscEnroll(PFSdataDTO pfsDTO) {
+		return adminDAO.pfscEnroll(pfsDTO);
+	}
+
+	public void pfNmUpdate(Map<String, Object> map) {
+		adminDAO.pfNmUpdate(map);
+	}
+
+	public void pfTelUpdate(Map<String, Object> map) {
+		adminDAO.pfTelUpdate(map);
+	}
+
+	public void pfEmailUpdate(Map<String, Object> map) {
+		adminDAO.pfEmailUpdate(map);
+	}
+
+	public void pfNcdUpdate(Map<String, Object> map) {
+		adminDAO.pfNcdUpdate(map);
+	}
+
 	
 	
 

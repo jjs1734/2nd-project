@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>상담 신청</title>
+</head>
+<body>
+	<h1>상담 신청서</h1>
+    <form th:action="@{/submit}" th:object="${appointment}" method="post">
+        이름: <input type="text" th:field="*{name}" /><br/>
+        학번: <input type="text" th:field="*{studentId}" /><br/>
+        학과: <input type="text" th:field="*{department}" /><br/>
+        휴대전화번호: <input type="text" th:field="*{phone}" /><br/>
+        이메일주소: <input type="text" th:field="*{email}" /><br/>
+        상담 가능 날짜: <input type="datetime-local" th:field="*{appointmentDate}" /><br/>
+        <input type="checkbox" th:field="*{agree}" /> 개인정보활용에 동의합니다.<br/>
+        <button type="submit">신청하기</button>
+    </form>
+</body>
+</html>

@@ -50,7 +50,7 @@
 						<button type="button" class="btn btn-light" data-bs-toggle="modal"
 							data-bs-target="#gcounModal" th:data-gcounName="${gl.GCOUN_NM}"
 							th:data-gcounDTL="${gl.GCOUN_DTL_CN}" th:data-gcounDT="${#dates.format(gl.GCOUN_DT, 'yyyy년 MM월 dd일(EE) HH시 mm분')}" 
-							th:data-gcounCD="${gl.GCOUN_CD}" style="width: 100%;">신청 하기</button>
+							th:data-gcounCD="${gl.GCOUN_CD}" style="width: 100%;" th:disabled="${gl.GCOUN_PROG_STA_NM} != '모집중' and ${gl.GCOUN_REG_COUNT} == ${gl.GCOUN_LMT_COUNT}">신청 하기</button>
 					</div>
 				</div>
 			</div>
@@ -72,7 +72,6 @@
 						aria-label="Close"></button>
 				</div>
 				<div class="modal-body" id="gcoun-date">모달 내용</div>
-				<div class="modal-body" id="gcoun-dtl">모달 내용</div>
 				<div>이름<input id="studName" type="text" placeholder="학생 이름" disabled></div>
 				<div>학번<input id="studNum" type="text" placeholder="학번" disabled></div>
 				<div>학과<input id="scsbjt" type="text" placeholder="학과" disabled></div>
