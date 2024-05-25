@@ -103,7 +103,7 @@ public class ProfessorController {
 	
 	@PostMapping("/submitPFCoun")
 	@ResponseBody
-	public void pfCoun(
+	public void submitPFCoun(
 		@RequestParam("studentNo") String std_no,
 		@RequestParam("professorNo") String pf_no,
 		@RequestParam("pfs_no") String pfs_no,

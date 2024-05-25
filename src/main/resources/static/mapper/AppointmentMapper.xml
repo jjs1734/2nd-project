@@ -10,5 +10,10 @@
     <select id="getAllAppointments" resultType="com.wizian.web.dto.Appointment">
         SELECT * FROM appointment
     </select>
+    
+    <insert id="submitAppointment" parameterType="com.wizian.web.dto.PsycounDTO">
+    	INSERT INTO appointments (studentId, name, department, phone, email, appointmentDate, appointmentTime)
+    	VALUES (#{userId}, #{name}, #{sc}, #{phone}, #{email}, #{date}, #{time})
+    </insert>
 
 </mapper>

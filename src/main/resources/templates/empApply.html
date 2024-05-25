@@ -38,7 +38,7 @@
        color: white;
    }
    .profileMain{background-color: #f4f4f4; padding: 10px;}
-    #sidenav{background: #B6B6B6; float:left; margin-right:20px; padding:10px; margin-top: 0px; width:290px; height:900px; text-align:center;}
+    #sidenav{background: #B6B6B6; float:left; margin-right:20px; padding:10px; margin-top: 0px; width:290px; height:780px; text-align:center;}
    .button{margin-bottom:30px; color:white; font-size:15pt; width:140px; height:35px; background-color:#A41034; border: none;}
    #content{background: #B6B6B6; float:left; padding:10px; margin-top:40px; width:1000px; height:780px;}
    
@@ -122,11 +122,14 @@
               <!-- 좌측 메뉴 nav -->
               <!-- <div th:replace="~{leftmenu :: LeftMenu}"></div> -->
               <div id="sidenav">
-            <p style="margin-top:20px; margin-bottom:80px; font-weight:bold; font-size:20pt;">취업 상담</p>
-               <button class="button" type="submit" onclick="openPage('/empCounProfile')">상담사 소개</button><br>
-               <button class="button" type="submit" onclick="openPage('/psycoun_type')">상담 신청</button><br>
-               <button class="button" type="submit" onclick="openPage('/psycoun_app')"></button>
-            </div>
+		        <form th:action="@{/employment}" >
+					<p style="margin-top:20px; margin-bottom:80px; font-weight:bold; font-size:20pt;">취업 상담</p>
+					<button class="button" type="submit" onclick="openPage('/employment')">상담 소개</button><br>
+	            </form>
+	            <form th:action="@{/empCounProfile}" >
+					<button class="button" type="submit" onclick="openPage('/empCounProfile')">상담 신청</button><br>
+				</form>
+			</div>
               
               <!-- Page Content-->
               <!--상담 신청서 main 부분 -->
@@ -364,7 +367,7 @@
           function initializeFullCalendar(events) {
              console.log("!!!" + events);
              var calendarEl = document.getElementById('calendar');
-              var calendar = new FullCalendar.Calendar(calendarEl, {
+             var calendar = new FullCalendar.Calendar(calendarEl, {
                  //eventBackgroundColor: 'red',
                  initialView : 'timeGridWeek',
                   slotMinTime : '08:00:00',
@@ -389,13 +392,23 @@
                    /*
                     * 드래그로 이벤트 추가하기 신진수가 한거
                     */
+                    
+                    
                    select: function (arg) { // 캘린더에서 이벤트를 생성할 수 있다.
+	                  var isEventAdded = false; // 이벤트가 추가되었는지 여부를 저장하는 변수
                       if (arg.start.getDay() === 0 || arg.start.getDay() === 6) {
                            // 일요일 또는 토요일을 선택하려고 할 때
                            return;
-                       }
+                       }	
                       //var title = prompt('일정을 입력해주세요.');
                      //if (confirm(arg.start.toLocaleString() + '부터 ' + arg.end.toLocaleString() + '까지 해당 시간대로 예약하시겠습니까?')) {
+                    	 
+                    if (isEventAdded) {
+				        // 이미 이벤트가 추가되었다면 알림을 표시하고 함수를 종료합니다.
+				        alert("이미 예약된 이벤트가 있습니다.");
+				        return;
+				    }
+                    	 
                      if (confirm(arg.start.toLocaleString() + '시로 예약하시겠습니까?')) {
                         var startHour = arg.start.getHours();
                          var empCounCd = startHour.toString().padStart(2, '0'); // 2자리로 만들기 위해 0으로 패딩

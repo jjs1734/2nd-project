@@ -31,7 +31,7 @@
       			  <!-- Carousel Items -->	
       			  <div class="carousel-inner" onclick="location.href='/group';" style="cursor: pointer;">
           			  <div th:each="path, stat : ${mainGroupImg}" th:classappend="${stat.first} ? 'carousel-item active' : 'carousel-item'">
-            		    <img th:src="@{'images/' + ${path}}" class="img-fluid rounded mb-4 mb-lg-0" alt="..."/>
+            		    <img th:src="@{${path}}" class="img-fluid rounded mb-4 mb-lg-0" alt="..." style="object-fit:contain; width: 900px; max-height: 400px;">
          			   </div>
         		  </div>
         
@@ -51,8 +51,12 @@
                 
                 <div class="col-lg-5">
                     <h1 class="font-weight-light">공지사항</h1>
-                    <p>집단 상담은 유사한 관심을 가진 10명 이내의 사람들이 모여 자신의 이야기를 함께 나누는 모임입니다.<br>상호 지지적인 분위기 속에서 자신의 문제를 해결하고 새로운 행동을 실천해 볼 수 있는 경험을 통해 성장의 기회를 갖게 됩니다.</p>
-                    <a class="btn btn-primary" href="/group">바로가기</a>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+                    <a class="btn btn-primary" href="/notice">바로가기</a>
                 </div>
             </div>
             <!-- Call to Action-->
