@@ -74,8 +74,6 @@ public class AdminController {
 			
 		}
 		
-		
-		
 		return "admin/gcoun";
 	}
 	
@@ -84,7 +82,7 @@ public class AdminController {
 		String grade = (String) session.getAttribute("grade");
 		
 		if (grade.equals("상담사")||grade.equals("관리자")||grade.equals("교수")) {
-			return "/admin/student";
+			return "admin/student";
 		} else {
 			return "redirect:/admin/main";
 		}
@@ -335,8 +333,17 @@ public class AdminController {
 	
 	@ResponseBody
 	@GetMapping("/admin/getGcounList")
-	public List<Map<String, Object>> getGcounList() {
-		List<Map<String, Object>> getGcounList = adminService.getGcounList();
+	public List<Map<String, Object>> getGcounList(HttpSession session) {
+		String userId = (String) session.getAttribute("userId");
+		String grade = (String) session.getAttribute("grade");
+		
+		List<Map<String, Object>> getGcounList;
+		
+		if (grade.equals("관리자")) {
+			getGcounList = adminService.getGcounList();
+		} else {
+			getGcounList = adminService.getGcounList2(userId);
+		}
 		
 		return getGcounList;
 	}
@@ -516,7 +523,7 @@ public class AdminController {
         file.transferTo(saveFile);
         
         adminDTO.setGCOUN_FILENM(fileName);
-        adminDTO.setGCOUN_CONTS_CN("/gcounFiles/" + fileName);
+        adminDTO.setGCOUN_CONTS_CN("gcounFiles/" + fileName);
         
         int gcounEnroll = adminService.gcounEnroll(adminDTO);
 		

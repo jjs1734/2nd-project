@@ -30,8 +30,8 @@
 
 			<div class="col" th:each="gl : ${groupList}">
 				<div class="card border-dark bg-secondary text-white mb-3">
-					<img th:src="@{'images/'+ ${gl.GCOUN_CONTS_CN}}"
-						class="card-img-top" alt="...">
+					<img th:src="@{${gl.GCOUN_CONTS_CN}}"
+						class="card-img-top" alt="..." style="object-fit:cover; width: 100%; height: 200px;">
 					<div class="card-body">
 						<h5 class="card-title">
 							[[${gl.GCOUN_NM}]] <span class="badge text-bg-dark">[[${gl.GCOUN_PROG_STA_NM}]]</span>

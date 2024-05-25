@@ -22,6 +22,8 @@ public interface AdminDAO {
 
 	List<Map<String, Object>> getGcounList();
 
+	List<Map<String, Object>> getGcounList2(String userId);
+
 	List<Map<String, Object>> getGcounStudList(String gcounCd);
 
 	List<Map<String, Object>> getEcounList();
@@ -42,8 +44,10 @@ public interface AdminDAO {
 
 	int registerEmpCounPro(EcounAdDTO ecounAdDTO);
 
-	 BoardDTO getPostDetail(int postId);
-	 List<BoardDTO> getReplies(int postId);
+	BoardDTO getPostDetail(int postId);
+	
+	List<BoardDTO> getReplies(int postId);
+	
 	List<Map<String, Object>> getEcounStudList(String cslNo);
 	
 	List<Map<String, Object>> getGcounCslList();
@@ -66,6 +70,7 @@ public interface AdminDAO {
 	void pfStateUpdate(Map<String, Object> map);
 
 	List<Map<String, Object>> getGcounCslList2(String userId);
+	
 	List<Map<String, Object>> getPfList();
 
 	List<Map<String, Object>> getPfscList(String pfNo);
@@ -81,5 +86,4 @@ public interface AdminDAO {
 	void pfNcdUpdate(Map<String, Object> map);
 
 
-	
 }
