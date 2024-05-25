@@ -54,7 +54,7 @@
             float: left;
             padding: 20px;
             margin-top: 40px;
-            width: 1000px;
+            width: 90%;
             height: 780px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -106,10 +106,10 @@
                     thead.html('<tr><th scope="col">프로그램명</th><th scope="col">담당상담사</th><th scope="col">집단상담 일시</th><th scope="col">신청상태</th></tr>');
                     break;
                 case '3': // 취업상담
-                    thead.html('<tr><th scope="col">취업상담번호</th><th scope="col">이전상담번호</th><th scope="col">상담사이름</th><th scope="col">예약일자</th><th scope="col">예약시간</th><th scope="col">상담신청내용</th><th scope="col">진행상태</th></tr>');
+                    thead.html('<tr><th scope="col">취업상담번호</th><th scope="col">이전상담번호</th><th scope="col">상담사</th><th scope="col">예약일자</th><th scope="col">예약시간</th><th scope="col">상담신청내용</th><th scope="col">진행상태</th></tr>');
                     break;
                 case '4': // 심리상담
-                    thead.html('<tr><th scope="col">상담신청번호</th><th scope="col">예약일자</th><th scope="col">예약시간</th><th scope="col">심리검사종류</th><th scope="col">진행상태</th></tr>');
+                    thead.html('<tr><th scope="col">상담신청번호</th><th scope="col">예약일자</th><th scope="col">예약시간</th><th scope="col">진행상태</th></tr>');
                     break;
                 case '5': // 개인상담
                     thead.html('<tr><th scope="col">상담번호</th><th scope="col">이전상담번호</th><th scope="col">상담제목</th><th scope="col">상담주제</th><th scope="col">게시일자</th><th scope="col">진행상태</th></tr>');
@@ -122,8 +122,10 @@
             	url: "/allCounList",
             	type: "post",
             	data: {selectedValue : selectedValue, userId : userId },
-            	success: function(){
-            		alert('통신성공');
+            	success: function(response){
+            		console.log('리스트 불러오기 성공');
+            		console.log(response);
+            		populateTable(response, selectedValue);
             	},
             	error: function(xhr, status, error) {
   	                console.error("Error updating data: ", error);
@@ -133,6 +135,84 @@
             // 테이블 본문 업데이트 (예시로 빈 행을 추가)
             tbody.html('<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>');
         });
+        
+                 // 테이블 데이터를 동적으로 추가하는 함수
+        function populateTable(data, selectedValue) {
+            let tbody = $('#counselingTable tbody');
+            tbody.empty(); // 기존 내용을 지웁니다.
+
+            data.forEach(function(item) {
+                let row = '<tr>';
+                switch (selectedValue) {
+                    case '1': // 교수상담
+                        row += '<td>' + item.PF_COUN_NO + '</td>';
+                        row += '<td>' + item.PF_NM + '</td>';
+                        row += '<td>' + item.PF_COUN_RSVT_YMD + '</td>';
+                        row += '<td>' + formatTime(item.PF_COUN_RSVT_TIME) + '</td>';
+                        row += '<td>' + item.PF_CONTENTS + '</td>';
+                        row += '<td>' + getStatusChange(item.PF_COUN_STATE_CD) + '</td>';
+                        break;
+                    case '2': // 집단상담
+                        row += '<td>' + item.GCOUN_NM + '</td>';
+                        row += '<td>' + item.CSL_NM + '</td>';
+                        row += '<td>' + item.GCOUN_DT + '</td>';
+                        row += '<td>' + item.GCOUN_STA_NM  + '</td>';
+                        break;
+                    case '3': // 취업상담
+                        row += '<td>' + item.COUN_NUM + '</td>';
+                        row += '<td>' + item.COUN_NUM2 + '</td>';
+                        row += '<td>' + item.CSL_NM + '</td>';
+                        row += '<td>' + item.EMP_COUN_RSVT_YMD + '</td>';
+                        row += '<td>' + formatTime(item.EMP_COUN_RSVT_CD) + '</td>';
+                        row += '<td>' + item.USR_CN + '</td>';
+                        row += '<td>' + getStatusChange(item.EMP_STTS_CD) + '</td>';
+                        break;
+                    case '4': // 심리상담
+                        row += '<td>' + item.Key + '</td>';
+                        row += '<td>' + item.VISIT_RES_YMD + '</td>';
+                        row += '<td>' + formatTime(item.VISIT_RES_CD) + '</td>';
+                        row += '<td>' + getStatusChange(item.COUN_PRO_CD) + '</td>';
+                        break;
+                    case '5': // 개인상담
+                        row += '<td>' + item.PST_SN + '</td>';
+                        row += '<td>' + item.PST_SN_OLD + '</td>';
+                        row += '<td>' + item.PST_TTL + '</td>';
+                        row += '<td>' + item.PST_CAT + '</td>';
+                        row += '<td>' + item.PSTG_YMD + '</td>';
+                        row += '<td>' + getStatusChange(item.PST_COMP) + '</td>';
+                        break;
+                    default:
+                        break;
+                }
+                row += '</tr>';
+                tbody.append(row);
+            });
+        }
+        
+        function getStatusChange(statusCode) {
+		    switch (statusCode) {
+		        case '10':
+		            return "예약중";
+		        case '20':
+		            return "승인";
+		        case '30':
+		            return "거절";
+		        case '40':
+		            return "상담완료";
+		        case '50':
+		            return "추가상담";
+		        case '60':
+		            return "취소";
+		        
+		        default:
+		            return "관리자문의";
+		    }
+	}
+	
+	function formatTime(time) {
+    	return time + ":00";
+	}
+        
     });
     </script>
     </head>
@@ -151,7 +231,7 @@
 					<button class="button" type="submit" >상담신청내역</button><br>
 				</div>
 	        	<div id="content" class="continer mt-5">
-	        		<h3>상담 내역 조회 [[${session.userId}]]</h3>
+	        		<h3>상담 내역 조회</h3>
 	        		<input type="hidden" id="userId" th:value="${session.userId}"/>
 	        		<!-- 상담 select 박스 -->
 	        		<div class="row mb-4">	
@@ -186,7 +266,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
+									<tr id="change">
 										<td></td>
 										<td></td>
 										<td></td>

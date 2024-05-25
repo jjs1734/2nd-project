@@ -15,11 +15,20 @@
 	</select>
 	
 	<select id="eCounList" parameterType="String" resultType="Map">
+	SELECT ECT.COUN_NUM, ECT.COUN_NUM2, CS.CSL_NM, ECT.EMP_COUN_RSVT_YMD, ECT.EMP_COUN_RSVT_CD, ECT.USR_CN, ECT.EMP_STTS_CD
+	FROM EMP_COUN_TAB ECT JOIN EMP_COUN_CAL ECC ON ECT.CAL_NUM=ECC.CAL_NUM 
+	JOIN COUNSELOR CS ON ECC.CSL_NO= CS.CSL_NO
+	WHERE STUD_NO=#{userId}
 	</select>
 	
 	<select id="psyCounList" parameterType="String" resultType="Map">
+	SELECT `Key`, VISIT_RES_YMD, VISIT_RES_CD, COUN_PRO_CD FROM PSY_EXAM_VISIT_REQUEST 
+	WHERE STUD_NO=#{userId}
 	</select>
 	
 	<select id="inCounList" parameterType="String" resultType="Map">
+	SELECT PST_SN, PST_SN_OLD, PST_TTL, PST_CAT, PSTG_YMD, PST_COMP
+	FROM ICOUN_POSTS
+	WHERE WRITER=#{userId}
 	</select>
 </mapper>

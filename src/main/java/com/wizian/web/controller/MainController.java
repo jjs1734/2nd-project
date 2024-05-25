@@ -144,7 +144,7 @@ public class MainController {
 	
 	@ResponseBody
 	@PostMapping("/allCounList")
-	public /*List<Map<String, Object>>*/void allCounList(@RequestParam("selectedValue") String selectedValue, @RequestParam("userId") String userId){
+	public List<Map<String, Object>> allCounList(@RequestParam("selectedValue") String selectedValue, @RequestParam("userId") String userId){
 		System.out.println(selectedValue);
 		System.out.println(userId);
 		int selectValue = util.str2Int(selectedValue);
@@ -152,28 +152,31 @@ public class MainController {
 		
 		switch (selectValue) {
         case 1: // 교수상담
+        	System.out.println("교수상담 리스트를 불러옵니다");
         	counList = mainService.pfCounList(userId);
             break;
         case 2: // 집단상담
+        	System.out.println("집단상담 리스트를 불러옵니다");
         	counList = mainService.gCounList(userId);
             break;
         case 3: // 취업상담
+        	System.out.println("취업상담 리스트를 불러옵니다");
         	counList = mainService.eCounList(userId);
             break;
         case 4: // 심리상담
+        	System.out.println("심리상담 리스트를 불러옵니다");
         	counList = mainService.psyCounList(userId);
             break;
         case 5: // 개인상담
+        	System.out.println("개인상담 리스트를 불러옵니다");
         	counList = mainService.inCounList(userId);
             break;
         default:
             break;
     }
+			
 		
-		
-		
-		
-		//return counList;
+		return counList;
 	}
 	
 	
