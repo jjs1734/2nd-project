@@ -95,7 +95,9 @@
         
 	        <div id="sidenav">
 				<p style="margin-top:20px; margin-bottom:80px; font-weight:bold; font-size:20pt;">마이페이지</p>
-				<button class="button" type="submit" onclick="openPage('/psycoun_proc')">내 정보</button><br>
+				<form th:action="@{/mypage}" >
+					<button class="button" type="submit">내 정보</button><br>
+            	</form>
 				<button class="button" type="submit" onclick="openPage('/psycoun_type')"></button><br>
 				<button class="button" type="submit" onclick="openPage('/psycoun_app')"></button>
 			</div>
