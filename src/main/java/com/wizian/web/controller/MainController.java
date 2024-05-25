@@ -22,7 +22,7 @@ public class MainController {
 	@Autowired
 	private GroupService groupService;
 	
-	@GetMapping("/main")
+	@GetMapping({"/main", "/"})
 	public String main(HttpSession session, Model model){
 		
 		String userId = (String) session.getAttribute("userId");

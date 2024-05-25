@@ -43,7 +43,7 @@ public class AdminController {
 	@Autowired
 	private Util util;
 	
-	@GetMapping("/admin/main")
+	@GetMapping({"/admin/main", "/admin"})
 	public String mypage() {
 		
 		return "admin/main";
@@ -58,7 +58,7 @@ public class AdminController {
 		System.out.println(grade);
 		
 		if(userId == null || grade.equals("학생") ) {
-			return "redirect:/login";
+			return "redirect:/admin/main";
 		}
 		
 		if (userId != null) {
@@ -69,7 +69,7 @@ public class AdminController {
 				List<Map<String, Object>> getGcounCslList2 = adminService.getGcounCslList2(userId);
 				model.addAttribute("cslList", getGcounCslList2);
 			} else if (grade.equals("교수")) {
-				return "redirect://admin/main";
+				return "redirect:/admin/main";
 			}
 			
 		}
@@ -80,10 +80,15 @@ public class AdminController {
 	}
 	
 	@GetMapping("/admin/student")
-	public String student() {
+	public String student(HttpSession session) {
+		String grade = (String) session.getAttribute("grade");
 		
+		if (grade.equals("상담사")||grade.equals("관리자")||grade.equals("교수")) {
+			return "/admin/student";
+		} else {
+			return "redirect:/admin/main";
+		}
 		
-		return "/admin/student";
 	}
 	
 	@ResponseBody
@@ -94,15 +99,28 @@ public class AdminController {
 	}
 	
 	@GetMapping("/admin/counselor")
-	public String counselor() {
+	public String counselor(HttpSession session) {
+		String grade = (String) session.getAttribute("grade");
 		
-		return "/admin/counselor";
+		if (grade.equals("상담사")||grade.equals("관리자")) {
+			return "/admin/counselor";
+		} else {
+			return "redirect:/admin/main";
+		}
+		
+		
 	}
 	
 	//교수 관리
 	@GetMapping("/admin/professor")
-	public String professor() {
-		return "/admin/professor";
+	public String professor(HttpSession session) {
+		String grade = (String) session.getAttribute("grade");
+		
+		if (grade.equals("교수")||grade.equals("관리자")) {
+			return "admin/professor";
+		} else {
+			return "redirect:/admin/main";
+		}
 	}
 	
 	@ResponseBody
@@ -193,8 +211,15 @@ public class AdminController {
 	
 	//지도교수 상담
 	@GetMapping("/admin/pfcoun")
-	public String pfcoun() {
-		return "/admin/pfcoun";
+	public String pfcoun(HttpSession session) {
+		String grade = (String) session.getAttribute("grade");
+		
+		if (grade.equals("교수")||grade.equals("관리자")) {
+			return "admin/pfcoun";
+		} else {
+			return "redirect:/admin/main";
+		}
+		
 	}
 	
 	@ResponseBody
@@ -318,14 +343,26 @@ public class AdminController {
 	
 	// 취업상담
 	@GetMapping("/admin/ecoun")
-	public String ecoun() {		
-		return "admin/ecoun";
+	public String ecoun(HttpSession session) {		
+		String grade = (String) session.getAttribute("grade");
+		if (grade.equals("상담사")||grade.equals("관리자")) {
+			return "admin/ecoun";
+		} else {
+			return "redirect:/admin/main";
+		}
 	}
 	
 	//개인상담
 	@GetMapping("/admin/indicoun")
-	public String indicoun() {	
-		return "admin/indicoun";
+	public String indicoun(HttpSession session) {	
+		String grade = (String) session.getAttribute("grade");
+		
+		if (grade.equals("상담사")||grade.equals("관리자")) {
+			return "admin/indicoun";
+		} else {
+			return "redirect:/admin/main";
+		}
+		
 	
 	}
 	
@@ -488,9 +525,13 @@ public class AdminController {
 	
 	// 심리상담
 	@GetMapping("/admin/pcoun")
-	public String pcoun() {
-		
-		return "admin/pcoun";
+	public String pcoun(HttpSession session) {
+		String grade = (String) session.getAttribute("grade");
+		if (grade.equals("상담사")||grade.equals("관리자")) {
+			return "admin/pcoun";
+		} else {
+			return "redirect:/admin/main";
+		}
 	}
 
 	@PostMapping("/admin/registerEmpCounselor")

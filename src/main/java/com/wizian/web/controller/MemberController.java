@@ -54,10 +54,14 @@ public class MemberController {
 	
 	@PostMapping("/logout")
 	public String logout(HttpSession session) {
-	//	System.out.println("로그아웃 실행");
-		session.invalidate();
-		
-		return "redirect:/main";
+		String grade = (String) session.getAttribute("grade");
+		if (grade.equals("학생")) {
+			session.invalidate();
+			return "redirect:/main";
+		} else {
+			session.invalidate();
+			return "redirect:/admin/main";
+		}
 	
 	}
 	
