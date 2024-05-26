@@ -11,27 +11,51 @@
 <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 <!-- Core theme CSS (includes Bootstrap)-->
 <link href="css/styles.css" rel="stylesheet" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="js/scripts.js">
 
 </script>
 </head>
-<body class="d-flex flex-column" style="height: 100vh;">
+<body class="d-flex flex-column min-vh-100">
 	<!-- 메뉴-->
 	<div th:replace="~{menu :: Menu}"></div>
 
 	<!-- Page Content-->
 	<div class="container px-4 px-lg-5">
-		<h1 class="text-center">집단 상담</h1>
+		<br>
+		<div class="mb-4 p-3 border rounded"
+			style="border-color: lightblue; background-color: #E0F7FA;">
+			<div class="mb-4 p-3 border rounded">
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" id="recruiting"
+						name="status" value="모집중"> <label class="form-check-label"
+						for="recruiting">모집중</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" id="closed"
+						name="status" value="모집마감"> <label
+						class="form-check-label" for="closed">모집마감</label>
+				</div>
+			</div>
+			<div class="mb-4 p-3 border rounded">
+				<div class="input-group">
+					<input type="text" class="form-control" id="search" name="search"
+						placeholder="검색">
+					<button class="btn btn-primary" type="button" id="searchButton">검색</button>
+					<button class="btn btn-secondary" type="button" id="resetButton">초기화</button>
+				</div>
+			</div>
+		</div>
 
 
 		<div class="row row-cols-1 row-cols-md-2 g-4">
 
 			<div class="col" th:each="gl : ${groupList}">
 				<div class="card border-dark bg-secondary text-white mb-3">
-					<img th:src="@{${gl.GCOUN_CONTS_CN}}"
-						class="card-img-top" alt="..." style="object-fit:cover; width: 100%; height: 200px;">
+					<img th:src="@{${gl.GCOUN_CONTS_CN}}" class="card-img-top"
+						alt="...">
 					<div class="card-body">
 						<h5 class="card-title">
 							[[${gl.GCOUN_NM}]] <span class="badge text-bg-dark">[[${gl.GCOUN_PROG_STA_NM}]]</span>
@@ -39,8 +63,8 @@
 						<p class="card-text">
 							일시 : <span
 								th:text="${#dates.format(gl.GCOUN_DT, 'yyyy년 MM월 dd일(EE) HH시 mm분')}"></span>
-							<br>장소 : <span>[[${gl.GCOUN_DTL_CN}]]</span>	
-							<br>모집 기간 : <span
+							<br>장소 : <span>[[${gl.GCOUN_DTL_CN}]]</span> <br>모집 기간
+							: <span
 								th:text="${#dates.format(gl.GCOUN_BGNG_DT, 'yyyy년 MM월 dd일(EE)')}"></span>
 							~ <span
 								th:text="${#dates.format(gl.GCOUN_DDLN_DT, 'yyyy년 MM월 dd일(EE)')}"></span>
@@ -49,8 +73,11 @@
 						</p>
 						<button type="button" class="btn btn-light" data-bs-toggle="modal"
 							data-bs-target="#gcounModal" th:data-gcounName="${gl.GCOUN_NM}"
-							th:data-gcounDTL="${gl.GCOUN_DTL_CN}" th:data-gcounDT="${#dates.format(gl.GCOUN_DT, 'yyyy년 MM월 dd일(EE) HH시 mm분')}" 
-							th:data-gcounCD="${gl.GCOUN_CD}" style="width: 100%;" th:disabled="${gl.GCOUN_PROG_STA_NM} != '모집중' and ${gl.GCOUN_REG_COUNT} == ${gl.GCOUN_LMT_COUNT}">신청 하기</button>
+							th:data-gcounDTL="${gl.GCOUN_DTL_CN}"
+							th:data-gcounDT="${#dates.format(gl.GCOUN_DT, 'yyyy년 MM월 dd일(EE) HH시 mm분')}"
+							th:data-gcounCD="${gl.GCOUN_CD}" style="width: 100%;"
+							th:disabled="${gl.GCOUN_PROG_STA_NM} != '모집중' and ${gl.GCOUN_REG_COUNT} == ${gl.GCOUN_LMT_COUNT}">신청
+							하기</button>
 					</div>
 				</div>
 			</div>
@@ -62,7 +89,8 @@
 	<div th:replace="~{footer :: Footer}"></div>
 
 	<!-- Modal -->
-	<div class="modal fade" id="gcounModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+	<div class="modal fade" id="gcounModal" data-bs-backdrop="static"
+		data-bs-keyboard="false" tabindex="-1"
 		aria-labelledby="staticBackdropLabel" aria-hidden="true">
 		<div class="modal-dialog modal-xl modal-dialog-centered">
 			<div class="modal-content">
@@ -72,12 +100,21 @@
 						aria-label="Close"></button>
 				</div>
 				<div class="modal-body" id="gcoun-date">모달 내용</div>
-				<div>이름<input id="studName" type="text" placeholder="학생 이름" disabled></div>
-				<div>학번<input id="studNum" type="text" placeholder="학번" disabled></div>
-				<div>학과<input id="scsbjt" type="text" placeholder="학과" disabled></div>
-				<div>연락처<input id="telNo" type="text" placeholder="번호" disabled></div>
+				<div>
+					이름<input id="studName" type="text" placeholder="학생 이름" disabled>
+				</div>
+				<div>
+					학번<input id="studNum" type="text" placeholder="학번" disabled>
+				</div>
+				<div>
+					학과<input id="scsbjt" type="text" placeholder="학과" disabled>
+				</div>
+				<div>
+					연락처<input id="telNo" type="text" placeholder="번호" disabled>
+				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">닫기</button>
 					<button type="button" id="enroll" class="btn btn-primary">신청</button>
 				</div>
 			</div>
@@ -85,7 +122,8 @@
 	</div>
 
 	<!-- Bootstrap core JS-->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js">
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js">
 	</script>
 	<!-- Core theme JS-->
 	<script>
@@ -145,6 +183,76 @@
 				    }
 				});
 			} 
+			
+			$('#resetButton').click(function() {
+		        $('input[name="status"]').prop('checked', false);
+		        $('#search').val('');
+		    });
+			
+			$('#searchButton').click(function() {
+		        var selectedStatus = $('input[name="status"]:checked').val();
+		        var searchValue = $('#search').val();
+		        if ((!selectedStatus || selectedStatus === '') && searchValue === '') {
+		            alert('검색 조건을 입력하세요.');
+		            return;
+		        } 
+
+				$.ajax({
+					type: "POST",
+					url: "/groupSearch",
+					data: {
+						status: selectedStatus,
+						searchValue: searchValue
+					},
+					success: function(data) {
+				        var rowContainer = $('.row');
+				        rowContainer.empty(); // 기존 내용을 지웁니다.
+
+				        if (data.length === 0) {
+				            rowContainer.append('<div class="col-12 text-center">상담이 존재하지 않습니다.</div>');
+				        } else {
+				            data.forEach(function(item) {
+				                var cardHtml = `
+				                    <div class="col">
+				                        <div class="card border-dark bg-secondary text-white mb-3">
+				                            <img src="${item.GCOUN_CONTS_CN}" class="card-img-top" alt="...">
+				                            <div class="card-body">
+				                                <h5 class="card-title">
+				                                    ${item.GCOUN_NM} <span class="badge text-bg-dark">${item.GCOUN_PROG_STA_NM}</span>
+				                                </h5>
+				                                <p class="card-text">
+				                                    일시 : <span>${formatDate(item.GCOUN_DT)}</span>
+				                                    <br>장소 : <span>${item.GCOUN_DTL_CN}</span>
+				                                    <br>모집 기간 : <span>${formatDate(item.GCOUN_BGNG_DT)}</span>
+				                                    ~ <span>${formatDate(item.GCOUN_DDLN_DT)}</span>
+				                                    <br>신청 현황 : ${item.GCOUN_REG_COUNT} / ${item.GCOUN_LMT_COUNT}
+				                                </p>
+				                                <button type="button" class="btn btn-light" data-bs-toggle="modal"
+				                                    data-bs-target="#gcounModal" data-gcounName="${item.GCOUN_NM}"
+				                                    data-gcounDTL="${item.GCOUN_DTL_CN}" data-gcounDT="${formatDate(item.GCOUN_DT)}"
+				                                    data-gcounCD="${item.GCOUN_CD}" style="width: 100%;"
+				                                    ${item.GCOUN_PROG_STA_NM != '모집중' && item.GCOUN_REG_COUNT == item.GCOUN_LMT_COUNT ? 'disabled' : ''}>
+				                                    신청 하기
+				                                </button>
+				                            </div>
+				                        </div>
+				                    </div>`;
+				                rowContainer.append(cardHtml);
+				            });
+				        }
+				    },
+					error: function(error) {
+						alert('실패했습니다.');
+					}
+				});
+			
+			
+				// 날짜 포맷팅 함수
+				function formatDate(dateString) {
+				    var options = { year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short', hour: '2-digit', minute: '2-digit' };
+				    return new Date(dateString).toLocaleDateString('ko-KR', options);
+				}
+			});
 			
 	});
 	</script>

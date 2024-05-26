@@ -26,4 +26,10 @@ public interface GroupDAO {
 
 	void updateTelNo(String userId, String value);
 
+	List<Map<String, Object>> searchList1(String status);
+
+	List<Map<String, Object>> searchList2(String searchValue);
+	
+	List<Map<String, Object>> searchList3(Map<String, Object> map);
+
 }
