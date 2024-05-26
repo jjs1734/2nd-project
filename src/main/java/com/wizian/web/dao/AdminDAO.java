@@ -91,6 +91,8 @@ public interface AdminDAO {
 
 	void pfNcdUpdate(Map<String, Object> map);
 
+	int updateStatus(Map<String, Object> map);
+
 	
 
 

@@ -76,7 +76,7 @@
 							th:data-gcounDTL="${gl.GCOUN_DTL_CN}"
 							th:data-gcounDT="${#dates.format(gl.GCOUN_DT, 'yyyy년 MM월 dd일(EE) HH시 mm분')}"
 							th:data-gcounCD="${gl.GCOUN_CD}" style="width: 100%;"
-							th:disabled="${gl.GCOUN_PROG_STA_NM} != '모집중' and ${gl.GCOUN_REG_COUNT} == ${gl.GCOUN_LMT_COUNT}">신청
+							th:disabled="${gl.GCOUN_PROG_STA_NM} == '모집마감' or ${gl.GCOUN_REG_COUNT} == ${gl.GCOUN_LMT_COUNT}">신청
 							하기</button>
 					</div>
 				</div>
@@ -99,18 +99,43 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal"
 						aria-label="Close"></button>
 				</div>
-				<div class="modal-body" id="gcoun-date">모달 내용</div>
-				<div>
-					이름<input id="studName" type="text" placeholder="학생 이름" disabled>
-				</div>
-				<div>
-					학번<input id="studNum" type="text" placeholder="학번" disabled>
-				</div>
-				<div>
-					학과<input id="scsbjt" type="text" placeholder="학과" disabled>
-				</div>
-				<div>
-					연락처<input id="telNo" type="text" placeholder="번호" disabled>
+				<div class="modal-body">
+					<div class="mb-3">
+						<label class="col-sm-4 col-form-label">일시</label>
+						<div class="col-sm-8">
+							<input id="gcoun-date" type="text" class="w-50" disabled>
+						</div>
+					</div>
+					<div class="mb-3">
+						<label class="col-sm-4 col-form-label">장소</label>
+						<div class="col-sm-8">
+							<input id="gcoun-dtl" type="text" class="w-50" disabled>
+						</div>
+					</div>
+					<div class="mb-3">
+						<label class="col-sm-4 col-form-label">이름</label>
+						<div class="col-sm-8">
+							<input id="studName" type="text" class="w-50" disabled>
+						</div>					
+					</div>
+					<div class="mb-3">
+						<label class="col-sm-4 col-form-label">학번</label>
+						<div class="col-sm-8">
+							<input id="studNum" type="text" class="w-50" disabled>
+						</div>
+					</div>
+					<div class="mb-3">
+						<label class="col-sm-4 col-form-label">학과</label>
+						<div class="col-sm-8">
+							<input id="scsbjt" type="text" class="w-50" disabled>
+						</div>
+					</div>
+					<div class="mb-3">
+						<label class="col-sm-4 col-form-label">연락처</label>
+						<div class="col-sm-8">
+							<input id="telNo" type="text" class="w-50" disabled>
+						</div>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
@@ -140,12 +165,12 @@
 	    	var scsbjt = '[[${userInfo.SCSBJT_NM}]]';
 			var modal = $(this); 
 			modal.find('.modal-title').text(gcounName);
-			modal.find('#gcoun-date').text('일시 : ' + gcounDT);
-			modal.find('#gcoun-dtl').text('장소 : ' + gcounDTL);
-			modal.find('#studName').attr('placeholder', studName);
-			modal.find('#studNum').attr('placeholder', studNum);
-			modal.find('#telNo').attr('placeholder', telNo);
-			modal.find('#scsbjt').attr('placeholder', scsbjt);
+		    modal.find('#gcoun-date').val(gcounDT);
+		    modal.find('#gcoun-dtl').val(gcounDTL);
+		    modal.find('#studName').val(studName);
+		    modal.find('#studNum').val(studNum);
+		    modal.find('#telNo').val(telNo);
+		    modal.find('#scsbjt').val(scsbjt);
 			
 				$('#enroll').off('click').click(function() {
 					enroll(gcounCD, studNum);
@@ -167,7 +192,7 @@
 						if (data === 1) {
 				    	$('#gcounModal').modal('hide'); // 모달 창 닫기
 				        Swal.fire({
-				        	  text: "신청이 완료되었습니다",
+				        	  text: "신청이 완료되었습니다.",
 				        	  icon: "success",
 				        	  timer: 1500,
 				        	  willClose: () => {
@@ -179,7 +204,14 @@
 						}
 				    },
 				    error: function(error) {
-				        alert('이미 신청이 되어 있습니다.');
+				    	Swal.fire({
+				        	  text: "이미 신청 되어있습니다.",
+				        	  icon: "error",
+				        	  timer: 2000,
+				        	  willClose: () => {
+							        location.reload();
+					        	  }
+				        	});
 				    }
 				});
 			} 
@@ -231,7 +263,7 @@
 				                                    data-bs-target="#gcounModal" data-gcounName="${item.GCOUN_NM}"
 				                                    data-gcounDTL="${item.GCOUN_DTL_CN}" data-gcounDT="${formatDate(item.GCOUN_DT)}"
 				                                    data-gcounCD="${item.GCOUN_CD}" style="width: 100%;"
-				                                    ${item.GCOUN_PROG_STA_NM != '모집중' && item.GCOUN_REG_COUNT == item.GCOUN_LMT_COUNT ? 'disabled' : ''}>
+				                                    ${item.GCOUN_PROG_STA_NM == '모집마감' || item.GCOUN_REG_COUNT == item.GCOUN_LMT_COUNT ? 'disabled' : ''}>
 				                                    신청 하기
 				                                </button>
 				                            </div>

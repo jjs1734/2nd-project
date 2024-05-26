@@ -70,6 +70,13 @@
 		INSERT INTO GROUP_COUN_INFO (CSL_NO, GCOUN_NM, GCOUN_DT, GCOUN_BGNG_DT, GCOUN_DDLN_DT, GCOUN_LMT_COUNT, GCOUN_DTL_CN, GCOUN_CONTS_CN, GCOUN_FILENM)
 		VALUES(#{CSL_NO}, #{GCOUN_NM}, #{GCOUN_DT}, #{GCOUN_BGNG_DT}, #{GCOUN_DDLN_DT}, #{GCOUN_LMT_COUNT}, #{GCOUN_DTL_CN}, #{GCOUN_CONTS_CN}, #{GCOUN_FILENM});
 	</insert>
+	
+	<update id="updateStatus" parameterType="Map">
+		UPDATE GROUP_COUN_APPLICANT a
+		JOIN GROUP_COUN_INFO i ON a.GCOUN_Cd = i.GCOUN_CD
+		SET GCOUN_STA_NM = #{value}
+		WHERE STUD_NO = #{studNo} AND i.GCOUN_NM = #{gcounNm}
+	</update>
 	<!-- 집단 상담 -->
 	
 	<!-- ★★★★★**********★★★★★ -->
