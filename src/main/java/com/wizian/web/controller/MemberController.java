@@ -43,6 +43,8 @@ public class MemberController {
 		session.setAttribute("userId", user.getLOGIN_ID());
 		//세션에 등급 저장
 		session.setAttribute("grade", user.getADMIN_YN());
+		
+		session.setAttribute("userNo", user.getUSER_NO());
 
 		if(user.getADMIN_YN().equals("학생")) {
 			return "redirect:/main";

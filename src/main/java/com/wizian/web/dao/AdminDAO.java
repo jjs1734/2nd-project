@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.wizian.web.dto.BoardDTO;
@@ -57,7 +58,10 @@ public interface AdminDAO {
 	List<Map<String, Object>> counselorList();
 
 	int ecounEnroll(EcounAdDTO ecounAdDTO);
+	
 	List<Map<String, Object>> getPfcounList();
+	
+	List<Map<String, Object>> getPfcounList(@Param("userId") String userId);
 
 	int pfCounEnroll(PfRsvDTO pfRsv);
 
@@ -72,6 +76,8 @@ public interface AdminDAO {
 	List<Map<String, Object>> getGcounCslList2(String userId);
 	
 	List<Map<String, Object>> getPfList();
+	
+	List<Map<String, Object>> getPfList(@Param("userNo") String userNo);
 
 	List<Map<String, Object>> getPfscList(String pfNo);
 
@@ -84,6 +90,9 @@ public interface AdminDAO {
 	void pfEmailUpdate(Map<String, Object> map);
 
 	void pfNcdUpdate(Map<String, Object> map);
+
+	
+
 
 
 }

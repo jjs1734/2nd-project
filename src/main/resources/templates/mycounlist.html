@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://thymeleaf.org">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>My Page - 상담목록</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+		<style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        #sidenav {
+            background: #B6B6B6;
+            /* color: #fff; */
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+            float: left;
+            margin-right: 20px;
+            padding: 10px;
+            margin-top: 40px;
+            width: 200px;
+            height: auto;
+            text-align: center;
+        }
+
+        .button {
+            margin-bottom: 30px;
+            color: white;
+            font-size: 15pt;
+            width: 140px;
+            height: 35px;
+            background-color: #A41034;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #004494;
+            cursor: pointer;
+        }
+
+        #content {
+            background: #ffffff;
+            float: left;
+            padding: 20px;
+            margin-top: 40px;
+            width: 90%;
+            height: 780px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-family: Arial, sans-serif;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 768px) {
+            #sidenav, #content {
+                width: 100%;
+                margin-top: 20px;
+                float: none;
+            }
+        }
+    </style>
+    <script type="text/javascript">
+    $(function(){
+    	
+    	$('#counselingTable').hide();
+    	$('#Message').show();
+        
+    	$('#selectCoun').change(function() {
+            let selectedValue = $(this).val();
+            console.log(selectedValue);
+            let table = $('#counselingTable');
+            let thead = table.find('thead');
+            let tbody = table.find('tbody');
+            let Message = $('#Message');
+            let userId = $('#userId').val();
+            console.log(userId);
+            
+            if (selectedValue === "") {
+                // 테이블 숨기고 안내 문구 보이기
+                table.hide();
+                Message.show();
+            } else {
+                // 선택된 값이 기본 안내 문구가 아닌 경우
+                // 테이블 보이고 안내 문구 숨기기
+                table.show();
+                Message.hide();
+            }
+
+            // 테이블 value따라 테이블 헤더 바꾸기
+            switch (selectedValue) {
+                case '1': // 교수상담
+                    thead.html('<tr><th scope="col">교수상담번호</th><th scope="col">교수</th><th scope="col">예약일자</th><th scope="col">예약시간</th><th scope="col">신청내용</th><th scope="col">진행상태</th><th scope="col"></th></tr>');
+                    break;
+                case '2': // 집단상담
+                    thead.html('<tr><th scope="col">프로그램명</th><th scope="col">담당상담사</th><th scope="col">집단상담 일시</th><th scope="col">신청상태</th></tr>');
+                    break;
+                case '3': // 취업상담
+                    thead.html('<tr><th scope="col">취업상담번호</th><th scope="col">이전상담번호</th><th scope="col">상담사</th><th scope="col">예약일자</th><th scope="col">예약시간</th><th scope="col">상담신청내용</th><th scope="col">진행상태</th></tr>');
+                    break;
+                case '4': // 심리상담
+                    thead.html('<tr><th scope="col">상담신청번호</th><th scope="col">예약일자</th><th scope="col">예약시간</th><th scope="col">진행상태</th></tr>');
+                    break;
+                case '5': // 개인상담
+                    thead.html('<tr><th scope="col">상담번호</th><th scope="col">이전상담번호</th><th scope="col">상담제목</th><th scope="col">상담주제</th><th scope="col">게시일자</th><th scope="col">진행상태</th></tr>');
+                    break;
+                default:
+                    break;
+            }
+            
+            $.ajax({
+            	url: "/allCounList",
+            	type: "post",
+            	data: {selectedValue : selectedValue, userId : userId },
+            	success: function(response){
+            		console.log('리스트 불러오기 성공');
+            		console.log(response);
+            		populateTable(response, selectedValue);
+            	},
+            	error: function(xhr, status, error) {
+  	                console.error("Error updating data: ", error);
+  	            }
+            });
+
+            // 테이블 본문 업데이트 (예시로 빈 행을 추가)
+            tbody.html('<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>');
+        });
+        
+                 // 테이블 데이터를 동적으로 추가하는 함수
+        function populateTable(data, selectedValue) {
+            let tbody = $('#counselingTable tbody');
+            tbody.empty(); // 기존 내용을 지웁니다.
+
+            data.forEach(function(item) {
+                let row = '<tr>';
+                switch (selectedValue) {
+                    case '1': // 교수상담
+                        row += '<td>' + item.PF_COUN_NO + '</td>';
+                        row += '<td>' + item.PF_NM + '</td>';
+                        row += '<td>' + item.PF_COUN_RSVT_YMD + '</td>';
+                        row += '<td>' + formatTime(item.PF_COUN_RSVT_TIME) + '</td>';
+                        row += '<td>' + item.PF_CONTENTS + '</td>';
+                        row += '<td>' + getStatusChange(item.PF_COUN_STATE_CD) + '</td>';
+                        // 진행상태가 10일 때만 취소 버튼 추가
+		                if (item.PF_COUN_STATE_CD === '10') {
+		                    row += '<td><button class="btn btn-danger cancelBtn" data-id="' + item.PF_COUN_NO + '">취소</button></td>';
+		                } else {
+		                    row += '<td></td>';
+		                }
+                        break;
+                    case '2': // 집단상담
+                        row += '<td>' + item.GCOUN_NM + '</td>';
+                        row += '<td>' + item.CSL_NM + '</td>';
+                        row += '<td>' + item.GCOUN_DT + '</td>';
+                        row += '<td>' + item.GCOUN_STA_NM  + '</td>';
+                        break;
+                    case '3': // 취업상담
+                        row += '<td>' + item.COUN_NUM + '</td>';
+                        row += '<td>' + item.COUN_NUM2 + '</td>';
+                        row += '<td>' + item.CSL_NM + '</td>';
+                        row += '<td>' + item.EMP_COUN_RSVT_YMD + '</td>';
+                        row += '<td>' + formatTime(item.EMP_COUN_RSVT_CD) + '</td>';
+                        row += '<td>' + item.USR_CN + '</td>';
+                        row += '<td>' + getStatusChange(item.EMP_STTS_CD) + '</td>';
+                        break;
+                    case '4': // 심리상담
+                        row += '<td>' + item.Key + '</td>';
+                        row += '<td>' + item.VISIT_RES_YMD + '</td>';
+                        row += '<td>' + formatTime(item.VISIT_RES_CD) + '</td>';
+                        row += '<td>' + getStatusChange(item.COUN_PRO_CD) + '</td>';
+                        break;
+                    case '5': // 개인상담
+                        row += '<td>' + item.PST_SN + '</td>';
+                        row += '<td>' + item.PST_SN_OLD + '</td>';
+                        row += '<td>' + item.PST_TTL + '</td>';
+                        row += '<td>' + item.PST_CAT + '</td>';
+                        row += '<td>' + item.PSTG_YMD + '</td>';
+                        row += '<td>' + getStatusChange(item.PST_COMP) + '</td>';
+                        break;
+                    default:
+                        break;
+                }
+                row += '</tr>';
+                tbody.append(row);
+            });
+        }
+        
+        function getStatusChange(statusCode) {
+		    switch (statusCode) {
+		        case '10':
+		            return "예약중";
+		        case '20':
+		            return "승인";
+		        case '30':
+		            return "거절";
+		        case '40':
+		            return "상담완료";
+		        case '50':
+		            return "추가상담";
+		        case '60':
+		            return "취소";
+		        
+		        default:
+		            return "관리자문의";
+		    }
+	}
+	
+	function formatTime(time) {
+    	return time + ":00";
+	}
+	
+	$(document).on('click', '.cancelBtn', function() {
+        let counNo = $(this).data('id');
+	    console.log('취소할 상담 번호:', counNo);
+	
+	    // AJAX 요청을 통해 상담 취소 처리
+	    $.ajax({
+	        url: '/cancelpfCoun',  // 상담 취소를 처리할 서버의 URL
+	        type: 'POST',
+	        data: { counNo : counNo },
+	        success: function(response) {
+	            if(response == '1' || response == 1){
+	            alert('상담이 성공적으로 취소되었습니다.');
+	            location.reload();
+	            }
+	        },
+	        error: function(xhr, status, error) {
+	            // 오류가 발생한 경우 처리할 내용
+	            alert('상담 취소 중 오류가 발생했습니다. 다시 시도해 주세요.');
+	        }
+	    });
+	});
+        
+    });
+    </script>
+    </head>
+    <body>
+        <!-- 메뉴-->
+        <div th:insert="~{menu :: Menu}"></div>
+        
+        <!-- Page Content-->
+       
+        <div class="container px-4 px-lg-5">
+	        <div class="d-flex justify-content-center">
+	        
+		        <div id="sidenav">
+					<p style="margin-top:20px; margin-bottom:80px; font-weight:bold; font-size:20pt;">마이페이지</p>
+					<button class="button" type="submit" onclick="openPage('/mypage')">내 정보</button><br>
+					<button class="button" type="submit" >상담신청내역</button><br>
+				</div>
+	        	<div id="content" class="continer mt-5">
+	        		<h3>상담 내역 조회</h3>
+	        		<input type="hidden" id="userId" th:value="${session.userId}"/>
+	        		<!-- 상담 select 박스 -->
+	        		<div class="row mb-4">	
+		        		<div class="col">
+		        			<p></p>
+		        			<select class="form-select" id="selectCoun" aria-label="Default select example">
+								<option selected>조회를 원하는 상담 종류를 선택해주세요</option>
+								<option value="1">교수상담</option>
+								<option value="2">집단상담</option>
+								<option value="3">취업상담</option>
+								<option value="4">심리상담</option>
+								<option value="5">개인상담</option>
+							</select>
+		        		</div>
+	        		</div>
+	        		<!-- 상담리스트 테이블 -->
+	        		<div class="row">
+		        		<div class="col">
+		        			<div id="Message">
+					        	<h5>상담분류를 선택해주세요</h5>
+					        </div>
+		        			<table class="table" id="counselingTable">
+								<thead>
+									<tr>
+										<th scope="col">상담사이름</th>
+										<th scope="col">예약일자</th>
+										<th scope="col">예약시간</th>
+										<th scope="col">신청내용</th>
+										<th scope="col">상담코멘트</th>
+										<th scope="col">진행상태</th>
+										<!-- <th scope="col">취소버튼</th> -->
+									</tr>
+								</thead>
+								<tbody>
+									<tr id="change">
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<!-- <td></td> -->
+									</tr>				
+									
+								</tbody>
+							</table>
+		        		</div>
+		        	</div>
+				</div>
+  	
+	        </div>
+        
+        </div>
+        
+        
+        <!-- 푸터-->
+        <div class="container px-4 px-lg-5 fixed-bottom" th:replace="footer :: Footer"> -->
+        <!-- <div class="container px-4 px-lg-5" th:insert="~{footer :: Footer}"> -->
+        </div>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+    </body>
+</html>
