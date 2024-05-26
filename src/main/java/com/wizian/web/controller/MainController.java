@@ -173,10 +173,20 @@ public class MainController {
             break;
         default:
             break;
-    }
-			
+    }			
 		
 		return counList;
+	}
+	
+	@ResponseBody
+	@PostMapping("/cancelpfCoun")
+	public int cancelpfCoun(@RequestParam("counNo") String counNo) {
+		System.out.println("취소처리할 상담 번호:" + counNo);
+		int counNum =util.str2Int(counNo);
+		
+		int result = mainService.updateState(counNum);
+		
+		return 1;
 	}
 	
 	

@@ -20,5 +20,7 @@ public interface MainDAO {
 
 	List<Map<String, Object>> inCounList(String userId);
 
+	int updateState(int counNum);
+
 
 }

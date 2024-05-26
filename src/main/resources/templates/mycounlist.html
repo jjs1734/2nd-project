@@ -100,7 +100,7 @@
             // 테이블 value따라 테이블 헤더 바꾸기
             switch (selectedValue) {
                 case '1': // 교수상담
-                    thead.html('<tr><th scope="col">교수상담번호</th><th scope="col">교수</th><th scope="col">예약일자</th><th scope="col">예약시간</th><th scope="col">신청내용</th><th scope="col">진행상태</th></tr>');
+                    thead.html('<tr><th scope="col">교수상담번호</th><th scope="col">교수</th><th scope="col">예약일자</th><th scope="col">예약시간</th><th scope="col">신청내용</th><th scope="col">진행상태</th><th scope="col"></th></tr>');
                     break;
                 case '2': // 집단상담
                     thead.html('<tr><th scope="col">프로그램명</th><th scope="col">담당상담사</th><th scope="col">집단상담 일시</th><th scope="col">신청상태</th></tr>');
@@ -151,6 +151,12 @@
                         row += '<td>' + formatTime(item.PF_COUN_RSVT_TIME) + '</td>';
                         row += '<td>' + item.PF_CONTENTS + '</td>';
                         row += '<td>' + getStatusChange(item.PF_COUN_STATE_CD) + '</td>';
+                        // 진행상태가 10일 때만 취소 버튼 추가
+		                if (item.PF_COUN_STATE_CD === '10') {
+		                    row += '<td><button class="btn btn-danger cancelBtn" data-id="' + item.PF_COUN_NO + '">취소</button></td>';
+		                } else {
+		                    row += '<td></td>';
+		                }
                         break;
                     case '2': // 집단상담
                         row += '<td>' + item.GCOUN_NM + '</td>';
@@ -212,6 +218,28 @@
 	function formatTime(time) {
     	return time + ":00";
 	}
+	
+	$(document).on('click', '.cancelBtn', function() {
+        let counNo = $(this).data('id');
+	    console.log('취소할 상담 번호:', counNo);
+	
+	    // AJAX 요청을 통해 상담 취소 처리
+	    $.ajax({
+	        url: '/cancelpfCoun',  // 상담 취소를 처리할 서버의 URL
+	        type: 'POST',
+	        data: { counNo : counNo },
+	        success: function(response) {
+	            if(response == '1' || response == 1){
+	            alert('상담이 성공적으로 취소되었습니다.');
+	            location.reload();
+	            }
+	        },
+	        error: function(xhr, status, error) {
+	            // 오류가 발생한 경우 처리할 내용
+	            alert('상담 취소 중 오류가 발생했습니다. 다시 시도해 주세요.');
+	        }
+	    });
+	});
         
     });
     </script>

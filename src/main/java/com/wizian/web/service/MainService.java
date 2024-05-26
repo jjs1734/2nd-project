@@ -34,4 +34,8 @@ public class MainService {
 		return mainDAO.inCounList(userId);
 	}
 
+	public int updateState(int counNum) {
+		return mainDAO.updateState(counNum);
+	}
+
 }

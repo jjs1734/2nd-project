@@ -31,4 +31,11 @@
 	FROM ICOUN_POSTS
 	WHERE WRITER=#{userId}
 	</select>
+	
+	<update id="updateState" parameterType="Integer">
+		UPDATE PF_COUN_INFO 
+		SET PF_COUN_STATE_CD = '60' 
+		WHERE PF_COUN_NO = #{counNum};
+	</update>
+	
 </mapper>
