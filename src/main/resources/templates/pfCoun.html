@@ -263,7 +263,8 @@
 				contentType: false,
 				processData: false,
 				success:function(response){
-					alert('상담 신청에 성공하였습니다.')
+					alert('상담 신청에 성공하였습니다.');
+					window.location.href = '/mycounist';
 				},
 				error: function(xhr, status, error){
 					console.error(xhr);

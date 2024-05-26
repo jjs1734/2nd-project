@@ -93,9 +93,20 @@ public class AdminController {
 	
 	@ResponseBody
 	@GetMapping("/admin/getPfList")
-	public List<Map<String, Object>> getPfList() {
-		List<Map<String, Object>> getPfList = adminService.getPfList();
-		return getPfList;
+	public List<Map<String, Object>> getPfList(HttpSession session) {
+		String userNo = (String) session.getAttribute("userNo");
+		System.out.println("계정번호" + userNo);
+		String grade = (String) session.getAttribute("grade");
+		System.out.println("계정등급: "+ grade);
+		if("교수".equals(grade)) {
+			System.out.println("등급 교수에 해당하는 교수리스트가 실행됩니다.");
+			List<Map<String, Object>> getPfList = adminService.getPfList(userNo);
+			return getPfList;
+		} else {
+			System.out.println("등급 관리자에 해당하는 교수리스트가 실행됩니다.");
+			List<Map<String, Object>> getPfList = adminService.getPfList();
+			return getPfList;			
+		}
 	}
 	
 	@ResponseBody
@@ -239,9 +250,20 @@ public class AdminController {
 	
 	@ResponseBody
 	@GetMapping("/admin/getPfcounList")
-	public List<Map<String, Object>> getPfcounList() {
-		List<Map<String, Object>> getPfcounList = adminService.getPfcounList();
-		return getPfcounList;
+	public List<Map<String, Object>> getPfcounList(HttpSession session) {
+		String userId = (String) session.getAttribute("userId");
+		System.out.println("계정아이디: " + userId);
+		String grade = (String) session.getAttribute("grade");
+		System.out.println("계정등급: "+ grade);
+		if("교수".equals(grade)) {
+			System.out.println("등급 교수에 해당하는 상담리스트가 실행됩니다.");
+			List<Map<String, Object>> getPfcounList = adminService.getPfcounList(userId);
+			return getPfcounList;
+		} else {
+			System.out.println("등급 관리자에 해당하는 상담리스트가 실행됩니다.");
+			List<Map<String, Object>> getPfcounList = adminService.getPfcounList();
+			return getPfcounList;
+		}
 	}
 	
 	@ResponseBody
