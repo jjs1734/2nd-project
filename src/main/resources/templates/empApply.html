@@ -340,10 +340,9 @@
                       console.log('서버로부터의 응답:', response);
                       for (var i = 0; i < response.length; i++) {
                           var res = response[i];
-                          var dateTime = res.DATE + 'T' + res.EMP_COUN_CD + ':00';
+                          var dateTime = res.EMP_DATE + 'T' + res.EMP_COUN_CD + ':00';
                           var eventCal = {
                               title: '예약',   // 예약자 이름을 제목으로 설정
-                              //title: res.USR_CN,   // 예약자 이름을 제목으로 설정
                               start: dateTime,  // 예약 날짜를 시작일로 설정
                               dbEvent: true,  // DB에서 가져온 이벤트임을 나타내는 플래그
                               color: 'green'
@@ -389,25 +388,22 @@
                       right: 'dayGridMonth,timeGridWeek'
                   },
                   events: events,
+                  
                    /*
-                    * 드래그로 이벤트 추가하기 신진수가 한거
+                    * 드래그로 이벤트 추가하기
                     */
                     
-                    
                    select: function (arg) { // 캘린더에서 이벤트를 생성할 수 있다.
-	                  var isEventAdded = false; // 이벤트가 추가되었는지 여부를 저장하는 변수
+	                  /* var isEventAdded = false; // 이벤트가 추가되었는지 여부를 저장하는 변수
                       if (arg.start.getDay() === 0 || arg.start.getDay() === 6) {
                            // 일요일 또는 토요일을 선택하려고 할 때
                            return;
                        }	
-                      //var title = prompt('일정을 입력해주세요.');
-                     //if (confirm(arg.start.toLocaleString() + '부터 ' + arg.end.toLocaleString() + '까지 해당 시간대로 예약하시겠습니까?')) {
-                    	 
                     if (isEventAdded) {
 				        // 이미 이벤트가 추가되었다면 알림을 표시하고 함수를 종료합니다.
 				        alert("이미 예약된 이벤트가 있습니다.");
 				        return;
-				    }
+				    } */
                     	 
                      if (confirm(arg.start.toLocaleString() + '시로 예약하시겠습니까?')) {
                         var startHour = arg.start.getHours();
@@ -421,9 +417,9 @@
                          console.log(CSL_NO);
                          
                          selectedTitle = title;
-                            //selectedStart = arg.start.toLocaleDateString();
+                         //selectedStart = arg.start.toLocaleDateString();
                          selectedStart = arg.start.toISOString().split('T')[0];
-                            selectedTime = empCounCd.toString().padStart(2, '0') + ':00';
+                         selectedTime = empCounCd.toString().padStart(2, '0') + ':00';
                          
                         var eventData = {
                                 title: title,
@@ -464,7 +460,6 @@
                                        var dateOnly = response.dateOnly;
                                        CSL_NO = CSL_NO;
                                        console.log(CSL_NO);
-                                       //window.location.href = response.redirect; // 리다이렉트 URL로 이동
                                        window.location.href = response.redirect + "?CSL_NO=" + CSL_NO; // CSL_NO 값을 URL에 추가하여 리다이렉트
                                    } else {
                                        alert("예약 실패!");

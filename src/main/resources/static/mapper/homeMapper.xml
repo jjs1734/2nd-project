@@ -121,7 +121,7 @@
 	</select> -->
 
     <select id="empCalList" parameterType="String" resultType="Map">
-        SELECT CSL_NO, DATE, EMP_COUN_CD, USR_CN 
+        SELECT CAL_NUM, CSL_NO, EMP_DATE, EMP_COUN_CD 
         FROM EMP_COUN_CAL 
         WHERE CSL_NO = #{cslNo1}
     </select>
