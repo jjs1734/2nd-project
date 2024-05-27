@@ -166,6 +166,15 @@ public class AdminService {
 		adminDAO.pfNcdUpdate(map);
 	}
 
+	public int updateStatus(Map<String, Object> map) {
+		return adminDAO.updateStatus(map);
+	}
+
+
+
+	
+
+
 	public void toggleCompletionStatus(int postId) {
 		adminDAO.toggleCompletionStatus(postId);
 	}

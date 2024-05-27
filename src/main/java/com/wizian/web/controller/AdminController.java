@@ -558,6 +558,21 @@ public class AdminController {
         return gcounEnroll;
 	}
 	
+	@ResponseBody
+	@PostMapping("/admin/updateStatus")
+	public int updateStatus(@RequestParam("value") String value, 
+			@RequestParam("gcounNm") String gcounNm, @RequestParam("studNo") String studNo) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("value", value);
+		map.put("gcounNm", gcounNm);
+		map.put("studNo", studNo);
+		
+		int result = adminService.updateStatus(map);
+		
+		return result;
+	}
+	
 	// 심리상담
 	@GetMapping("/admin/pcoun")
 	public String pcoun(HttpSession session) {

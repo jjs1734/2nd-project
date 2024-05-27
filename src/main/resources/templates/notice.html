@@ -13,76 +13,106 @@
 <link href="css/styles.css" rel="stylesheet" />
 <style>
 html, body {
-    height: 100%;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
+	/* height: 100%;
+	margin: 0; */
+	font-family: 'Arial', sans-serif;
 }
-body {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
+
+/* body {
+	display: flex;
+	flex-direction: column;
+	background-color: #f8f9fa;
+} */
+
+/* .container {
+	flex: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding-top: 50px;
+	padding-bottom: 50px;
+} */
+
+.table-container {
+	background: #fff;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	width: 100%;
+	max-width: 1200px; /* Adjust this value as needed */
 }
-.container-flex {
-    flex: 1;
+
+h3 {
+	text-align: center;
+	margin-bottom: 30px;
 }
-.footer {
-    flex-shrink: 0;
+
+.table th, .table td {
+	text-align: center;
+	vertical-align: middle;
+}
+
+.pagination {
+	margin-top: 20px;
+}
+
+.pagination .page-item.active .page-link {
+	background-color: #007bff;
+	border-color: #007bff;
+}
+
+.pagination .page-link {
+	color: #007bff;
 }
 </style>
 </head>
-<body>
-    <!-- 메뉴-->
-    <div th:replace="~{menu :: Menu}"></div>
+<body class="d-flex flex-column min-vh-100">
+	<!-- 메뉴-->
+	<div th:replace="menu :: Menu"></div>
+	<br><br>
+	<!-- Page Content-->
+	<div class="container">
+		<div class="table-container">
+			<h3>공지사항</h3>
+			<div th:if="${#lists.isEmpty(board)}">
+				<h4>출력할 데이터가 없습니다.</h4>
+				<p>관리자에게 문의하세요.</p>
+			</div>
+			<div th:unless="${#lists.isEmpty(board)}">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>제목</th>
+							<th>작성자</th>
+							<th>게시일</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="board : ${board}" th:if="${board.BBS_SN} == 2">
+							<td><a th:href="@{/indiboard_detail(no=${board.PST_SN})}"
+								th:text="${board.PST_TTL}"></a></td>
+							<td th:text="${board.WRITER}"></td>
+							<td th:text="${board.PSTG_YMD}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="row">
+				<div class="col-12 d-flex justify-content-center">
+					<ul class="pagination">
+						<li th:each="i : ${#numbers.sequence(1, totalPages)}"
+							class="page-item" th:classappend="${currentPage == i} ? 'active'">
+							<a th:href="@{/notice(bbsSn=${bbsSn}, page=${i})}" th:text="${i}"
+							class="page-link">Page number</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <!-- Page Content-->
-    <div class="container-flex container px-4 px-lg-5">
-        <!-- Heading Row-->
-        <div class="row gx-4 gx-lg-5 align-items-center my-5">
-            <div class="col-lg-12">
-                <div class="table-container">
-                    <h3>공지사항</h3>
-                    <div th:if="${#lists.isEmpty(board)}">
-                        <h4>출력할 데이터가 없습니다.</h4>
-                        <p>관리자에게 문의하세요.</p>
-                    </div>
-                    <div th:unless="${#lists.isEmpty(board)}">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                     <th width="70%">제목</th>
-                                    <th width="15%">작성자</th>
-                                    <th width="15%">게시일</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr th:each="board : ${board}" th:if="${board.BBS_SN} == 2">
-                                    <td><a th:href="@{/notice_detail(no=${board.PST_SN})}"
-                                        th:text="${board.PST_TTL}"></a></td>
-                                    <td th:text="${board.WRITER}"></td>
-                                    <td th:text="${board.PSTG_YMD}"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 d-flex justify-content-center">
-                            <ul class="pagination">
-                                <li th:each="i : ${#numbers.sequence(1, totalPages)}"
-                                    class="page-item"
-                                    th:classappend="${currentPage == i} ? 'active'"><a
-                                    th:href="@{/notice(bbsSn=${bbsSn}, page=${i})}" th:text="${i}"
-                                    class="page-link">Page number</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 푸터-->
-    <div class="container px-4 px-lg-5 footer" th:replace="~{footer :: Footer}"></div>
+	<!-- 푸터-->
+	<div th:replace="~{footer :: Footer}"></div>
 
     <!-- Bootstrap core JS-->
     <script

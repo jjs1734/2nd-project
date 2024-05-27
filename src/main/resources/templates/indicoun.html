@@ -51,7 +51,7 @@ body {
 				<div class="row">
 					<div th:each="counselor : ${counProfile}" class="col-md-6">
 						<div class="card">
-							<img th:src="@{path_to_your_image/character.png}" class="card-img-top"
+							<img src="images/상담사.png" class="card-img-top"
 								alt="상담사 이미지">
 							<div class="card-body">
 								<h5 class="card-title" th:text="${counselor.CSL_NM}"></h5>
@@ -72,7 +72,7 @@ body {
 	</div>
 
 	<!-- 푸터-->
-	<div class="container px-4 px-lg-5" th:replace="footer :: Footer"></div>
+	<div th:replace="~{footer :: Footer}"></div>
 
 	<!-- Bootstrap core JS-->
 	<script

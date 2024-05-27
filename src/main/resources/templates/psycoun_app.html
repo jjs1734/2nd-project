@@ -240,9 +240,6 @@
      		</div>
      	</div>
      </div>
-     
-     
-	
 	
 	<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@5.7.0/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@5.7.0/main.min.js"></script>
@@ -323,6 +320,7 @@
     })
     .then(response => response.json())
     .then(data => {
+        console.log('Response data:', data);  // 받은 응답 출력
         if (data.success) {
             alert('신청이 완료되었습니다.');
         } else {
@@ -333,6 +331,7 @@
         console.error('Error:', error);
         alert('신청 중 오류가 발생하였습니다.');
     });
+
 });
 
 /*     // AJAX 요청을 보냅니다.
