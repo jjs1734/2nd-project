@@ -34,15 +34,16 @@ public class MemberController {
 	
 	@PostMapping("/login")
 	public String login(@RequestParam("id") String id, @RequestParam("pw") String pw, HttpSession session) {
-		//System.out.println("아이디 입력값: " + id + " 비밀번호 입력값 : " + pw);
+		
 		MemberDTO user = memberService.login(id, pw);
 		if(user.getLOGIN_ID() == null) {
-			//System.out.println("로그인 실패");
 			return "redirect:/login";
 		}
 		session.setAttribute("userId", user.getLOGIN_ID());
 		//세션에 등급 저장
 		session.setAttribute("grade", user.getADMIN_YN());
+		
+		session.setAttribute("userNo", user.getUSER_NO());
 
 		if(user.getADMIN_YN().equals("학생")) {
 			return "redirect:/main";

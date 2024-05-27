@@ -225,20 +225,36 @@
 		});
 		
 		$('#counRequest').on('click', function(){
+			
+			const studNo = $('#std_no').text();
+			const pfNo =  $('.pf-no').val();
+			const pfSno = $('#hiddenPfsNo').val();
+			const selectDT = $('#selectDate').text();
+			const counContent = $('#Counseling-content').val();
+			
+			
+			if(counContent == null || counContent ==""){
+				alert('상담 내용을 작성해주세요');
+				return false;
+			}
+			
 			let formData = new FormData();
-			formData.append("studentNo", $('#std_no').text());//학번
+			
+			formData.append("studentNo", studNo);//학번
 			//formData.append("studentTel", $('#std_tel').text());//학생전화번호
 			//formData.append("studentEmail", $('#std_email').text());//학생이메일
-			formData.append("professorNo", $('.pf-no').val());//교수번호
-			formData.append("pfs_no", $('#hiddenPfsNo').val());//교수스케쥴번호			
+			formData.append("professorNo", pfNo);//교수번호
+			formData.append("pfs_no", pfSno);//교수스케쥴번호			
 			//console.log('교수스케쥴번호: '+$('#hiddenPfsNo').val());		
-			formData.append("selectedDate", $('#selectDate').text());//예약일시
-			console.log('예약일시: '+$('#selectDate').text());		
-			formData.append("counselingContent", $('#Counseling-content').val());//상담내용
+			formData.append("selectedDate",  selectDT);//예약일시
+			console.log('예약일시: '+selectDT);		
+			formData.append("counselingContent", counContent);//상담내용
 			for(let i = 0; i<files.length; i++){
 				formData.append("files", files[i]);//파일		
 			}
 			console.log(formData);
+			
+			
 			
 			$.ajax({
 				url: '/submitPFCoun',
@@ -247,7 +263,8 @@
 				contentType: false,
 				processData: false,
 				success:function(response){
-					alert('통신에 성공하였습니다.')
+					alert('상담 신청에 성공하였습니다.');
+					window.location.href = '/mycounist';
 				},
 				error: function(xhr, status, error){
 					console.error(xhr);
