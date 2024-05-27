@@ -9,7 +9,7 @@
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="./css/styles.css" rel="stylesheet" />
-        <link href="./css/shinjin.css" rel="stylesheet" />
+        <!-- <link href="./css/shinjin.css" rel="stylesheet" /> -->
         
         <!-- Bootstrap CSS -->
        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -44,7 +44,7 @@
 <meta charset="UTF-8">
 <title>상담 신청</title>
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body>
    <!-- 메뉴-->
       <div th:replace="~{menu :: Menu}"></div>
       
@@ -76,7 +76,7 @@
 	                 </div> -->
 	                 <div class="col-md-5 d-flex align-items-center justify-content-center" style="padding: 0px; text-align: center;">
 					    <!-- <img class="img-fluid rounded-start" alt="..." style="height: 22vh; width: 100%;" th:if="${row.ECOUN_CONTS_CN != null}" th:src="@{${row.ECOUN_CONTS_CN}}"> -->
-					    <img class="img-fluid rounded-start" th:if="${row.ECOUN_CONTS_CN != null}" th:src="@{'https://wizian5.s3.us-east-1.amazonaws.com/' + ${row.ECOUN_CONTS_CN}}" alt="이미지">
+					    <img class="img-fluid rounded-start" th:if="${row.ECOUN_CONTS_CN != null}" th:src="@{'https://wizian5.s3.us-east-1.amazonaws.com/' + ${row.ECOUN_CONTS_CN}}" alt="이미지" style="height: 215px; width: 170px;">
 					</div>
 	                 <div class="col-md-7" style="padding: 10px;">
 	                         <div class="card-body" style="padding: 5px;">

@@ -264,7 +264,7 @@
 		myModal.hide();
 		
 		//Alert창 띄우기
-		alert("신청이 완료되었습니다");
+		//alert("신청이 완료되었습니다");
 	}
     
 	//확인 버튼 클릭시 Alert창 닫고 모달 닫기
@@ -322,14 +322,14 @@
     .then(data => {
         console.log('Response data:', data);  // 받은 응답 출력
         if (data.success) {
-            alert('신청이 완료되었습니다.');
+            //alert('신청이 완료되었습니다.');
         } else {
-            alert('신청에 실패하였습니다. 다시 시도해주세요.');
+            //alert('신청에 실패하였습니다. 다시 시도해주세요.');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('신청 중 오류가 발생하였습니다.');
+        //alert('신청 중 오류가 발생하였습니다.');
     });
 
 });
