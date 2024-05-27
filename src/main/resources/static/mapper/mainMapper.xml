@@ -38,4 +38,20 @@
 		WHERE PF_COUN_NO = #{counNum};
 	</update>
 	
+	<select id="selectPfsno">
+	SELECT PFS_NO FROM PF_COUN_INFO WHERE PF_COUN_NO = #{counNum}
+	</select>
+	
+	<update id="updatePfsc" parameterType="Integer">
+		UPDATE PF_SCHEDULE
+		SET PF_SC_DEL = '1' 
+		WHERE PFS_NO = #{pfsno}
+	</update>
+	
+	<update id="updatePfsc0" parameterType="Integer">
+		UPDATE PF_SCHEDULE
+		SET PF_SC_DEL = '0' 
+		WHERE PFS_NO = #{pfsno}
+	</update>
+	
 </mapper>

@@ -21,6 +21,13 @@ public interface MainDAO {
 	List<Map<String, Object>> inCounList(String userId);
 
 	int updateState(int counNum);
+	
+	int selectPfsno(int counNum);
+
+	void updatePfsc(int pfsno);
+
+	void updatePfsc0(int pfsno);
+
 
 
 }

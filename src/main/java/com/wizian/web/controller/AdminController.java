@@ -32,6 +32,7 @@ import com.wizian.web.dto.EcounAdDTO;
 import com.wizian.web.dto.PFSdataDTO;
 import com.wizian.web.service.AdminService;
 import com.wizian.web.service.BoardService;
+import com.wizian.web.service.MainService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -44,6 +45,8 @@ public class AdminController {
 	
 	@Autowired
 	private BoardService boardService;
+	@Autowired
+	private MainService mainService;
 	@Autowired
 	private AdminService adminService;
 	@Autowired
@@ -205,7 +208,7 @@ public class AdminController {
 			map.put("fieldValue", fieldValue);
 			adminService.pfNmUpdate(map);
 			//System.out.println("삽입성공1");
-		}else if(fieldName.equals("PF_TEL")) {
+		}else if(fieldName.equals("PF_TELNO")) {
 			map.put("counNum", counNum);
 			map.put("fieldValue", fieldValue);
 			adminService.pfTelUpdate(map);
@@ -334,10 +337,20 @@ public class AdminController {
 			adminService.pfCounTimeUpdate(map);
 			//System.out.println("삽입성공3");
 		}else {
-			//EMP_STTS_CD
+			//PF_STATE_CD
 			map.put("counNum", counNum);
 			map.put("fieldValue", fieldValue);
 			adminService.pfStateUpdate(map);
+			//fieldValue값이 60이면 mainService의 메소두 두개 실행 
+			if (fieldValue.equals("60")) {
+				int pfsno = mainService.selectPfsno(counNum);
+				mainService.updatePfsc(pfsno);
+				System.out.println(pfsno +" 번 스케쥴의 사용 가능 여부를 1로 업데이트 합니다.");
+			} else {
+				int pfsno = mainService.selectPfsno(counNum);
+				mainService.updatePfsc0(pfsno);
+				System.out.println(pfsno +" 번 스케쥴의 사용 가능 여부를 0으로 업데이트 합니다.");
+			}
 			//System.out.println("삽입성공4");
 		}
 	}

@@ -38,4 +38,17 @@ public class MainService {
 		return mainDAO.updateState(counNum);
 	}
 
+	public int selectPfsno(int counNum) {
+		return mainDAO.selectPfsno(counNum);
+	}
+	
+	public void updatePfsc(int pfsno) {
+		mainDAO.updatePfsc(pfsno);
+	}
+	
+	public void updatePfsc0(int pfsno) {
+		mainDAO.updatePfsc0(pfsno);
+	}
+
+
 }

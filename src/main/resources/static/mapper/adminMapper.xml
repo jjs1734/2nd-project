@@ -203,7 +203,7 @@
 	</update>
 	<update id="pfTelUpdate" parameterType="Map">
 		UPDATE PF_INFO 
-		SET PF_TEL = #{fieldValue }
+		SET PF_TELNO = #{fieldValue }
 		WHERE PF_NO = #{counNum }
 	</update>
 	<update id="pfEmailUpdate" parameterType="Map">
