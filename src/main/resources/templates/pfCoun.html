@@ -86,15 +86,15 @@
 					</div>
 				</div>
 				<!-- 첨부 파일 -->
-				<div class="row mb-3 w-80 mx-auto">
+				<!-- <div class="row mb-3 w-80 mx-auto">
 				<label for="file_upload" class="col-sm-2 col-form-label text-center">첨부파일</label>
 					<div class="col-sm-10 align-items-center">
 						<input type="file" class="form-control" id="file_upload" aria-describedby="inputGroupFileAddon04" aria-label="Upload" multiple>
 						<ul class="list-group" id="file_list" ></ul>
-						<!-- 업로드 버튼은 삭제할지도..? -->
-						<!-- <button class="btn btn-outline-secondary col-2" type="button" id="inputGroupFileAddon04">업로드</button> -->
+						업로드 버튼은 삭제할지도..?
+						<button class="btn btn-outline-secondary col-2" type="button" id="inputGroupFileAddon04">업로드</button>
 					</div>	
-				</div>
+				</div> -->
 				<!-- 상담신청 버튼 -->
 				<div class="input-group justify-content-center w-10 mx-auto">
 					<button type="button" class="btn mb-3" id="counRequest" style="background-color: #A41034; color: white;">상담신청</button>
@@ -207,7 +207,7 @@
 			});
 		});
 		 
-		let files=[];
+		/* let files=[];
 		$('#file_upload').on('change', function(){
 			
 			let newFiles = $(this)[0].files;
@@ -222,7 +222,7 @@
 			let fileName = $(this).parent().text().trim().slice(0, -1);
 			files = files.filter(file => file.name !== fileName);
 			updateFileList();
-		});
+		}); */
 		
 		$('#counRequest').on('click', function(){
 			
@@ -249,9 +249,9 @@
 			formData.append("selectedDate",  selectDT);//예약일시
 			console.log('예약일시: '+selectDT);		
 			formData.append("counselingContent", counContent);//상담내용
-			for(let i = 0; i<files.length; i++){
+			/* for(let i = 0; i<files.length; i++){
 				formData.append("files", files[i]);//파일		
-			}
+			} */
 			console.log(formData);
 			
 			
@@ -264,7 +264,7 @@
 				processData: false,
 				success:function(response){
 					alert('상담 신청에 성공하였습니다.');
-					window.location.href = '/mycounist';
+					window.location.href = '/mycounlist';
 				},
 				error: function(xhr, status, error){
 					console.error(xhr);

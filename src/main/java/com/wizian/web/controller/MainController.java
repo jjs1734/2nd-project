@@ -186,7 +186,7 @@ public class MainController {
 		
 		int result = mainService.updateState(counNum);
 		
-		return 1;
+		return result;
 	}
 	
 	
