@@ -11,7 +11,7 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
     </head>
-    <body>
+    <body class="d-flex flex-column min-vh-100"> 
         <!-- 메뉴-->
         <div th:insert="~{menu :: Menu}"></div>
         
@@ -31,7 +31,7 @@
       			  <!-- Carousel Items -->	
       			  <div class="carousel-inner" onclick="location.href='/group';" style="cursor: pointer;">
           			  <div th:each="path, stat : ${mainGroupImg}" th:classappend="${stat.first} ? 'carousel-item active' : 'carousel-item'">
-            		    <img th:src="@{'images/' + ${path}}" class="img-fluid rounded mb-4 mb-lg-0" alt="..."/>
+            		    <img th:src="@{${path}}" class="img-fluid rounded mb-4 mb-lg-0" alt="..." style="object-fit:contain; width: 900px; max-height: 400px;">
          			   </div>
         		  </div>
         
@@ -51,8 +51,8 @@
                 
                 <div class="col-lg-5">
                     <h1 class="font-weight-light">공지사항</h1>
-                    <p>집단 상담은 유사한 관심을 가진 10명 이내의 사람들이 모여 자신의 이야기를 함께 나누는 모임입니다.<br>상호 지지적인 분위기 속에서 자신의 문제를 해결하고 새로운 행동을 실천해 볼 수 있는 경험을 통해 성장의 기회를 갖게 됩니다.</p>
-                    <a class="btn btn-primary" href="/group">바로가기</a>
+					<br>
+                    <a class="btn btn-primary" href="/notice">바로가기</a>
                 </div>
             </div>
             <!-- Call to Action-->
@@ -63,7 +63,7 @@
             <div class="row gx-4 gx-lg-5">
                 <div class="col-md-3 mb-5">
                     <div class="card h-70">
-                    	<img src="..." class="card-img-top" alt="...">
+                    	<img src="images/지도교수상담.png" class="card-img-top" alt="...">
                         <div class="card-body">
                             <h4 class="card-title">지도교수상담</h4>
                             <p>지도교수 상담은 학생들이 학업 및 진로에 관한 조언과 지도를 받는 과정입니다. 지도교수 외 다른 교수님께도 상담 신청 가능합니다.</p>
@@ -73,16 +73,17 @@
                 </div>
                 <div class="col-md-3 mb-5">
                     <div class="card h-70">
-                        <img src="..." class="card-img-top" alt="...">
+                        <img src="images/취업상담.png" class="card-img-top" alt="...">
                         <div class="card-body">
                             <h4 class="card-title">취업 상담</h4>
+                           <p>취업 상담은 진로 결정에 있어 어려움을 겪고 있는 학생들에게 상담을 통해 나아갈 길을 같이 고민하고 제시해 드립니다.</p>
                         </div>
                         <div class="card-footer"><a class="btn btn-primary btn-sm" href="/employment">바로가기</a></div>
                     </div>
                 </div>
                 <div class="col-md-3 mb-5">
                     <div class="card h-70">
-                       	<img src="..." class="card-img-top" alt="...">
+                       	<img src="images/심리상담.png" class="card-img-top" alt="...">
                         <div class="card-body">
                             <h4 class="card-title">심리 상담</h4>
                             <p>심리상담은 학생들 개인의 성격, 정신건강, 진로에 대한 다양한 검사를 통해 자신에 대한 분명한 이해를 하도록 도와드립니다.</p>
@@ -92,9 +93,10 @@
                 </div>
                 <div class="col-md-3 mb-5">
                     <div class="card h-70">
-                        <img src="..." class="card-img-top" alt="...">
+                        <img src="images/개인상담.png" class="card-img-top" alt="...">
                         <div class="card-body">
                             <h4 class="card-title">개인 상담</h4>
+                            <p>개인 상담은 상담사에게 상담 받고 싶은 고민을 작성해주시면 상담사가 확인 후 고민에 대한 답변을 남겨드립니다.</p>
                         </div>
                         <div class="card-footer"><a class="btn btn-primary btn-sm" href="/indicoun">바로가기</a></div>
                     </div>
@@ -103,8 +105,7 @@
         </div>
         
         <!-- 푸터-->
-        <div class="container px-4 px-lg-5" th:insert="~{footer :: Footer}">
-        </div>
+		<div th:replace="~{footer :: Footer}"></div>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->

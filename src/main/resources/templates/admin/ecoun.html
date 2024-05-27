@@ -15,7 +15,7 @@
   <script src="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.js"></script>
   <!-- 이하 생략 -->
   <title>
-    관리자 페이지
+    취업 상담 관리
   </title>
   <!--     Fonts and icons     -->
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
@@ -52,22 +52,8 @@
   
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
    
-   <!-- Navbar -->
-    <nav th:fragment="navbar" class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
-      <div class="container-fluid py-1 px-3">
-        <nav aria-label="breadcrumb">
-          <h6 class="font-weight-bolder mb-0">취업 상담</h6>
-        </nav>
-        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            <div class="input-group input-group-outline">
-              <label class="form-label">Type here...</label>
-              <input type="text" class="form-control">
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
+ 	 <!-- Navbar -->
+    <div th:replace="~{admin/navbar :: navbar}"></div>
     <!-- End Navbar -->
    
    
@@ -80,16 +66,18 @@
             <!-- 상담사 등록 폼 -->
             <div id="counselorForm" style="display: none;">
                 <h4>상담사 등록</h4>
-                <form>
                     <input type="text" name="cd" placeholder="상담 코드">
                     <input type="text" name="cslNo" placeholder="상담사 코드">
                     <input type="text" name="cslNm" placeholder="상담사 이름">
                     <input type="text" name="email" placeholder="이메일">
                     <input type="text" name="mobile" placeholder="전화번호(- 포함 작성)">
                     <input type="text" name="scsbjtNm" placeholder="담당 학과">
-                    <input type="file" id="ecounFile" name="ecounFile" multiple>
-                    <button type="submit">등록</button>
-                </form>
+                    <form id="fileForm" enctype="multipart/form-data">
+                        <div class="input-group mb-3">
+                            <input type="file" accept="image/*" id="file" name="file" class="form-control">
+                        </div>
+                    </form>
+                    <button id="submit-button" type="submit">등록하기</button>
             </div>
         	<div id="ecounGrid"></div>
         	<br>
@@ -207,79 +195,89 @@
 		       $("#counselorForm").toggle(); // 폼 보이기/숨기기 전환
 		   });
 		
-		   // 상담사 등록 폼 제출 시
-		   $("#counselorForm").submit(function (event) {
-		       event.preventDefault(); // 기본 동작 방지
+		function validateForm(){
+			
+		    var isValid = true;
+		   	
+	        event.preventDefault(); // 기본 동작 방지
 		    // 각 입력 필드의 값을 가져옴
-		        var cd = $("input[name='cd']").val();
-		        var cslNo = $("input[name='cslNo']").val();
-		        var cslNm = $("input[name='cslNm']").val();
-		        var email = $("input[name='email']").val(); // 올바른 이메일 변수 사용
-		        var mobile = $("input[name='mobile']").val();
-		        var scsbjtNm = $("input[name='scsbjtNm']").val();
-		        var ecounFile = $('#ecounFile');
+			var cd = $("input[name='cd']").val();
+			var cslNo = $("input[name='cslNo']").val();
+			var cslNm = $("input[name='cslNm']").val();
+			var email = $("input[name='email']").val(); // Correct email variable usage
+			var mobile = $("input[name='mobile']").val();
+			var scsbjtNm = $("input[name='scsbjtNm']").val();
+			var ecounFile = $('#file'); // Correctly get files from input with id file
 
-		        // 이메일 주소 유효성 검사
-		        if (!validateEmail(email)) {
-		            alert("유효한 이메일 주소를 입력하세요.");
-		            return;
-		        }
+		    // 이메일 주소 유효성 검사
+		    if (!validateEmail(email)) {
+		        alert("유효한 이메일 주소를 입력하세요.");
+		        isValid = false; // 유효성 검사 실패
+		    }
 
-		        // 휴대전화 번호 유효성 검사
-		        if (!validateMobile(mobile)) {
-		            alert("유효한 휴대전화 번호를 입력하세요.");
-		            return;
-		        }
-				
-		     	// 업로드 파일 존재 여부 확인
-				if (!ecounFile.val()) {
-					alert('업로드 할 이미지를 선택하세요.');
-					$('#ecounFile').focus();
-					return;
-				}
-		     	
-				// 이메일 주소 유효성 검사 함수
-		        function validateEmail(email) {
-		            var re = /\S+@\S+\.\S+/;
-		            return re.test(email);
-		        }
+		    // 휴대전화 번호 유효성 검사
+		    if (!validateMobile(mobile)) {
+		        alert("유효한 휴대전화 번호를 입력하세요.");
+		        isValid = false; // 유효성 검사 실패
+		    }
 
-		         // 휴대전화 번호 유효성 검사 함수
-		        function validateMobile(mobile) {
-		            var re = /^\d{3}-\d{3,4}-\d{4}$/;
-		            return re.test(mobile);
-		        }
-		     	
-				const files = ecounFile[0].files;
-		     	
-				if (files.length > 0) {
-					const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
-					const fileExtension = files[0].name.split('.').pop().toLowerCase();
+		    // 업로드 파일 존재 여부 확인
+		    if (!ecounFile.val()) {
+		        alert('업로드 할 이미지를 선택하세요.'); // Standard alert
+		        ecounFile.focus();
+		        isValid = false; // 유효성 검사 실패
+		    }
+	     	
+			// 이메일 주소 유효성 검사 함수
+	        function validateEmail(email) {
+	            var re = /\S+@\S+\.\S+/;
+	            return re.test(email);
+	        }
 
-					if (!validExtensions.includes(fileExtension)) {
-						alert(fileExtension + ' 파일은 업로드 불가합니다. jpg, jpeg, png, gif, bmp 형식의 파일을 선택해주세요.');
-						$('#ecounFile').focus();
-						return;
-					}
-				} 
-				
-		        console.log(files);
-		        
-		        const formData = new FormData();
-		        
-		     	// 파일 부분 기능 (첨부파일 읽어오는거)
-				for(var i = 0; i < files.length; i++) {
-					formData.append("file", files[i]);
-				}
-				// 폼 데이터 생성
-		        /* var formData = {
-		            cd: cd,
-		            cslNo: cslNo,
-		            cslNm: cslNm,
-		            email: email,
-		            mobile: mobile,
-		            scsbjtNm: scsbjtNm
-		        }; */
+	         // 휴대전화 번호 유효성 검사 함수
+	        function validateMobile(mobile) {
+	            var re = /^\d{3}-\d{3,4}-\d{4}$/;
+	            return re.test(mobile);
+	        }
+	     	
+			//const files = ecounFile[0].files;
+	     	
+			// Check file extensions if files exist
+			if (ecounFile[0].files.length > 0) {
+			    const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+			    const fileExtension = ecounFile[0].files[0].name.split('.').pop().toLowerCase();
+			
+			    if (!validExtensions.includes(fileExtension)) {
+			        alert(fileExtension + ' 파일은 업로드 불가합니다. jpg, jpeg, png, gif, bmp 형식의 파일을 선택해주세요.');
+			        $('#ecounFile').focus();
+		            isValid = false;
+			    }
+			}
+			
+		    // 등록 실패시 폼 제출 방지
+		    if (!isValid) {
+		        event.preventDefault(); // 제출 방지
+		        return;
+		    }
+			
+	        return isValid;
+	        
+		}
+		   // 상담사 등록 폼 제출 시
+		   $("#submit-button").click(function (event) {
+			   
+			    // 유효성 검사를 수행하고 결과를 받아옴
+			    var isValid = validateForm();
+			    var formData = new FormData();
+			    
+				var cd = $("input[name='cd']").val();
+				var cslNo = $("input[name='cslNo']").val();
+				var cslNm = $("input[name='cslNm']").val();
+				var email = $("input[name='email']").val(); // Correct email variable usage
+				var mobile = $("input[name='mobile']").val();
+				var scsbjtNm = $("input[name='scsbjtNm']").val();
+				var ecounFile = $('#file'); // Correctly get files from input with id file
+			    
 		        formData.append("cd", cd);
 		        formData.append("CSL_NO", cslNo);
 		        formData.append("CSL_NM", cslNm);
@@ -287,27 +285,37 @@
 		        formData.append("CSL_MOBILE", mobile);
 		        formData.append("SCSBJT_NM", scsbjtNm);
 		        
-				console.log(formData);
-				
+                const files = ecounFile[0].files;
+                
+                var ecounFile = document.getElementById('file');
+                if (ecounFile.files.length > 0) {
+                    formData.append("ecounFile", ecounFile.files[0]);
+                }
+		        
 		       // 서버로 폼 데이터를 전송하여 상담사 등록
-		       $.ajax({
-		            url: "/admin/registerEmpCounselor",
-		            type: "post",
-		            //data: JSON.stringify(formData), // JSON 데이터로 변환하여 전송
-		            data: formData, // JSON 데이터로 변환하여 전송
-		            //contentType: "application/json; charset=utf-8",
-		            processData: false,
-					contentType: false,
-		            dataType: "json",
-		            success: function (result) {
-		                alert("상담사가 등록되었습니다.");
-		                // 등록 후 목록을 다시 불러오는 등의 작업 수행
-		                // 예: grid1.resetData(result);
-		            },
-		           error: function (xhr, status, error) {
-		               console.error("Error registering counselor: ", error);
-		           }
-		       });
+		       if(isValid) {
+		    	   $.ajax({
+		    		    url: "/admin/registerEmpCounselor",
+		    		    type: "post",
+		    		    data: formData, // JSON 데이터로 변환하여 전송
+		    		    processData: false,
+		    		    contentType: false,
+		    		    /* dataType: 'json', */
+		    		    success: function (result) {
+		    		        if (result === "success") {
+		    		            // 등록 성공 시 알림 띄우기
+		    		            Swal.fire("등록 성공", "상담사가 등록되었습니다.", "success");
+		    		        } else if(result === "false"){
+		    		            // 등록 실패 시 알림 띄우기
+		    		            Swal.fire("등록 실패", "상담사 코드가 이미 존재합니다. 다른 코드를 입력해주세요.", "error");
+		    		        }
+		    		    },
+		    		    error: function (xhr, status, error) {
+		    		        // 등록 실패 시 알림 띄우기
+		    		        Swal.fire("등록 실패", "상담사 등록 중 오류가 발생했습니다.", "error");
+		    		    }
+		    		});
+		       }
 		   });
 			
 	  	  $.ajax({
@@ -320,7 +328,6 @@
 	            row.CD = "CO003:30"; // 상담 코드 하드코딩
 	          });
 	  	      grid1.resetData(result);
-	  	      console.log(result);
 	  	    },
 	  	  });
 	  	
@@ -352,7 +359,6 @@
  */					grid2.resetData(result)
 				},
 				error: function(xhr, status, error) {
-		            console.error("Error fetching data: ", error);
 		        }
 			});
 			// 추가적인 동작: 예를 들어, 알림으로 클릭된 데이터 표시 (옵션)

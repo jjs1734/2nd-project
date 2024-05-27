@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://thymeleaf.org">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <!-- tui-date-picker와 tui-time-picker의 CSS 파일 링크 추가 -->
+  <link href="/css/tui-date-picker.css" rel="stylesheet" />
+  <link href="/css/tui-time-picker.css" rel="stylesheet" />
+  <!-- tui-date-picker와 tui-time-picker의 JavaScript 파일 추가 -->
+	<script type="text/javascript" src="https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.js"></script>
+	<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.3.0/tui-pagination.js"></script>
+	<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+  <title>
+    교수 상담 관리
+  </title>
+  <!--     Fonts and icons     -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
+  <!-- Nucleo Icons -->
+  <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- Sweetalert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>  
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <!-- CSS Files -->
+  <link id="pagestyle" href="../assets/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
+  <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
+  <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+  <!-- moment.js 로드 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <!-- Tempus Dominus Bootstrap 4 datetimepicker CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet">
+  <!-- Tempus Dominus Bootstrap 4 datetimepicker JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.3.5/jquery.timepicker.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.3.5/jquery.timepicker.min.js"></script>
+
+ <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+</head>
+
+<body class="g-sidenav-show  bg-gray-200">
+  
+  <!-- 좌측 메뉴 -->
+  <div th:replace="~{admin/sidenav :: sidenav}"></div>
+  
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+   
+   <!-- Navbar -->
+    <div th:replace="~{admin/navbar :: navbar}"></div>
+    <!-- End Navbar -->
+   
+   
+   <div class="container-fluid py-4">
+      <div class="row min-vh-80 h-100">
+        <div class="col-12">
+       		<div style="display: flex; align-items: center;">
+       			<h4 style="margin-right: 10px;">교수 상담 목록</h4>
+       			<button id="pfcounModalBtn" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#pfcounModal">교수 상담 추가하기</button>
+       		</div>
+        	<div id="pfcounGrid"></div>
+        	<br>
+
+
+        	
+        </div>
+   </div>
+    
+    <!-- footer -->
+    
+    
+  </div>
+  </main>
+    <div th:replace="~{admin/settingBtn :: setBtn}"></div>
+    
+  <!-- 상담 추가 Modal -->
+	<div class="modal fade" id="pfcounModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-xl modal-dialog-centered">
+			<div class="modal-content">
+				<form id="pfcounForm">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="gcounModalHeader">상담 추가 등록</h1>
+					</div>
+					<div class="modal-body">
+						<div class="mb-3">
+							<label class="col-sm-4 col-form-label">교수</label>
+							<div class="col-sm-8">
+							<input id="pfNo" type="text" placeholder="교수번호를 입력해주세요">
+							</div>
+						</div>
+						<div class="mb-3">
+							<label class="col-sm-4 col-form-label">학생</label>
+							<div class="col-sm-8">
+								<input id="studNo" type="text" placeholder="학번을 입력해주세요">
+							</div>
+						</div>
+						<div class="mb-3">
+							<label class="col-sm-4 col-form-label">상담 신청 내용</label>
+							<div class="col-sm-8">
+								<textarea id="pfContents" rows="5" style="width:100%; resize:none;" placeholder="반드시 상담 내용을 작성해주세요!"></textarea>
+							</div>
+						</div>
+						<div class="mb-3">
+				            <label class="col-sm-4 col-form-label">상담 진행 일시</label>
+				            <div class="col-sm-8">
+				              <input id="pfcounDT" type="datetime-local" placeholder="일시">
+				            </div>
+				        </div>
+						<div class="mb-3">
+							<label class="col-sm-4 col-form-label">상담 결과</label>
+							<div class="col-sm-8">
+								<textarea id="pfComment" rows="5" style="width:100%; resize:none;" placeholder="반드시 상담에 대한 코멘트를 작성해주세요!"></textarea>
+							</div>
+						</div>
+						<div class="mb-3">
+							<label class="col-sm-4 col-form-label">상담 진행 상태</label>
+							<p>| 10(예약중)/20(승인)/30(거절)/40(상담완료)/50(추가상담)</p>
+							<div class="col-sm-8">
+								<input id="pfCounStateCD" type="text" placeholder="상담 진행 코드 입력">
+							</div>
+						</div>
+	        		</div>
+			        <div class="modal-footer">
+			          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+			          <button type="button" id="enroll" class="btn btn-primary">등록</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal" id="coModal" tabindex="-1">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title"></h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body" id="coModalBody">
+	        
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+    
+    
+  <!--   Core JS Files   -->
+  <script src="../assets/js/core/popper.min.js"></script>
+  <script src="../assets/js/core/bootstrap.min.js"></script>
+  <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.js"></script>
+  <script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.3.0/tui-pagination.js"></script>
+  <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+  <script>
+  const grid = new tui.Grid({
+      el: document.getElementById('pfcounGrid'),
+      scrollX: true,
+      scrollY: true,
+      bodyHeight: 600,
+      minBodyHeight: 30,
+//      rowHeaders: ['rowNum'],
+//      pageOptions: {
+//        perPage: 15
+//      },
+      columns: [
+        { header: '교수상담번호', name: 'PF_COUN_NO', sortable: true, align: 'center', width: 150, filter: 'select' },
+        { header: '신청학생학번', name: 'STUD_NO', sortable: true, align: 'center', width: 300, filter: 'select' },
+        { header: '학생이름', name: 'STUD_NM', sortable: true, align: 'center', width: 150, filter: 'select' },
+        { header: '학생학과', name: 'SCSBJT_NM', sortable: true, align: 'center', width: 200, filter: 'select' },
+        { header: '상담교수번호', name: 'PF_NO', sortable: true, align: 'center', width: 200, filter: 'select' },
+        { header: '상담교수이름', name: 'PF_NM', sortable: true, align: 'center', width: 200, filter: 'select' },
+        { header: '상담예약일자', name: 'PF_COUN_RSVT_YMD', sortable: true, align: 'center', width: 200, filter: 'select' },
+        { header: '상담예약시간', name: 'PF_COUN_RSVT_TIME', sortable: true, align: 'center', width: 200, filter: 'select' },
+        { header: '상담신청내용', name: 'PF_CONTENTS', sortable: true, align: 'center', width: 200, filter: 'select' },
+        {
+            header: '상담일자',
+            name: 'PF_COUN_YMD',
+            sortable: true,
+            align: 'center',
+            width: 120,
+            filter: 'select',
+            editor: {
+                type: 'datePicker',
+                options: {
+                    format: 'yyyy-MM-dd', // 날짜 형식 설정
+                	language: 'ko' // 언어 설정 (한글)
+                }
+            }
+    	},
+    	{ header: '상담시간(시)', name: 'PF_COUN_TIME_CD', sortable: true, align: 'center', width: 140, filter: 'select', editor: {
+        	type: 'select',
+        	options: {
+        		listItems: [
+        			{ text: '09(시)', value: '09' },
+	                { text: '10(시)', value: '10' },
+	                { text: '11(시)', value: '11' },
+	                { text: '12(시)', value: '12' },
+	                { text: '13(시)', value: '13' },
+	                { text: '14(시)', value: '14' },
+	                { text: '15(시)', value: '15' },
+	                { text: '16(시)', value: '16' },
+	                { text: '17(시)', value: '17' },
+        		]
+        	}
+        } },
+        { header: '상담사코멘트', name: 'PF_COUN_COMMENT', sortable: true, align: 'center', width: 200, filter: 'select', editor: 'text' },
+        { header: '상태', name: 'PF_COUN_STATE_CD', sortable: true, align: 'center', width: 100, filter: 'select', editor: {
+        	type: 'select',
+        	options: {
+        		listItems: [
+        			{ text: '10:예약중', value: '10' },
+	                { text: '20:승인', value: '20' },
+	                { text: '30:거절', value: '30' },
+	                { text: '40:상담완료', value: '40' },
+	                { text: '50:추가상담', value: '50' },
+	                { text: '60:취소', value: '60' }
+        		]
+        	}
+        } },
+        { header: '상담분류코드', name: 'COUN_CD', sortable: true, align: 'center', width: 200, filter: 'select', editor: 'text' }
+      ]
+    });
+  
+
+	$(document).ready(function () {
+		
+		// 모달 열기 기능
+		$('#pfcounModalBtn').click(function(e){
+			e.preventDefault();
+			$('#pfcounModal').modal("show");
+		});
+		
+		$('#pfcounModal').on('hidden.bs.modal', function () {
+	        $('#pfcounForm')[0].reset(); // 폼 초기화
+	        $('.modal-backdrop').remove(); // 백드롭 제거
+	    });
+		
+		
+		// 모달 내의 등록하기 버튼 기능
+		$('#enroll').click(function() {
+
+			const pfNo = $('#pfNo').val();
+			const studNo = $('#studNo').val();
+			const pfContents = $('#pfContents').val();
+			console.log(pfContents);
+			const pfcounDT = $('#pfcounDT').val();
+			console.log(pfcounDT);
+			const pfComment = $('#pfComment').val();
+			const pfCounStateCD = $('#pfCounStateCD').val();
+			
+			//유효성 검사
+			if(pfContents == null || pfContents ==""){
+				alert('상담 내용을 작성해주세요');
+				return false;
+			}else if(pfComment == null || pfComment ==""){
+				alert('상담 코멘트를 작성해주세요!');
+				return false;
+			}
+			
+		    const selectedTime = new Date(pfcounDT);
+		    const selectedHour = selectedTime.getHours();
+		    if (selectedHour < 9 || selectedHour > 17) {
+		        alert('상담 진행 시간을 09:00부터 17:59 사이로 선택해주세요!');
+		        return false;
+		    }
+			
+			
+			let formData = new FormData();
+			
+			formData.append("PF_NO", pfNo);
+			formData.append("STUD_NO", studNo);
+			formData.append("PF_CONTENTS", pfContents);
+			formData.append("PF_COUN_DT", pfcounDT);
+			formData.append("PF_COMMENT", pfComment);
+			formData.append("PF_COUN_STATE_CD", pfCounStateCD);
+			console.log(formData);
+			
+			$.ajax({
+				url: '/admin/pfcounEnroll',
+				method: 'post',
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function(response) {
+					if (response === 1) {
+						alert('등록에 성공하였습니다.');
+						$('#pfcounModal').modal('hide');
+						$('.modal-backdrop').remove();
+						//성공 시 데이터 새로 가져와서 그리드에 세팅하기
+						$.ajax({
+					  	    url: "/admin/getPfcounList",
+					  	    type: "get",
+					  	    dataType: "JSON",
+					  	    contentType: "application/json; charset=UTF-8",
+					  	    success: function (result) {
+					  	      grid.resetData(result);
+					  	    },
+					  	  });
+						
+					} else {
+						alert('등록에 실패하였습니다.');
+					}
+				},
+				error: function(error) {
+					alert('에러가 발생하였습니다.');
+				}
+			});
+			
+		});
+		
+		
+		
+  	  $.ajax({
+  	    url: "/admin/getPfcounList",
+  	    type: "get",
+  	    dataType: "JSON",
+  	    contentType: "application/json; charset=UTF-8",
+  	    success: function (result) {
+  	    	result.forEach(row => {
+  	    		row.COUN_CD = "C0003:10";
+  	    	});
+			grid.resetData(result);
+  	    },
+  	  });
+  	
+  	 
+   	grid.on('afterChange', function(ev) {
+  	    const { changes } = ev;
+  	    changes.forEach(change => {
+  	        const { rowKey, columnName, value } = change;
+  	        const rowData = grid.getRow(rowKey);
+  	        const counNum = rowData.PF_COUN_NO;
+  	        //alert(counNum);
+  	        //console.log(counNum);
+  	     	// 변경된 칼럼이 "상담일자", "상담시간(시)", "상담사코멘트", "상태" 중 하나인지 확인
+  	        if (["PF_COUN_YMD", "PF_COUN_TIME_CD", "PF_COUN_COMMENT", "PF_COUN_STATE_CD"].includes(columnName)) {
+  	            console.log("Changed column:", columnName); // 변경된 칼럼 확인
+  	            console.log("Row data:", rowData); // 해당 행의 데이터 확인
+  	            console.log("value:", value); // 해당 행의 데이터 확인
+  		        console.log(counNum);
+  	        
+  	        // 수정된 데이터를 서버로 전송
+  	        $.ajax({
+  	            url: "/admin/pfcounModify",
+  	            type: "post",
+  	           // contentType: "application/json",
+  	            data: {
+  	                counNum : counNum, // 고유 식별자
+  	                fieldName: columnName, // 수정된 컬럼 이름
+  	                fieldValue: value // 수정된 값
+  	            },
+  	            success: function(response) {
+  	                console.log('Data updated successfully');
+  	            },
+  	            error: function(xhr, status, error) {
+  	                console.error("Error updating data: ", error);
+  	            }
+  	        });
+  	        }
+  	    });
+  	});
+	
+ // 모달을 위한 클릭 이벤트 처리
+    grid.on('dblclick', function(ev) {
+      var rowKey = ev.rowKey;
+      var columnName = ev.columnName;
+      var cellValue = grid.getValue(rowKey, columnName);
+
+      if (columnName === 'PF_CONTENTS' || columnName === 'PF_COUN_COMMENT') {
+        document.getElementById('coModalBody').innerText = cellValue;
+        var coModal = new bootstrap.Modal(document.getElementById('coModal'));
+        coModal.show();
+      }
+    });
+
+	}); 
+  </script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="../assets/js/material-dashboard.min.js?v=3.0.0"></script>
+</body>
+
+</html>

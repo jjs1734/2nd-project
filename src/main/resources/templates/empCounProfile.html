@@ -27,7 +27,7 @@
     color: white;
 }
 .profileMain{background-color: #f4f4f4; padding: 10px; width: 80%;}
-#sidenav{background: #B6B6B6; float:left; margin-right:20px; padding:10px; margin-top: 0px; width:200px; height:925px; text-align:center;}
+#sidenav{background: #B6B6B6; float:left; margin-right:20px; padding:10px; margin-top: 0px; width:200px; height:auto; text-align:center;}
 .leftnavapply {text-align: center; background-color: gray;}
 #sidenav .button {margin-bottom: 30px; color: white; font-size: 15pt; width: 140px; height: 35px; background-color: #A41034; border: none;}
 #content{background: #B6B6B6; float:left; padding:10px; margin-top:40px; width:1000px; height:780px;}
@@ -44,7 +44,7 @@
 <meta charset="UTF-8">
 <title>상담 신청</title>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
    <!-- 메뉴-->
       <div th:replace="~{menu :: Menu}"></div>
       
@@ -54,17 +54,18 @@
       
       <div class="d-flex justify-content-center" style="margin: 0 400px;">
            <!-- 좌측 메뉴 nav -->
-	        <form th:action="@{/empCounProfile}" >
 	        <div id="sidenav">
+	        <form th:action="@{/employment}" >
 				<p style="margin-top:20px; margin-bottom:80px; font-weight:bold; font-size:20pt;">취업 상담</p>
-				<button class="button" type="submit" onclick="openPage('/empCounProfile')">상담사 소개</button><br>
-				<button class="button" type="submit" onclick="openPage('/psycoun_type')">상담 신청</button><br>
-				<button class="button" type="submit" onclick="openPage('/psycoun_app')"></button>
-			</div>
+				<button class="button" type="submit" onclick="openPage('/employment')">상담 소개</button><br>
             </form>
+            <form th:action="@{/empCounProfile}" >
+				<button class="button" type="submit" onclick="openPage('/empCounProfile')">상담 신청</button><br>
+			</form>
+			</div>
 	        <!-- Page Content-->
 	        <!-- 좌측 메뉴 nav와 container 클래스를 가로로 배열하기 위해서 div설정 -->
-	        <div class="profileMain" style="text-align: center;">
+	        <div class="profileMain" style="text-align: left;">
 	           <!-- 메인 내용 -->
 	           <!-- 1번 상담사 -->
 	          <div th:each="row, iterStat : ${empCounProfile}" th:if="${iterStat.index < 12}"
@@ -74,7 +75,8 @@
 						 <img class="img-fluid rounded-start" alt="..." style="height: 215px; width: 170px;" th:if="${row.ECOUN_CONTS_CN != null}" th:src="@{${row.ECOUN_CONTS_CN}}">
 	                 </div> -->
 	                 <div class="col-md-5 d-flex align-items-center justify-content-center" style="padding: 0px; text-align: center;">
-					    <img class="img-fluid rounded-start" alt="..." style="height: 22vh; width: 100%;" th:if="${row.ECOUN_CONTS_CN != null}" th:src="@{${row.ECOUN_CONTS_CN}}">
+					    <!-- <img class="img-fluid rounded-start" alt="..." style="height: 22vh; width: 100%;" th:if="${row.ECOUN_CONTS_CN != null}" th:src="@{${row.ECOUN_CONTS_CN}}"> -->
+					    <img class="img-fluid rounded-start" th:if="${row.ECOUN_CONTS_CN != null}" th:src="@{'https://wizian5.s3.us-east-1.amazonaws.com/' + ${row.ECOUN_CONTS_CN}}" alt="이미지">
 					</div>
 	                 <div class="col-md-7" style="padding: 10px;">
 	                         <div class="card-body" style="padding: 5px;">

@@ -183,6 +183,7 @@
 			</div>
 		</div>
 		
+		
 	    <div id="calendar"></div>
 	    
 	<!-- 날짜 선택 풀캘린더 modal -->
@@ -239,9 +240,6 @@
      		</div>
      	</div>
      </div>
-     
-     
-	
 	
 	<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@5.7.0/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@5.7.0/main.min.js"></script>
@@ -276,17 +274,67 @@
 	//신청하기 버튼 클릭시
 	document.getElementById("openModalButton").addEventListener("click", function() {
     // 폼 데이터를 가져옵니다.
-    var formData = {
-        name: document.getElementById("name").value,
-        studentId: document.getElementById("studentId").value,
-        department: document.getElementById("department").value,
-        phone: document.getElementById("phone").value,
-        email: document.getElementById("email").value,
-        appointmentDate: document.getElementById("appointmentDate").value,
-        agree: document.getElementById("agree").checked
+    const userInfo = {
+        name: document.querySelector('.user').value,
+        phone: document.querySelector('.telno').value,
+        email: document.querySelector('.email').value,
+        date: document.querySelector('.coundate').value,
+        agree: document.getElementById('flexCheckDefault').checked
     };
+    
+    const nameParts = userInfo.name.split(' / ');
+    userInfo.na = nameParts[0].trim(); // "김철수"
+    userInfo.sc = nameParts[2].trim(); // "컴퓨터공학과"
+    
+    // date를 가져와서 공백을 기준으로 나누어 배열로 만듭니다.
+    const dateArray = document.querySelector('.coundate').value.split(' ');
+    // 첫 번째 요소가 date1입니다.
+    userInfo.date1 = dateArray.slice(0, 3).join(' ');
+    
+    // 시간 부분을 가져오기 위해 배열의 길이를 확인합니다.
+    if (dateArray.length >= 5) {
+        // 시간 부분에서 ":"을 기준으로 문자열을 분할합니다.
+        const timeArray = dateArray[4].split(':');
+        
+        // 시간을 userInfo에 저장합니다.
+        let hour = parseInt(timeArray[0]);
+        if ([1, 2, 3, 4, 5].includes(hour)) {
+            hour += 12;
+        }
+        userInfo.time = hour;
+    }
 
-    // AJAX 요청을 보냅니다.
+    console.log(userInfo);
+    
+    if (!userInfo.agree) {
+        alert('개인정보활용에 동의하셔야 합니다.');
+        return;
+    }
+    
+    fetch('/submitAppointment', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userInfo)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Response data:', data);  // 받은 응답 출력
+        if (data.success) {
+            alert('신청이 완료되었습니다.');
+        } else {
+            alert('신청에 실패하였습니다. 다시 시도해주세요.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('신청 중 오류가 발생하였습니다.');
+    });
+
+});
+
+/*     // AJAX 요청을 보냅니다.
     $.ajax({
         type: "POST",
         url: "/submit", // 데이터를 전송할 URL을 지정합니다.
@@ -301,7 +349,7 @@
             console.error(error);
         }
     });
-});
+}); */
     
 	
 	//=================================================================================================================================================
@@ -397,9 +445,7 @@
 
              	// 사용자가 입력한 일정 정보 가져오기
                 var title = $('#eventTitle').val();
-                selectedTitle = title;
-			    selectedStart = arg.start.toISOString().split('T')[0];
-                selectedTime = empCounCd.toString().padStart(2, '0') + ':00';
+                
 
                 // 새 이벤트 생성
                 var newEvent = {
@@ -444,110 +490,105 @@
          	
          	
          	
-            
-			var selectedDateTime = null; // 상담 날짜 예약 모달에서 선택한 날짜와 시간 저장 변수
-         	// 일정 추가 모달이 열릴 때 선택한 날짜와 시간 기억
-            calendar.on('dateClick', function(info) {
-            	 selectedDateTime = info.date;
-            	 $('#eventModal').modal('show');
+            var selectedDateTime = null; // 상담 날짜 예약 모달에서 선택한 날짜와 시간 저장 변수
 
-            	 var start = new Date(info.date);
-                 //start.setHours(9);
+         // 일정 추가 모달이 열릴 때 선택한 날짜와 시간 기억
+         calendar.on('dateClick', function(info) {
+             $('#eventModal').modal('show');
 
-                 var end = new Date(start);
-                 end.setMinutes(start.getMinutes() + 50);
+             var start = new Date(info.date);
+             //start.setHours(9);
 
-                 $('#eventForm')[0].reset();
-                 $('#eventModal').data('selectedEvent', { start: start, end: end });
-                 $('#eventStart').val(formatDateTime(start));
-                 $('#eventEnd').val(formatDateTime(end));
-                 
-              	 // datepicker의 값을 선택한 날짜로 설정
-                 var formattedDate = formatDateTime(start);
-                 $('#datepicker').val(formattedDate);
-                 $('#timepicker').val(formattedDate);
+             var end = new Date(start);
+             end.setMinutes(start.getMinutes() + 50);
+
+             $('#eventForm')[0].reset();
+             $('#eventModal').data('selectedEvent', { start: start, end: end });
+             $('#eventStart').val(formatDateTime(start));
+             $('#eventEnd').val(formatDateTime(end));
+
+             // datepicker의 값을 선택한 날짜로 설정
+             var formattedDate = formatDateTime(start);
+             $('#datepicker').val(formattedDate);
+             $('#timepicker').val(formattedDate);
+
+             console.log("!!!" + formattedDate);
+         });
+
+         $('#calendarModal').on('show.bs.modal', function () {
+             var events = calendar.getEvents(); // 캘린더에 있는 모든 이벤트 가져오기
+             events.forEach(function(event) {
+                 calendar.addEvent(event);
              });
-            
-         	
-            
-            
-         	
-            $('#calendarModal').on('show.bs.modal', function () {
-                // 상담 날짜 예약 모달이 열릴 때 실행되는 코드
-                var events = calendar.getEvents(); // 캘린더에 있는 모든 이벤트 가져오기
-                // 모든 기존 이벤트 제거
-                //calendar.removeAllEvents();
-                // 추가된 모든 이벤트를 다시 추가
-                //addedEvents.forEach(function(event) {
-                //    calendar.addEvent(event);
-                //});
-                events.forEach(function(event) {
-                    calendar.addEvent(event);
-                });
-                
-                if (selectedDateTime) {
-                    var formattedDateTime = formatDateTime(selectedDateTime);
-                    $('#datepicker').val(formattedDateTime);
-                    $('#timepicker').val(formattedDateTime);
-                }
-            });
-            
+
+             if (selectedDateTime) {
+                 var formattedDateTime = formatDateTime(selectedDateTime);
+                 $('#datepicker').val(formattedDateTime);
+                 $('#timepicker').val(formattedDateTime);
+             }
+         });
+
          // 상담 날짜 예약 모달이 닫힐 때, 선택한 날짜와 시간 초기화
-            $('#calendarModal').on('hidden.bs.modal', function () {
-                selectedDateTime = null;
-            });
-         	
-            
-            // 날짜 선택 모달(calendarModal)을 static으로 설정
-             $('#calendarModal').modal({
-        		 backdrop: 'static',
-        		 keyboard: false
-    		});
-            
-          	// 일정 추가 모달(calendarModal)을 static으로 설정
-             $('#eventModal').modal({
-        		 backdrop: 'static',
-        		 keyboard: false
-    		});
+         $('#calendarModal').on('hidden.bs.modal', function () {
+             selectedDateTime = null;
+         });
 
-            $('#calendarIcon').on('click', function () {
-                $('#calendarModal').modal('show');
-            });
-            
-            
-            $('#closeEventModal').on('click', function() {
-                $('#eventModal').modal('hide');  // 닫기 버튼 눌렀을 때 일정 추가 모달 닫기
-            });
-            
-            $('#closeEventModalX').on('click', function() {
-                $('#eventModal').modal('hide');  // X버튼 눌렀을 때 일정 추가 모달 닫기
-            });
-            
-            $('#closeCalendarModal').on('click', function() {
-                $('#calendarModal').modal('hide');  // 닫기 버튼 눌렀을 때 날짜 선택 모달 닫기
-            });
+         // 날짜 선택 모달(calendarModal)을 static으로 설정
+         $('#calendarModal').modal({
+             backdrop: 'static',
+             keyboard: false
+         });
 
-            $('#closeCalendarModalX').on('click', function() {
-                $('#calendarModal').modal('hide');  // X버튼 눌렀을 때 날짜 선택 모달 닫기
-            });
-            
-            
-            $('#saveDateButton').on('click', function() {
-            	if (addedEvents.length > 0 || deletedDates.length > 0) {
-            		if (addedEvents.length > 0) {
-                        alert('예약이 완료되었습니다.');
-                        addedEvents = [];
-                    }
-                    if (deletedDates.length > 0) { // 추가: 삭제된 날짜가 있을 경우 알림 표시
-                        alert('변경된 내용이 저장되었습니다.');
-                        deletedDates = [];
-                    }
-                } else {
-                    alert('변경된 내용이 없습니다.');
-                }
-            });
-             
-             
+         // 일정 추가 모달(eventModal)을 static으로 설정
+         $('#eventModal').modal({
+             backdrop: 'static',
+             keyboard: false
+         });
+
+         $('#calendarIcon').on('click', function () {
+             $('#calendarModal').modal('show');
+         });
+
+         $('#closeEventModal').on('click', function() {
+             $('#eventModal').modal('hide');  // 닫기 버튼 눌렀을 때 일정 추가 모달 닫기
+         });
+
+         $('#closeEventModalX').on('click', function() {
+             $('#eventModal').modal('hide');  // X버튼 눌렀을 때 일정 추가 모달 닫기
+         });
+
+         $('#closeCalendarModal').on('click', function() {
+             $('#calendarModal').modal('hide');  // 닫기 버튼 눌렀을 때 날짜 선택 모달 닫기
+         });
+
+         $('#closeCalendarModalX').on('click', function() {
+             $('#calendarModal').modal('hide');  // X버튼 눌렀을 때 날짜 선택 모달 닫기
+         });
+		
+         $('#saveDateButton').on('click', function() {
+        	    // 선택한 날짜와 시간을 기억
+        	    selectedDateTime = $('#datepicker').val(); // datepicker에서 선택한 값을 가져옴
+        	    var selectedTime = $('#timepicker').val(); // timepicker에서 선택한 값을 가져옴
+
+        	    if (selectedDateTime && selectedTime) {
+        	        // 선택한 날짜와 시간 출력
+        	        console.log("Selected Date and Time: " + selectedDateTime + " " + selectedTime);
+        	    }
+
+        	    if (addedEvents.length > 0 || deletedDates.length > 0) {
+        	        if (addedEvents.length > 0) {
+        	            alert('예약이 완료되었습니다.');
+        	            addedEvents = [];
+        	        }
+        	        if (deletedDates.length > 0) { // 추가: 삭제된 날짜가 있을 경우 알림 표시
+        	            alert('변경된 내용이 저장되었습니다.');
+        	            deletedDates = [];
+        	        }
+        	    } else {
+        	        alert('변경된 내용이 없습니다.');
+        	    }
+        	});
+
             function removeSavedDate(date) {
                 // 저장된 날짜 삭제하는 코드 추가
                 console.log('날짜가 삭제되었습니다.:', date);

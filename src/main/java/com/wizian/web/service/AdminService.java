@@ -12,7 +12,9 @@ import com.wizian.web.dao.GroupDAO;
 import com.wizian.web.dto.BoardDTO;
 import com.wizian.web.dto.EcounAdDTO;
 import com.wizian.web.dto.AdminDTO;
-import com.wizian.web.dto.BoardDTO;
+import com.wizian.web.dto.GroupDTO;
+import com.wizian.web.dto.PFSdataDTO;
+import com.wizian.web.dto.PfRsvDTO;
 
 @Service
 public class AdminService {
@@ -26,6 +28,10 @@ public class AdminService {
 
 	public List<Map<String, Object>> getGcounList() {
 		return adminDAO.getGcounList();
+	}
+	
+	public List<Map<String, Object>> getGcounList2(String userId) {
+		return adminDAO.getGcounList2(userId);
 	}
 
 	public List<Map<String, Object>> getGcounStudList(String gcounCd) {
@@ -72,9 +78,8 @@ public class AdminService {
 		adminDAO.registerCounselor(formData);
 	}
 
-	public void registerEmpCounPro(EcounAdDTO ecounAdDTO) {
-		System.out.println(ecounAdDTO);
-		adminDAO.registerEmpCounPro(ecounAdDTO);
+	public int registerEmpCounPro(EcounAdDTO ecounAdDTO) {
+		return adminDAO.registerEmpCounPro(ecounAdDTO);
 	}
 
 	public int gcounEnroll(AdminDTO adminDTO) {
@@ -97,6 +102,76 @@ public class AdminService {
 		return adminDAO.ecounEnroll(ecounAdDTO);
 	}
 	
+	public List<Map<String, Object>> getPfcounList() {
+		return adminDAO.getPfcounList();
+	}
+	
+	public List<Map<String, Object>> getPfcounList(String userId) {
+		return adminDAO.getPfcounList(userId);
+	}
+
+	public int pfCounEnroll(PfRsvDTO pfRsv) {
+		return adminDAO.pfCounEnroll(pfRsv);
+	}
+
+	public void pfCmtUpdate(Map<String, Object> map) {
+		adminDAO.pfCmtupdate(map);
+	}
+
+	public void pfCounDateUpdate(Map<String, Object> map) {
+		adminDAO.pfCounDateUpdate(map);
+	}
+
+	public void pfCounTimeUpdate(Map<String, Object> map) {
+		adminDAO.pfCounTimeUpdate(map);
+	}
+
+	public void pfStateUpdate(Map<String, Object> map) {
+		adminDAO.pfStateUpdate(map);
+	}
+
+	public List<Map<String, Object>> getGcounCslList2(String userId) {
+		return adminDAO.getGcounCslList2(userId);
+	}
+
+	public List<Map<String, Object>> getPfList() {
+		return adminDAO.getPfList();
+	}
+	
+	public List<Map<String, Object>> getPfList(String userNo) {
+		return adminDAO.getPfList(userNo);
+	}
+
+	public List<Map<String, Object>> getPfscList(String pfNo) {
+		return adminDAO.getPfscList(pfNo);
+	}
+
+	public int pfscEnroll(PFSdataDTO pfsDTO) {
+		return adminDAO.pfscEnroll(pfsDTO);
+	}
+
+	public void pfNmUpdate(Map<String, Object> map) {
+		adminDAO.pfNmUpdate(map);
+	}
+
+	public void pfTelUpdate(Map<String, Object> map) {
+		adminDAO.pfTelUpdate(map);
+	}
+
+	public void pfEmailUpdate(Map<String, Object> map) {
+		adminDAO.pfEmailUpdate(map);
+	}
+
+	public void pfNcdUpdate(Map<String, Object> map) {
+		adminDAO.pfNcdUpdate(map);
+	}
+
+	public int updateStatus(Map<String, Object> map) {
+		return adminDAO.updateStatus(map);
+	}
+
+
+
 	
 
 

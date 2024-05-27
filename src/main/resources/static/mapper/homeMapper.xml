@@ -45,8 +45,8 @@
     
     <!-- 취업 상담사 스케줄 테이블에 정보 넣기 -->
 	<insert id="insertCalFinal" parameterType="EventData">
-    	INSERT INTO EMP_COUN_CAL (CSL_NO, EMP_COUN_CD, DATE, EMP_DATE, USR_CN) 
-    	VALUES (#{CSL_NO}, #{empTime}, NOW(), #{empDate}, #{empContent})
+    	INSERT INTO EMP_COUN_CAL (CSL_NO, EMP_COUN_CD, DATE, EMP_DATE) 
+    	VALUES (#{CSL_NO}, #{empTime}, NOW(), #{empDate})
     	<selectKey keyProperty="CAL_NUM" order="AFTER" resultType="int">
         	SELECT LAST_INSERT_ID()
     	</selectKey>

@@ -1,15 +1,15 @@
 package com.wizian.web.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wizian.web.dto.GroupDTO;
@@ -60,5 +60,25 @@ public class GroupController {
 		}
 		
 		return result;
+	}
+	
+	@ResponseBody
+	@PostMapping("/groupSearch")
+	public List<Map<String, Object>> groupSearch(@RequestParam("status") String status, @RequestParam("searchValue") String searchValue) {
+		
+		List<Map<String, Object>> searchList;
+		
+		if(searchValue == null || searchValue.isEmpty()) {
+			searchList = groupService.searchList1(status);
+		} else if(status == null || status.isEmpty()) {
+			searchList = groupService.searchList2(searchValue);
+		} else {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("status", status);
+			map.put("searchValue", searchValue);
+			searchList = groupService.searchList3(map);
+		}
+		
+		return searchList;
 	}
 }

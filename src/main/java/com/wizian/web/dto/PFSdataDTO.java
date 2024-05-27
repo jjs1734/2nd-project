@@ -1,6 +1,6 @@
 package com.wizian.web.dto;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import lombok.Data;
 
@@ -8,5 +8,5 @@ import lombok.Data;
 public class PFSdataDTO {
 	private int PFS_NO;
 	private String PF_NO, PF_TIME_CD, PF_SC_DEL;
-	private LocalDate PF_DATE;
+	private Date PF_DATE;
 }

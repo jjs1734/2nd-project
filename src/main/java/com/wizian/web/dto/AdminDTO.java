@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 public class AdminDTO {
-	
+	//학생
 	private String STUD_NO, USER_NO, PF_NO, NTN_CD, SCSBJT_NM, STUD_NM, TELNO, STUD_EML_ADDR, COL_REG, STUD_BRDT, STUD_GEN, NTN_NM, PF_NM;
 
 	// 집단 상담

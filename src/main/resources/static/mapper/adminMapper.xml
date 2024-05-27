@@ -10,10 +10,8 @@
 	</select>
 	
 	<select id="counselorList" resultType="Map">
-		SELECT s.STUD_NO, s.USER_NO, s.PF_NO, s.NTN_CD, s.SCSBJT_NM, s.STUD_NM, s.TELNO, s.STUD_EML_ADDR, s.COL_REG, s.STUD_BRDT, s.STUD_GEN, n.NTN_NM, p.PF_NM
-		FROM STUD_INFO s
-		JOIN NATIONAL_INFO n ON s.NTN_CD = n.NTN_CD
-		JOIN PF_INFO p on s.PF_NO = p.PF_NO
+		SELECT CSL_NO, CSL_NM, CSL_EMAIL, CSL_MOBILE, USER_NO
+		FROM COUNSELOR
 	</select>
 	
 	<select id="getGcounStudList" resultType="Map" parameterType="String">
@@ -32,21 +30,53 @@
 		SELECT i.GCOUN_CD, i.CSL_NO, i.GCOUN_NM,
 		 	   DATE_FORMAT(i.GCOUN_DT, '%Y-%m-%d %H:%i') AS GCOUN_DT, 
 		 	   i.GCOUN_BGNG_DT, i.GCOUN_DDLN_DT,
-			   i.GCOUN_LMT_COUNT, i.GCOUN_CONTS_CN, i.GCOUN_DTL_CN, i.GCOUN_PROG_STA_NM,
-			   i.GCOUN_REG_COUNT, i.GCOUN_ATND_COUNT, c.CSL_NM
+			   (SELECT COUNT(*) 
+     			FROM GROUP_COUN_APPLICANT a 
+     			WHERE a.GCOUN_CD = i.GCOUN_CD AND a.GCOUN_STA_NM = '신청중') AS GCOUN_REG_COUNT, 
+			   i.GCOUN_CONTS_CN, i.GCOUN_DTL_CN, i.GCOUN_PROG_STA_NM, i.GCOUN_ATND_COUNT, c.CSL_NM,
+			   i.GCOUN_LMT_COUNT
 		FROM GROUP_COUN_INFO i
 		JOIN COUNSELOR c ON i.CSL_NO = c.CSL_NO
+	</select>
+
+	<select id="getGcounList2" resultType="Map" parameterType="String">
+		SELECT i.GCOUN_CD, i.CSL_NO, i.GCOUN_NM,
+		 	   DATE_FORMAT(i.GCOUN_DT, '%Y-%m-%d %H:%i') AS GCOUN_DT, 
+		 	   i.GCOUN_BGNG_DT, i.GCOUN_DDLN_DT,
+			   i.GCOUN_LMT_COUNT, i.GCOUN_CONTS_CN, i.GCOUN_DTL_CN, i.GCOUN_PROG_STA_NM,
+			   (SELECT COUNT(*) 
+     			FROM GROUP_COUN_APPLICANT a 
+     			WHERE a.GCOUN_CD = i.GCOUN_CD AND a.GCOUN_STA_NM = '신청중') AS GCOUN_REG_COUNT, 
+			   i.GCOUN_ATND_COUNT, c.CSL_NM
+		FROM GROUP_COUN_INFO i
+		JOIN COUNSELOR c ON i.CSL_NO = c.CSL_NO
+		JOIN USER u ON c.USER_NO = u.USER_NO
+		WHERE u.LOGIN_ID = #{userId};
 	</select>
 	
 	<select id="getGcounCslList" resultType="Map">
 		SELECT CSL_NO, CSL_NM
 		FROM COUNSELOR
 	</select>
+
+	<select id="getGcounCslList2" resultType="Map" parameterType="String">
+		SELECT CSL_NO, CSL_NM
+		FROM COUNSELOR c
+		JOIN USER u ON c.USER_NO = u.USER_NO
+		WHERE u.LOGIN_ID = #{userId}
+	</select>
 	
 	<insert id="gcounEnroll" parameterType="AdminDTO">
 		INSERT INTO GROUP_COUN_INFO (CSL_NO, GCOUN_NM, GCOUN_DT, GCOUN_BGNG_DT, GCOUN_DDLN_DT, GCOUN_LMT_COUNT, GCOUN_DTL_CN, GCOUN_CONTS_CN, GCOUN_FILENM)
 		VALUES(#{CSL_NO}, #{GCOUN_NM}, #{GCOUN_DT}, #{GCOUN_BGNG_DT}, #{GCOUN_DDLN_DT}, #{GCOUN_LMT_COUNT}, #{GCOUN_DTL_CN}, #{GCOUN_CONTS_CN}, #{GCOUN_FILENM});
 	</insert>
+	
+	<update id="updateStatus" parameterType="Map">
+		UPDATE GROUP_COUN_APPLICANT a
+		JOIN GROUP_COUN_INFO i ON a.GCOUN_Cd = i.GCOUN_CD
+		SET GCOUN_STA_NM = #{value}
+		WHERE STUD_NO = #{studNo} AND i.GCOUN_NM = #{gcounNm}
+	</update>
 	<!-- 집단 상담 -->
 	
 	<!-- ★★★★★**********★★★★★ -->
@@ -134,6 +164,8 @@
 		VALUES (#{cslNo}, #{email}, #{mobile}, #{scsbjtNm})
 	</insert> -->
 	
+	
+	
 	<insert id="ecounEnroll" parameterType="EcounAdDTO">
 		INSERT INTO COUNSELOR (CSL_NO, CSL_NM, CSL_EMAIL, CSL_MOBILE)
 		VALUES (#{cslNo}, #{cslNm}, #{email}, #{mobile})		
@@ -142,10 +174,89 @@
 	<!-- 취업 상담사 프로필(DB : EMP_COUN_PRO) 등록 -->
 	<insert id="registerEmpCounPro" parameterType="EcounAdDTO">
 		INSERT INTO EMP_COUN_PRO (CSL_NO, EMP_CSL_EM, EMP_CSL_TELNO, SCSBJT_NM, ECOUN_FILENM, ECOUN_CONTS_CN)
-		VALUES (#{cslNo}, #{email}, #{mobile}, #{scsbjtNm}, #{ECOUN_FILENM}, #{ECOUN_CONTS_CN})
+		VALUES (#{cslNo}, #{email}, #{mobile}, #{scsbjtNm}, #{ECOUN_FILENM}, #{fileUrl})
 	</insert>
 	
+	<!-- 교수관리 -->
+	<select id="getPfList" parameterType="String" resultType="Map">
+		SELECT PF_NO, USER_NO, SCSBJT_NM, NTN_CD, PF_NM, PF_TELNO, PF_EMAIL, PF_BIRTH, PF_GEN FROM PF_INFO
+		<if test="userNo != null and userNo != ''">
+        WHERE USER_NO = #{userNo}
+    	</if>
+	</select>
 	
+	<select id="getPfscList" parameterType="String" resultType="Map">
+		SELECT sc.PFS_NO, sc.PF_NO, pi.PF_NM, sc.PF_DATE, sc.PF_TIME_CD, sc.PF_SC_DEL
+ 		FROM PF_SCHEDULE sc JOIN PF_INFO pi ON sc.PF_NO = pi.PF_NO
+ 		WHERE sc.PF_NO = #{pfNo}	
+	</select>
+	
+	<insert id="pfscEnroll" parameterType="com.wizian.web.dto.PFSdataDTO">
+		INSERT INTO PF_SCHEDULE (PF_NO, PF_DATE, PF_TIME_CD) 
+		VALUES (#{PF_NO}, #{PF_DATE}, #{PF_TIME_CD});
+	</insert>
+	
+	<update id="pfNmUpdate" parameterType="Map">
+		UPDATE PF_INFO 
+		SET PF_NM = #{fieldValue }
+		WHERE PF_NO = #{counNum }
+	</update>
+	<update id="pfTelUpdate" parameterType="Map">
+		UPDATE PF_INFO 
+		SET PF_TEL = #{fieldValue }
+		WHERE PF_NO = #{counNum }
+	</update>
+	<update id="pfEmailUpdate" parameterType="Map">
+		UPDATE PF_INFO 
+		SET PF_EMAIL = #{fieldValue }
+		WHERE PF_NO = #{counNum }
+	</update>
+	<update id="pfNcdUpdate" parameterType="Map">
+		UPDATE PF_INFO 
+		SET NTN_CD = #{fieldValue }
+		WHERE PF_NO = #{counNum }
+	</update>
+	
+	
+	<!-- 지도교수상담 -->
+	<select id="getPfcounList" parameterType="String" resultType="Map">
+	    SELECT PCI.PF_COUN_NO, PCI.STUD_NO, SI.STUD_NM, SI.SCSBJT_NM, PCI.PF_NO, PI.PF_NM, PCI.PF_COUN_RSVT_YMD, PCI.PF_COUN_RSVT_TIME, PCI.PF_CONTENTS, PCI.PF_COUN_YMD, PCI.PF_COUN_TIME_CD, PCI.PF_COUN_COMMENT, PCI.PF_COUN_STATE_CD
+	    FROM PF_COUN_INFO PCI 
+	    JOIN STUD_INFO SI ON PCI.STUD_NO=SI.STUD_NO
+	    JOIN PF_INFO PI ON PCI.PF_NO=PI.PF_NO
+	    <if test="userId != null">
+	        WHERE PCI.PF_NO = #{userId}
+	    </if>
+	</select>
+	
+	<insert id="pfCounEnroll" parameterType="com.wizian.web.dto.PfRsvDTO">
+		INSERT INTO PF_COUN_INFO (PF_NO, STUD_NO, PF_COUN_RSVT_YMD, PF_COUN_RSVT_TIME, PF_CONTENTS, PF_COUN_YMD, PF_COUN_TIME_CD, PF_COUN_COMMENT, PF_COUN_STATE_CD) 
+		VALUES (#{PF_NO}, #{STUD_NO}, #{PF_COUN_RSVT_YMD}, #{PF_COUN_RSVT_TIME}, #{PF_CONTENTS}, #{PF_COUN_YMD}, #{PF_COUN_TIME_CD}, #{PF_COUN_COMMENT}, #{PF_COUN_STATE_CD});
+	</insert>
+	
+	<update id="pfCmtupdate" parameterType="Map">
+		UPDATE PF_COUN_INFO 
+		SET PF_COUN_COMMENT = #{fieldValue }
+		WHERE PF_COUN_NO = #{counNum }
+	</update>
+	
+	<update id="pfCounDateUpdate" parameterType="Map">
+		UPDATE PF_COUN_INFO 
+		SET PF_COUN_YMD = #{fieldValue }
+		WHERE PF_COUN_NO = #{counNum }
+	</update>
+	
+	<update id="pfCounTimeUpdate" parameterType="Map">
+		UPDATE PF_COUN_INFO 
+		SET PF_COUN_TIME_CD = #{fieldValue }
+		WHERE PF_COUN_NO = #{counNum }
+	</update>
+	
+	<update id="pfStateUpdate" parameterType="Map">
+		UPDATE PF_COUN_INFO 
+		SET PF_COUN_STATE_CD = #{fieldValue }
+		WHERE PF_COUN_NO = #{counNum }
+	</update>
     <!-- 게시글의 상담 완료 여부 토글 -->
     <update id="toggleCompletionStatus" parameterType="int">
         UPDATE ICOUN_POSTS
