@@ -37,3 +37,4 @@ out/
 .vscode/
 src/main/resources/application.properties
 resources/application.properties
+.gradle/8.7/checksums/checksums.lock
