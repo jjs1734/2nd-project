@@ -254,17 +254,7 @@
 						alert('등록에 성공하였습니다.');
 						$('#pfscModal').modal('hide');
 						$('.modal-backdrop').remove();
-						//성공 시 데이터 새로 가져와서 그리드에 세팅하기
-						$.ajax({
-					  	    url: "/admin/getPfList",
-					  	    type: "get",
-					  	    dataType: "JSON",
-					  	    contentType: "application/json; charset=UTF-8",
-					  	    success: function (result) {
-					  	      grid.resetData(result);
-					  	    },
-					  	  });
-						
+												
 					} else {
 						alert('등록에 실패하였습니다.');
 					}
@@ -341,7 +331,19 @@
   	                fieldValue: value // 수정된 값
   	            },
   	            success: function(response) {
-  	                console.log('Data updated successfully');
+  	                //console.log('Data updated successfully');
+  	                //성공시 데이터 다시 불러오기
+  	              $.ajax({
+  	          	    url: "/admin/getPfList",
+  	          	    type: "get",
+  	          	    dataType: "JSON",
+  	          	    contentType: "application/json; charset=UTF-8",
+  	          	    success: function (result) {
+  	        			grid.resetData(result);
+  	          	    },
+  	          	  });
+  	               //console.log('데이터를 다시 불러옵니다');
+  	                
   	            },
   	            error: function(xhr, status, error) {
   	                console.error("Error updating data: ", error);
