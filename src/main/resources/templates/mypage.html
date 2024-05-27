@@ -98,8 +98,9 @@
 				<form th:action="@{/mypage}" >
 					<button class="button" type="submit">내 정보</button><br>
             	</form>
-				<button class="button" type="submit" onclick="openPage('/psycoun_type')"></button><br>
-				<button class="button" type="submit" onclick="openPage('/psycoun_app')"></button>
+				<form th:action="@{/mycounlist}" >
+					<button class="button" type="submit">상담신청조회</button><br>
+            	</form><br>
 			</div>
         	
         	<div id="content">

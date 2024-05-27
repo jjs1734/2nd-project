@@ -255,8 +255,12 @@
 	        
 		        <div id="sidenav">
 					<p style="margin-top:20px; margin-bottom:80px; font-weight:bold; font-size:20pt;">마이페이지</p>
-					<button class="button" type="submit" onclick="openPage('/mypage')">내 정보</button><br>
-					<button class="button" type="submit" >상담신청내역</button><br>
+					<form th:action="@{/mypage}" >
+						<button class="button" type="submit">내 정보</button><br>
+            		</form>
+					<form th:action="@{/mycounlist}" >
+						<button class="button" type="submit">상담신청조회</button><br>
+            		</form><br>
 				</div>
 	        	<div id="content" class="continer mt-5">
 	        		<h3>상담 내역 조회</h3>
