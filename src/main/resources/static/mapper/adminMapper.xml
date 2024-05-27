@@ -30,21 +30,53 @@
 		SELECT i.GCOUN_CD, i.CSL_NO, i.GCOUN_NM,
 		 	   DATE_FORMAT(i.GCOUN_DT, '%Y-%m-%d %H:%i') AS GCOUN_DT, 
 		 	   i.GCOUN_BGNG_DT, i.GCOUN_DDLN_DT,
-			   i.GCOUN_LMT_COUNT, i.GCOUN_CONTS_CN, i.GCOUN_DTL_CN, i.GCOUN_PROG_STA_NM,
-			   i.GCOUN_REG_COUNT, i.GCOUN_ATND_COUNT, c.CSL_NM
+			   (SELECT COUNT(*) 
+     			FROM GROUP_COUN_APPLICANT a 
+     			WHERE a.GCOUN_CD = i.GCOUN_CD AND a.GCOUN_STA_NM = '신청중') AS GCOUN_REG_COUNT, 
+			   i.GCOUN_CONTS_CN, i.GCOUN_DTL_CN, i.GCOUN_PROG_STA_NM, i.GCOUN_ATND_COUNT, c.CSL_NM,
+			   i.GCOUN_LMT_COUNT
 		FROM GROUP_COUN_INFO i
 		JOIN COUNSELOR c ON i.CSL_NO = c.CSL_NO
+	</select>
+
+	<select id="getGcounList2" resultType="Map" parameterType="String">
+		SELECT i.GCOUN_CD, i.CSL_NO, i.GCOUN_NM,
+		 	   DATE_FORMAT(i.GCOUN_DT, '%Y-%m-%d %H:%i') AS GCOUN_DT, 
+		 	   i.GCOUN_BGNG_DT, i.GCOUN_DDLN_DT,
+			   i.GCOUN_LMT_COUNT, i.GCOUN_CONTS_CN, i.GCOUN_DTL_CN, i.GCOUN_PROG_STA_NM,
+			   (SELECT COUNT(*) 
+     			FROM GROUP_COUN_APPLICANT a 
+     			WHERE a.GCOUN_CD = i.GCOUN_CD AND a.GCOUN_STA_NM = '신청중') AS GCOUN_REG_COUNT, 
+			   i.GCOUN_ATND_COUNT, c.CSL_NM
+		FROM GROUP_COUN_INFO i
+		JOIN COUNSELOR c ON i.CSL_NO = c.CSL_NO
+		JOIN USER u ON c.USER_NO = u.USER_NO
+		WHERE u.LOGIN_ID = #{userId};
 	</select>
 	
 	<select id="getGcounCslList" resultType="Map">
 		SELECT CSL_NO, CSL_NM
 		FROM COUNSELOR
 	</select>
+
+	<select id="getGcounCslList2" resultType="Map" parameterType="String">
+		SELECT CSL_NO, CSL_NM
+		FROM COUNSELOR c
+		JOIN USER u ON c.USER_NO = u.USER_NO
+		WHERE u.LOGIN_ID = #{userId}
+	</select>
 	
 	<insert id="gcounEnroll" parameterType="AdminDTO">
 		INSERT INTO GROUP_COUN_INFO (CSL_NO, GCOUN_NM, GCOUN_DT, GCOUN_BGNG_DT, GCOUN_DDLN_DT, GCOUN_LMT_COUNT, GCOUN_DTL_CN, GCOUN_CONTS_CN, GCOUN_FILENM)
 		VALUES(#{CSL_NO}, #{GCOUN_NM}, #{GCOUN_DT}, #{GCOUN_BGNG_DT}, #{GCOUN_DDLN_DT}, #{GCOUN_LMT_COUNT}, #{GCOUN_DTL_CN}, #{GCOUN_CONTS_CN}, #{GCOUN_FILENM});
 	</insert>
+	
+	<update id="updateStatus" parameterType="Map">
+		UPDATE GROUP_COUN_APPLICANT a
+		JOIN GROUP_COUN_INFO i ON a.GCOUN_Cd = i.GCOUN_CD
+		SET GCOUN_STA_NM = #{value}
+		WHERE STUD_NO = #{studNo} AND i.GCOUN_NM = #{gcounNm}
+	</update>
 	<!-- 집단 상담 -->
 	
 	<!-- ★★★★★**********★★★★★ -->

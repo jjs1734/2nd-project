@@ -29,6 +29,10 @@ public class AdminService {
 	public List<Map<String, Object>> getGcounList() {
 		return adminDAO.getGcounList();
 	}
+	
+	public List<Map<String, Object>> getGcounList2(String userId) {
+		return adminDAO.getGcounList2(userId);
+	}
 
 	public List<Map<String, Object>> getGcounStudList(String gcounCd) {
 		return adminDAO.getGcounStudList(gcounCd);
@@ -127,6 +131,10 @@ public class AdminService {
 		adminDAO.pfStateUpdate(map);
 	}
 
+	public List<Map<String, Object>> getGcounCslList2(String userId) {
+		return adminDAO.getGcounCslList2(userId);
+	}
+
 	public List<Map<String, Object>> getPfList() {
 		return adminDAO.getPfList();
 	}
@@ -157,6 +165,10 @@ public class AdminService {
 
 	public void pfNcdUpdate(Map<String, Object> map) {
 		adminDAO.pfNcdUpdate(map);
+	}
+
+	public int updateStatus(Map<String, Object> map) {
+		return adminDAO.updateStatus(map);
 	}
 
 

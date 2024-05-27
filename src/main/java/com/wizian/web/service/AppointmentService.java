@@ -1,6 +1,8 @@
 package com.wizian.web.service;
 
-import com.wizian.web.dto.Appointment; 
+import com.wizian.web.dao.PsycounDAO;
+import com.wizian.web.dto.Appointment;
+import com.wizian.web.dto.PsycounDTO;
 import com.wizian.web.repository.AppointmentRepository;
 
 
@@ -19,6 +21,9 @@ public class AppointmentService {
     public AppointmentService(AppointmentRepository appointmentRepository) {
         this.appointmentRepository = appointmentRepository;
     }
+    
+    @Autowired
+    private PsycounDAO psycounDAO;
 
     @Transactional
     public void saveAppointment(Appointment appointment) {
@@ -29,4 +34,9 @@ public class AppointmentService {
     public List<Appointment> getAllAppointments() {
         return appointmentRepository.findAll();
     }
+
+    public int submitAppointment(PsycounDTO psycounDTO) {
+		return psycounDAO.submitAppointment(psycounDTO);
+		
+	}
 }

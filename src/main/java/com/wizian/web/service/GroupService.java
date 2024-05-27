@@ -46,5 +46,17 @@ public class GroupService {
 		
 	}
 
+	public List<Map<String, Object>> searchList1(String status) {
+		return groupDAO.searchList1(status);
+	}
+
+	public List<Map<String, Object>> searchList2(String searchValue) {
+		return groupDAO.searchList2(searchValue);
+	}
+	
+	public List<Map<String, Object>> searchList3(Map<String, Object> map) {
+		return groupDAO.searchList3(map);
+	}
+
 	
 }
