@@ -5,11 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import com.wizian.web.dto.PsycounDTO;
 
-@Repository
 @Mapper
-public class PsycounDAO {
+@Repository
+public interface PsycounDAO {
 
-	public void submitAppointment(PsycounDTO psycounDTO) {
-		
-	}
+	public int submitAppointment(PsycounDTO psycounDTO);
+
 }

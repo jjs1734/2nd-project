@@ -35,8 +35,8 @@ public class AppointmentService {
         return appointmentRepository.findAll();
     }
 
-	public void submitAppointment(PsycounDTO psycounDTO) {
-		psycounDAO.submitAppointment(psycounDTO);
+    public int submitAppointment(PsycounDTO psycounDTO) {
+		return psycounDAO.submitAppointment(psycounDTO);
 		
 	}
 }
