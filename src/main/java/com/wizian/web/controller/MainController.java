@@ -1,5 +1,6 @@
 package com.wizian.web.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,8 +12,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wizian.web.service.GroupService;
+import com.wizian.web.service.MainService;
+import com.wizian.web.util.Util;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -22,7 +26,13 @@ public class MainController {
 	@Autowired
 	private GroupService groupService;
 	
-	@GetMapping({"/main", "/"})
+	@Autowired
+	private MainService mainService;
+	
+	@Autowired
+	private Util util;
+	
+	@GetMapping("/main")
 	public String main(HttpSession session, Model model){
 		
 		String userId = (String) session.getAttribute("userId");
@@ -65,7 +75,7 @@ public class MainController {
 	
 	@PostMapping("/updateMyInfo")
 	public ResponseEntity<String> updateMyInfo(HttpSession session, @RequestBody Map<String, String> data) {
-	    // 받은 데이터를 출력해 보겠습니다.
+	    // 받은 데이터 출력
 		String userId = (String) session.getAttribute("userId");
 		System.out.println("@@");
 		System.out.println(data);
@@ -114,12 +124,70 @@ public class MainController {
         return ResponseEntity.ok("Gender update successful");
     }
 	
-	
-	
 	@GetMapping("/intro")
-	public String intro() {
-		
-		
+	public String intro() {	
 		return "intro";
 	}
+	
+	@GetMapping("/mycounlist")
+	public String myCounList(HttpSession session, Model model) {
+		String userId = (String) session.getAttribute("userId");	
+		if (userId == null) {
+			return "redirect:/login";
+		}
+		
+		System.out.println(userId);
+		
+		model.addAttribute(userId, userId);
+		return "mycounlist";
+	}
+	
+	@ResponseBody
+	@PostMapping("/allCounList")
+	public List<Map<String, Object>> allCounList(@RequestParam("selectedValue") String selectedValue, @RequestParam("userId") String userId){
+		System.out.println(selectedValue);
+		System.out.println(userId);
+		int selectValue = util.str2Int(selectedValue);
+		List<Map<String, Object>> counList = new ArrayList<Map<String,Object>>();
+		
+		switch (selectValue) {
+        case 1: // 교수상담
+        	System.out.println("교수상담 리스트를 불러옵니다");
+        	counList = mainService.pfCounList(userId);
+            break;
+        case 2: // 집단상담
+        	System.out.println("집단상담 리스트를 불러옵니다");
+        	counList = mainService.gCounList(userId);
+            break;
+        case 3: // 취업상담
+        	System.out.println("취업상담 리스트를 불러옵니다");
+        	counList = mainService.eCounList(userId);
+            break;
+        case 4: // 심리상담
+        	System.out.println("심리상담 리스트를 불러옵니다");
+        	counList = mainService.psyCounList(userId);
+            break;
+        case 5: // 개인상담
+        	System.out.println("개인상담 리스트를 불러옵니다");
+        	counList = mainService.inCounList(userId);
+            break;
+        default:
+            break;
+    }			
+		
+		return counList;
+	}
+	
+	@ResponseBody
+	@PostMapping("/cancelpfCoun")
+	public int cancelpfCoun(@RequestParam("counNo") String counNo) {
+		System.out.println("취소처리할 상담 번호:" + counNo);
+		int counNum =util.str2Int(counNo);
+		
+		int result = mainService.updateState(counNum);
+		
+		return 1;
+	}
+	
+	
 }

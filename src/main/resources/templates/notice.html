@@ -13,25 +13,25 @@
 <link href="css/styles.css" rel="stylesheet" />
 <style>
 html, body {
-	height: 100%;
-	margin: 0;
+	/* height: 100%;
+	margin: 0; */
 	font-family: 'Arial', sans-serif;
 }
 
-body {
+/* body {
 	display: flex;
 	flex-direction: column;
 	background-color: #f8f9fa;
-}
+} */
 
-.container {
+/* .container {
 	flex: 1;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	padding-top: 50px;
 	padding-bottom: 50px;
-}
+} */
 
 .table-container {
 	background: #fff;
@@ -66,10 +66,10 @@ h3 {
 }
 </style>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 	<!-- 메뉴-->
 	<div th:replace="menu :: Menu"></div>
-
+	<br><br>
 	<!-- Page Content-->
 	<div class="container">
 		<div class="table-container">
@@ -112,7 +112,7 @@ h3 {
 	</div>
 
 	<!-- 푸터-->
-	<div class="container" th:replace="footer :: Footer"></div>
+	<div th:replace="~{footer :: Footer}"></div>
 
 	<!-- Bootstrap core JS-->
 	<script

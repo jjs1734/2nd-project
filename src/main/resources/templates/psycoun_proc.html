@@ -21,7 +21,7 @@
 </head>
      
       
-<body class="d-flex flex-column" style="height:100%">
+<body class="d-flex flex-column min-vh-100">
 	
  	
  	<!-- 메뉴-->
@@ -96,8 +96,7 @@
 	
 	
 	<!-- 푸터-->
-	<div class="container px-4 px-lg-5 fixed-bottom" th:replace="footer :: Footer">
-	</div>
+	<div th:replace="~{footer :: Footer}"></div>
 	<!-- Bootstrap core JS-->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 	<!-- Core theme JS-->
