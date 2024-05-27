@@ -323,7 +323,7 @@
   	        //alert(counNum);
   	        //console.log(counNum);
   	     	// 변경된 칼럼이 "교수이름", "교수전화번호", "교수이메일", "국가번호" 중 하나인지 확인
-  	        if (["PF_NM", "PF_TEL", "PF_EMAIL", "NTN_CD"].includes(columnName)) {
+  	        if (["PF_NM", "PF_TELNO", "PF_EMAIL", "NTN_CD"].includes(columnName)) {
   	            console.log("Changed column:", columnName); // 변경된 칼럼 확인
   	            console.log("Row data:", rowData); // 해당 행의 데이터 확인
   	            console.log("value:", value); // 해당 행의 데이터 확인
@@ -333,7 +333,8 @@
   	        $.ajax({
   	            url: "/admin/pfModify",
   	            type: "post",
-  	           // contentType: "application/json",
+  	          	contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+  	        	processData: true,
   	            data: {
   	                counNum : counNum, // 고유 식별자
   	                fieldName: columnName, // 수정된 컬럼 이름

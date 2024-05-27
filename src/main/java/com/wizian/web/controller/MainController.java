@@ -184,7 +184,16 @@ public class MainController {
 		System.out.println("취소처리할 상담 번호:" + counNo);
 		int counNum =util.str2Int(counNo);
 		
+		//상태 코드 변경
 		int result = mainService.updateState(counNum);
+		
+		//스케쥴번호 검색해서 스케쥴번호 값 받아오기
+		int pfsno = mainService.selectPfsno(counNum);
+		System.out.println("변경할 스케쥴번호 값: " + pfsno);
+		
+		//취소처리한 상담 번호의 일정 사용여부 변경
+		mainService.updatePfsc(pfsno);
+		
 		
 		return result;
 	}
