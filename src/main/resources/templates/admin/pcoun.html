@@ -44,7 +44,6 @@
         	<br>
         	<h4>상담 목록</h4>
         	<div id="pcounGrid"></div>
-        
         </div>
    </div>
     
@@ -85,30 +84,40 @@
         { header: '상담 가능 날짜', name: 'appointmentDate', align: 'center', width: 300 },
         { header: '개인정보 활용 동의', name: 'agree', align: 'center', width: 200 }
       ],
-      data: appointments
     });
   
-  const grid2 = new tui.Grid({
-        el: document.getElementById('pcounGrid'),
-        scrollX: false,
-        scrollY: true,
-        bodyHeight: 400,
-        minBodyHeight: 30,
-//        rowHeaders: ['rowNum'],
-//        pageOptions: {
-//          perPage: 15
-//        },
-        columns: [
-          { header: '상담신청번호', name: 'Key', sortable: true, align: 'center', width: 200, filter: 'select' },
-          { header: '학번', name: 'STUD_NO', sortable: true, align: 'center', width: 200, filter: 'select' },
-          { header: '방문예약일자', name: 'VISIT_RES_YMD', sortable: true, align: 'center', width: 150, filter: 'select' },
-          { header: '방문예약시간(시)', name: 'VISIT_RES_CD', sortable: true, align: 'center', width: 200, filter: 'select' },
-          { header: '방문확정일자', name: 'CON_VISIT_YMD', sortable: true, align: 'center', width: 150, filter: 'select' },
-          { header: '방문확정시간(시)', name: 'CON-VISIT_CD', sortable: true, align: 'center', width: 200, filter: 'select' },
-          { header: '상담진행코드', name: 'COUN_PRO_CD', sortable: true, align: 'center', width: 200, filter: 'select' },
-          { header: '심리검사종류', name: 'PSY_EXAM', sortable: true, align: 'center', width: 300, filter: 'select' }
-        ]
-      });  
+  document.addEventListener("DOMContentLoaded", function() {
+      // 데이터 가져오기
+      fetch('/api/psy-exam-visit-requests')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log(data); // 데이터 확인을 위해 콘솔에 출력
+          const grid2 = new tui.Grid({
+            el: document.getElementById('pcounGrid'),
+            scrollX: true,
+            scrollY: true,
+            bodyHeight: 225,
+            minBodyHeight: 30,
+            columns: [
+              { header: '상담신청번호', name: 'key', sortable: true, align: 'center', width: 100, filter: 'select' },
+              { header: '학번', name: 'studNo', sortable: true, align: 'center', width: 100, filter: 'select' },
+              { header: '방문예약일자', name: 'visitResYmd', sortable: true, align: 'center', width: 150, filter: 'select' },
+              { header: '방문예약시간(시)', name: 'visitResCd', sortable: true, align: 'center', width: 200, filter: 'select' },
+              { header: '방문확정일자', name: 'conVisitYmd', sortable: true, align: 'center', width: 150, filter: 'select' },
+              { header: '방문확정시간(시)', name: 'conVisitCd', sortable: true, align: 'center', width: 200, filter: 'select' },
+              { header: '상담진행코드', name: 'counProCd', sortable: true, align: 'center', width: 100, filter: 'select' },
+              { header: '심리검사종류', name: 'psyExam', sortable: true, align: 'center', width: 200, filter: 'select' }
+            ],
+            data: data
+          });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+    });
 
 	
   
