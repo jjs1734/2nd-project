@@ -362,16 +362,8 @@
   	            },
   	            success: function(response) {
   	                console.log('Data updated successfully');
-  	                //새로 데이터 가져오기
-  	              $.ajax({
-				  	    url: "/admin/getPfcounList",
-				  	    type: "get",
-				  	    dataType: "JSON",
-				  	    contentType: "application/json; charset=UTF-8",
-				  	    success: function (result) {
-				  	      grid.resetData(result);
-				  	    },
-				  	  });
+  	                //새로 데이터 가져오기 삭제
+
   	            },
   	            error: function(xhr, status, error) {
   	                console.error("Error updating data: ", error);
