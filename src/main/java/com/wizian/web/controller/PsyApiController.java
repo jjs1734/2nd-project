@@ -17,8 +17,8 @@ public class PsyApiController {
 	@Autowired
 	private PsycounService service;
 	
-	@GetMapping
-	public List<PsycounDTO> getAllVisitReqauests() {
-		return service.getAllVisitRequests();
-	}
+	/*
+	 * @GetMapping public List<PsycounDTO> getAllVisitReqauests() { return
+	 * service.getAllVisitRequests(); }
+	 */
 }
