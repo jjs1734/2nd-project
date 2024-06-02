@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wizian.web.dao.PsycounDAO">
+
+ 	<insert id="insertPsyExamVisitRequest" parameterType="com.wizian.web.dto.PsycounDTO">
+        INSERT INTO PSY_EXAM_VISIT_REQUEST (STUD_NO, VISIT_RES_YMD, VISIT_RES_CD, CON_VISIT_YMD, CON_VISIT_CD, COUN_PRO_CD, PSY_EXAM)
+        VALUES (#{studNo}, #{visitResYmd}, #{visitResCd}, #{conVisitYmd}, #{conVisitCd}, #{counProCd}, #{psyExam})
+    </insert>
+
+    <update id="updatePsyExamVisitRequest" parameterType="com.wizian.web.dto.PsycounDTO">
+        UPDATE PSY_EXAM_VISIT_REQUEST
+        SET VISIT_RES_YMD = #{visitResYmd}, VISIT_RES_CD = #{visitResCd}, CON_VISIT_YMD = #{conVisitYmd}, CON_VISIT_CD = #{conVisitCd}, COUN_PRO_CD = #{counProCd}, PSY_EXAM = #{psyExam}
+        WHERE STUD_NO = #{studNo}
+    </update>
+    
+     <select id="getAllRequests" resultType="com.wizian.web.dto.PsycounDTO">
+    	SELECT * FROM PSY_EXAM_VISIT_REQUEST
+	</select>
+
+   
+</mapper>

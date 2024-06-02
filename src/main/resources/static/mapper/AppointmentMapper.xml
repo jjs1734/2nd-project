@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wizian.web.dao.PsycounDAO">
+<mapper namespace="com.wizian.web.mapper.AppointmentMapper">
 
-    <insert id="saveAppointment" parameterType="com.wizian.web.dto.Appointment">
-        INSERT INTO appointment (name, student_id, department, phone, email, appointment_date, agree)
-        VALUES (#{name}, #{studentId}, #{department}, #{phone}, #{email}, #{appointmentDate}, #{agree})
+  <insert id="insertAppointment" parameterType="com.wizian.web.dto.AppointmentDTO">
+        INSERT INTO appointments (name, student_id, department, phone_number, email, date, time)
+        VALUES (#{name}, #{studentId}, #{department}, #{phoneNumber}, #{email}, #{date}, #{time})
     </insert>
 
-    <select id="getAllAppointments" resultType="com.wizian.web.dto.Appointment">
-        SELECT * FROM appointment
+    <select id="getAllAppointments" resultType="com.wizian.web.dto.AppointmentDTO">
+        SELECT name, student_id AS studentId, department, phone_number AS phoneNumber, email, date, time
+        FROM appointments
     </select>
-    
-    <insert id="submitAppointment" parameterType="com.wizian.web.dto.PsycounDTO">
-    	INSERT INTO appointments (studentId, name, department, phone, email, appointmentDate, appointmentTime, agree)
-    	VALUES (#{userId}, #{name}, #{sc}, #{phone}, #{email}, #{date}, #{time}, #{agree})
-    </insert>
-
 </mapper>

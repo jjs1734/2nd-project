@@ -1,79 +1,78 @@
 package com.wizian.web.controller;
 
-import com.wizian.web.dto.Appointment;
-import com.wizian.web.dto.EventData;
-import com.wizian.web.dto.PsycounDTO;
-import com.wizian.web.service.AppointmentService;
-
-import jakarta.servlet.http.HttpSession;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import com.wizian.web.dto.AppointmentDTO;
+import com.wizian.web.service.AppointmentService;
 
-@Controller
+@RestController
+@RequestMapping("/appointments")
 public class AppointmentController {
-
-    private final AppointmentService appointmentService;
-    
+	
     @Autowired
-    public AppointmentController(AppointmentService appointmentService) {
-        this.appointmentService = appointmentService;
-    }
-    
-    @GetMapping("/form")
-    public String showForm(Model model) {
-        model.addAttribute("appointment", new Appointment());
-        return "form";
-    }
+    private AppointmentService appointmentService;
 
-    @PostMapping("/submit")
-    public String submitForm(@ModelAttribute Appointment appointment) {
-        appointmentService.saveAppointment(appointment);
-        return "redirect:/pcoun";
-    }
+    @PostMapping("/create")
+    public ResponseEntity<Void> createAppointment(
+        @RequestParam("name") String name,
+        @RequestParam("studentId") String studentId,
+        @RequestParam("department") String department,
+        @RequestParam("phoneFront") String phoneFront,
+        @RequestParam("phoneBack1") String phoneBack1,
+        @RequestParam("phoneBack2") String phoneBack2,
+        @RequestParam("email") String email,
+        @RequestParam("date") String date,
+        @RequestParam("time") String time
+    ) {
+        // 로그 추가
+        System.out.println("Received request to create appointment:");
+        System.out.println("Name: " + name);
+        System.out.println("Student ID: " + studentId);
+        System.out.println("Department: " + department);
+        System.out.println("Phone Front: " + phoneFront);
+        System.out.println("Phone Back 1: " + phoneBack1);
+        System.out.println("Phone Back 2: " + phoneBack2);
+        System.out.println("Email: " + email);
+        System.out.println("Date: " + date);
+        System.out.println("Time: " + time);
 
-    @GetMapping("/pcoun")
-    public String viewAppointments(Model model) {
-        model.addAttribute("appointments", appointmentService.getAllAppointments());
-        return "pcoun";
-    }
-    
-    @ResponseBody
-    @PostMapping("/submitAppointment")
-    public ResponseEntity<Map<String, Object>> submitAppointment(HttpSession session, @RequestBody PsycounDTO psycounDTO) {
+        // 전화번호 합치기
+        String phoneNumber = phoneFront + phoneBack1 + phoneBack2;
+        System.out.println("Phone Number: " + phoneNumber);
         
-        String userId = (String) session.getAttribute("userId");
-        System.out.println("@@@" + userId);
-        
-        psycounDTO.setUserId(userId);
-        System.out.println("컨트롤러 넘어옴?" + psycounDTO.getDate());
-        System.out.println(psycounDTO.getEmail());
-        System.out.println(psycounDTO.getDate1());
-        System.out.println(psycounDTO.getNa());
-        System.out.println(psycounDTO.getPhone());
-        System.out.println(psycounDTO.getTime());
-        System.out.println(psycounDTO.isAgree());
-        
-        int result = appointmentService.submitAppointment(psycounDTO);
-        System.out.println("@@" + result);
+        // 날짜 형식 변환
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy. MM. dd.");
+        LocalDate parsedDate = LocalDate.parse(date.trim(), formatter);
+        String formattedDate = parsedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        System.out.println("Formatted Date: " + formattedDate);
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", result == 1);
+        AppointmentDTO appointmentDTO = new AppointmentDTO();
+        appointmentDTO.setName(name);
+        appointmentDTO.setStudentId(studentId);
+        appointmentDTO.setDepartment(department);
+        appointmentDTO.setPhoneNumber(phoneNumber);
+        appointmentDTO.setEmail(email);
+        appointmentDTO.setDate(formattedDate);
+        appointmentDTO.setTime(time);
 
-        System.out.println("Response: " + response);  // 응답 출력
-        return ResponseEntity.ok(response);
+        try {
+            appointmentService.saveAppointment(appointmentDTO);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception e) {
+            System.err.println("Error while saving appointment: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     
-    
+    @GetMapping
+    public List<AppointmentDTO> getAppointments() {
+        return appointmentService.getAllAppointments();
+    }
 }

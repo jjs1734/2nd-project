@@ -179,4 +179,19 @@ public class AdminService {
 		adminDAO.toggleCompletionStatus(postId);
 	}
 
+	public void pcounYmd(Map<String, Object> map) {
+		adminDAO.pcounYmd(map);
+	}
+	
+	public void pcounCd(Map<String, Object> map) {
+		adminDAO.pcounCd(map);
+	}
+	
+	public void pcounProCd(Map<String, Object> map) {
+		adminDAO.pcounProCd(map);
+	}
+
+	public void pcounExam(Map<String, Object> map) {
+		adminDAO.pcounExam(map);
+	}
 }

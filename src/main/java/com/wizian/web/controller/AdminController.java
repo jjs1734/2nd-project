@@ -596,7 +596,42 @@ public class AdminController {
 			return "redirect:/admin/main";
 		}
 	}
-
+	
+	@ResponseBody
+	@PostMapping("/admin/pcoun")
+	public void pcoun(
+		@RequestParam("counNum") int counNum,
+        @RequestParam(value = "fieldName", required = false) String fieldName,
+        @RequestParam(value = "fieldValue", required = false) String fieldValue) {
+		Map<String, Object> map = new HashMap<>();
+			System.out.println(fieldName);
+			System.out.println(fieldValue);
+		if (fieldName.equals("conVisitYmd")) {
+			map.put("counNum", counNum);
+			map.put("fieldValue", fieldValue);
+			adminService.pcounYmd(map);
+			//System.out.println("삽입성공1");
+		}else if(fieldName.equals("conVisitCd")) {
+			map.put("counNum", counNum);
+			map.put("fieldValue", fieldValue);
+			//adminService.pfCounDateUpdate(map);
+			//System.out.println("삽입성공2");
+		}else if(fieldName.equals("counProCd")) {
+			map.put("counNum", counNum);
+			map.put("fieldValue", fieldValue);
+			//adminService.pfCounTimeUpdate(map);
+			//System.out.println("삽입성공3");
+		}else {
+			//psyExam
+			map.put("counNum", counNum);
+			map.put("fieldValue", fieldValue);
+			//adminService.pfStateUpdate(map);
+			
+			//System.out.println("삽입성공4");
+		}
+	}
+	
+	//취업상담
 	@PostMapping("/admin/registerEmpCounselor")
     public void registerCounselor(@RequestParam("cd") String cd, @RequestParam("CSL_NO") String cslNo,
     		@RequestParam("CSL_NM") String cslNm, @RequestParam("CSL_EMAIL") String email, @RequestParam("CSL_MOBILE") String mobile, 

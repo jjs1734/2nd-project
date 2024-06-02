@@ -96,6 +96,14 @@ public interface AdminDAO {
 
 	int updateStatus(Map<String, Object> map);
 
+	void pcounYmd(Map<String, Object> map);
+
+	void pcounCd(Map<String, Object> map);
+
+	void pcounProCd(Map<String, Object> map);
+
+	void pcounExam(Map<String, Object> map);
+
 	
 
 
