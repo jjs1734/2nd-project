@@ -263,5 +263,30 @@
         SET PST_COMP = CASE WHEN PST_COMP = '미완료' THEN '완료' ELSE '미완료' END
         WHERE PST_SN = #{postId}
     </update>
+    
+    <!-- 심리상담 -->
+    <update id="pcounYmd" parameterType="Map">
+    	UPDATE PSY_EXAM_VISIT_REQUEST
+    	SET CON_VISIT_YMD = #{fieldValue }
+    	WHERE `Key` = ${counNum }
+    </update>
+    
+    <update id="pcounCd" parameterType="Map">
+    	UPDATE PSY_EXAM_VISIT_REQUEST
+    	SET CON_VISIT_CD = #{fieldValue }
+    	WHERE `Key` = ${counNum }
+    </update>
+    
+    <update id="pcounProCd" parameterType="Map">
+    	UPDATE PSY_EXAM_VISIT_REQUEST
+    	SET COUN_PRO_CD = #{fieldValue }
+    	WHERE `Key` = ${counNum }
+    </update>
+    
+    <update id="pcounExam" parameterType="Map">
+    	UPDATE PSY_EXAM_VISIT_REQUEST
+    	SET PSY_EXAM = #{fieldValue }
+    	WHERE `Key` = ${counNum }
+    </update>
 	
 </mapper>

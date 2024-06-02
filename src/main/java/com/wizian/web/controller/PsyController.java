@@ -1,12 +1,17 @@
 package com.wizian.web.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wizian.web.dto.PsycounDTO;
 import com.wizian.web.dto.UserDTO;
+import com.wizian.web.service.PsycounService;
 import com.wizian.web.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -16,6 +21,9 @@ public class PsyController {
 
 	@Autowired
 	private UserService userService;
+	
+	 @Autowired
+	    private PsycounService psycounService;
 
 	@GetMapping("/psycoun_proc")
 	public String index() {
@@ -37,6 +45,7 @@ public class PsyController {
 		model.addAttribute("userInfo", userInfo); // 사용자 정보
 		return "psycoun_app";
 	}
+	
 	
 
 }

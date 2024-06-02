@@ -11,7 +11,6 @@ import com.wizian.web.dto.BoardDTO;
 
 @Repository
 @Mapper
-
 public interface BoardDAO {
 
 	List<Map<String, Object>> counProfile();

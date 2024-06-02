@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <!-- tui-date-picker와 tui-time-picker의 CSS 파일 링크 추가 -->
+  <link href="/css/tui-date-picker.css" rel="stylesheet" />
+  <link href="/css/tui-time-picker.css" rel="stylesheet" />
+  <!-- tui-date-picker와 tui-time-picker의 JavaScript 파일 추가 -->
+	<script type="text/javascript" src="https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.js"></script>
+	<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.3.0/tui-pagination.js"></script>
+	<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
   <title>심리 상담 관리</title>
   <!--     Fonts and icons     -->
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
@@ -14,14 +21,23 @@
   <!-- Font Awesome Icons -->
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <!-- Sweetalert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>  
   <!-- Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
   <!-- CSS Files -->
   <link id="pagestyle" href="../assets/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
   <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
-  <link rel="stylesheet" href="./bootstrapt/css/bootstrap.min.css" />
   <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+  <!-- moment.js 로드 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <!-- Tempus Dominus Bootstrap 4 datetimepicker CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet">
+  <!-- Tempus Dominus Bootstrap 4 datetimepicker JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.3.5/jquery.timepicker.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.3.5/jquery.timepicker.min.js"></script>
+  <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 </head>
 
 <body class="g-sidenav-show  bg-gray-200">
@@ -61,66 +77,256 @@
   <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="text/javascript" src="https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.js"></script>
+  <script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.3.0/tui-pagination.js"></script>
+  <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
   <script>
+  
   //Thymeleaf 템플릿 엔진을 사용하여 Spring MVC 컨트롤러에서 전달된 appointments 데이터를 가져옵니다.
   const appointments = /*[[${appointments}]]*/ [];
-
+  let keyCounter = 1; // key 값을 관리할 변수
+  
+  
+  document.addEventListener('DOMContentLoaded', (event) => {
+  //grid1 설정
   const grid1 = new tui.Grid({
       el: document.getElementById('studGrid'),
       scrollX: true,
       scrollY: true,
       bodyHeight: 225,
       minBodyHeight: 30,
-//      rowHeaders: ['rowNum'],
-//      pageOptions: {
-//        perPage: 15
-//      },
       columns: [
         { header: '이름', name: 'name', sortable: true, align: 'center', width: 150, filter: 'select' },
-        { header: '학번', name: 'studentId', sortable: true, align: 'center', width: 200, filter: 'select' },
-        { header: '학과', name: 'department', sortable: true, align: 'center', width: 200, filter: 'select' },
-        { header: '전화번호', name: 'phone', sortable: true, align: 'center', width: 250, filter: 'select' },
-        { header: '이메일', name: 'email', sortable: true, align: 'center', width: 300, filter: 'select'},
-        { header: '상담 가능 날짜', name: 'appointmentDate', align: 'center', width: 300 },
-        { header: '개인정보 활용 동의', name: 'agree', align: 'center', width: 200 }
-      ],
+        { header: '학번', name: 'studentId', sortable: true, align: 'center', width: 150, filter: 'select' },
+        { header: '학과', name: 'department', sortable: true, align: 'center', width: 150, filter: 'select' },
+        { header: '전화번호', name: 'phoneNumber', sortable: true, align: 'center', width: 200, filter: 'select' },
+        { header: '이메일', name: 'email', sortable: true, align: 'center', width: 250, filter: 'select'},
+        { header: '상담 가능 날짜', name: 'date', sortable: true, align: 'center', width: 200, filter: 'select' },
+        { header: '상담 가능 시간', name: 'time', sortable: true, align: 'center', width: 200, filter: 'select' }
+    ],
+});
+  
+  
+  //서버에서 데이터를 가져와서 grid1에 적용
+  fetch('/appointments')
+    .then(response => response.json())
+    .then(data => {
+      if (!Array.isArray(data)) {
+        throw new Error('Invalid data format');
+      }
+      grid1.resetData(data.map(item => ({
+        name: item.name,
+        studentId: item.studentId,
+        department: item.department,
+        phoneNumber: item.phoneNumber,
+        email: item.email,
+        date: item.date,
+        time: item.time
+      })));
+    })
+    .catch(error => {
+      console.error('Error fetching appointments:', error);
     });
   
-  document.addEventListener("DOMContentLoaded", function() {
-      // 데이터 가져오기
-      fetch('/api/psy-exam-visit-requests')
-        .then(response => {
+  
+  //grid2 초기 설정
+  const grid2 = new tui.Grid({
+      el: document.getElementById('pcounGrid'),
+      scrollX: true,
+      scrollY: true,
+      bodyHeight: 225,
+      minBodyHeight: 30,
+      columns: [
+        { header: '상담신청번호', name: 'key', sortable: true, align: 'center', width: 150, filter: 'select' },
+        { header: '학번', name: 'studNo', sortable: true, align: 'center', width: 150, filter: 'select' },
+        { header: '방문예약일자', name: 'visitResYmd', sortable: true, align: 'center', width: 200, filter: 'select' },
+        { header: '방문예약시간(시)', name: 'visitResCd', sortable: true, align: 'center', width: 200, filter: 'select'},
+        { 
+      	  header: '방문확정일자', 
+      	  name: 'conVisitYmd', 
+      	  sortable: true, 
+      	  align: 'center', 
+      	  width: 200, 
+      	  filter: 'select',
+      	  editor: {
+                type: 'datePicker',
+                options: {
+                    format: 'yyyy-MM-dd', // 날짜 형식 설정
+                	language: 'ko' // 언어 설정 (한글)
+                }
+            }
+        },
+        { 
+      	  header: '방문확정시간(시)', 
+      	  name: 'conVisitCd', 
+      	  sortable: true, 
+      	  align: 'center', 
+      	  width: 200, 
+      	  filter: 'select',
+      	  editor: {
+	        	type: 'select',
+	        	options: {
+	        		listItems: [
+	        			{ text: '09(시)', value: '09' },
+		                { text: '10(시)', value: '10' },
+		                { text: '11(시)', value: '11' },
+		                { text: '12(시)', value: '12' },
+		                { text: '13(시)', value: '13' },
+		                { text: '14(시)', value: '14' },
+		                { text: '15(시)', value: '15' },
+		                { text: '16(시)', value: '16' },
+		                { text: '17(시)', value: '17' },
+	        		]
+	        	}
+        	}
+       },
+       { 
+      	 header: '상담진행코드', 
+      	 name: 'counProCd', 
+      	 sortable: true, 
+      	 align: 'center', 
+      	 width: 150, 
+      	 filter: 'select',
+      	 editor: {
+      	 	type: 'select',
+       	 	options: {
+       			listItems: [
+       				{ text: '10:예약중', value: '10' },
+	                { text: '20:승인', value: '20' },
+	                { text: '30:거절', value: '30' },
+	                { text: '40:상담완료', value: '40' },
+	                { text: '50:추가상담', value: '50' },
+	                { text: '60:취소', value: '60' }
+	            ]
+       		}
+      	 }
+        },
+        { 
+    	   header: '심리검사종류', 
+    	   name: 'psyExam', 
+    	   sortable: true, 
+    	   align: 'center', 
+    	   width: 200, 
+    	   filter: 'select',
+    	   editor: {
+         	 type: 'select',
+          	 options: {
+          		listItems: [
+          			{ text: '다면적 인성검사', value: 'MMPI-2' },
+   	                { text: '문장완성검사', value: 'SCT' },
+   	                { text: '성격유형검사', value: 'MBTI' },
+   	                { text: '기질 및 성격검사', value: 'TCI' },
+   	                { text: '적성탐색검사', value: 'Holland' },
+   	            ]
+             }
+           }
+         }
+       ],
+     });
+  
+  
+	//데이터 서버로 전송 함수
+  const saveGrid2Data = (data) => {
+	  console.log('Saving data:', data); // 추가된 로그
+      fetch('/api/savePsyExamVisitRequest', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+      })
+      .then(response => {
           if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
+              throw new Error('Network response was not ok');
           }
-          return response.json();
-        })
-        .then(data => {
-          console.log(data); // 데이터 확인을 위해 콘솔에 출력
-          const grid2 = new tui.Grid({
-            el: document.getElementById('pcounGrid'),
-            scrollX: true,
-            scrollY: true,
-            bodyHeight: 225,
-            minBodyHeight: 30,
-            columns: [
-              { header: '상담신청번호', name: 'key', sortable: true, align: 'center', width: 100, filter: 'select' },
-              { header: '학번', name: 'studNo', sortable: true, align: 'center', width: 100, filter: 'select' },
-              { header: '방문예약일자', name: 'visitResYmd', sortable: true, align: 'center', width: 150, filter: 'select' },
-              { header: '방문예약시간(시)', name: 'visitResCd', sortable: true, align: 'center', width: 200, filter: 'select' },
-              { header: '방문확정일자', name: 'conVisitYmd', sortable: true, align: 'center', width: 150, filter: 'select' },
-              { header: '방문확정시간(시)', name: 'conVisitCd', sortable: true, align: 'center', width: 200, filter: 'select' },
-              { header: '상담진행코드', name: 'counProCd', sortable: true, align: 'center', width: 100, filter: 'select' },
-              { header: '심리검사종류', name: 'psyExam', sortable: true, align: 'center', width: 200, filter: 'select' }
-            ],
-            data: data
-          });
-        })
-        .catch(error => console.error('Error fetching data:', error));
-    });
+          return response.json(); 
+      })
+      .then(data => {
+          console.log('Server response:', data);
+          //alert('데이터가 성공적으로 저장되었습니다.');
+      })
+      .catch(error => {
+          console.error('Error saving data:', error);
+          //alert('데이터 저장에 실패했습니다.');
+      });
+  };
+  	
+    //grid1에서 행을 클릭할 때 grid2에 학번 업데이트 및 새로운 행 추가
+  	 grid1.on('click', ev => {
+  	        const rowKey = ev.rowKey;
+  	        const rowData = grid1.getRow(rowKey);
+  	        if (rowData) {
+  	            const existingRow = grid2.getData().find(item => item.studNo === rowData.studentId);
+  	            if (!existingRow) {
+  	              const newRow = {
+  	                key: keyCounter++, // 새로운 key 값
+  	                studNo: rowData.studentId,
+  	                visitResYmd: rowData.date,
+  	                visitResCd: rowData.time,
+  	                conVisitYmd: '',
+  	                conVisitCd: '',
+  	                counProCd: '',
+  	                psyExam: ''
+  	          };
+  	          const updatedGrid2Data = [...grid2.getData(), newRow];
+  	          grid2.resetData(updatedGrid2Data);
+  	          
+  	       	  // 새로운 행이 추가될 때 데이터를 서버로 전송
+  	          saveGrid2Data(updatedGrid2Data);
+  	        }
+  	     }
+  	  });
+    
+  	 //grid2에서 데이터가 변경될 때마다 자동으로 서버로 전송
+  	 grid2.on('afterChange', ev => {
+  	     const grid2Data = grid2.getData();
 
-	
+  	     // 변경된 데이터를 서버로 전송
+  	     saveGrid2Data(grid2Data);
+  	 });
+  	 
+  	 
+  	//grid2에서 학번 칸을 클릭할 때 해당 행 삭제
+  	 grid2.on('click', ev => {
+  	     if (ev.columnName === 'studNo') { // 학번 칸을 클릭했을 때만 삭제
+  	       const rowKey = ev.rowKey;
+  	       const updatedGrid2Data = grid2.getData().filter((_, index) => index !== rowKey);
+  	       grid2.resetData(updatedGrid2Data);
+  	       
+  	       // 삭제된 데이터를 서버로 전송
+  	       saveGrid2Data(updatedGrid2Data);
+  	     }
+  	});
   
+  //페이지 로드 시 서버에서 grid2 데이터를 가져오는 함수
+  const loadGrid2Data = () => {
+      fetch('/psycoun/getAllRequests')
+          .then(response => response.json())
+          .then(data => {
+              if (!Array.isArray(data)) {
+                  throw new Error('Invalid data format');
+              }
+              console.log('Loaded grid2 data:', data);
+              grid2.resetData(data.map(item => ({
+                  key: item.key || keyCounter++,
+                  studNo: item.studNo,
+                  visitResYmd: item.visitResYmd,
+                  visitResCd: item.visitResCd,
+                  conVisitYmd: item.conVisitYmd,
+                  conVisitCd: item.conVisitCd,
+                  counProCd: item.counProCd,
+                  psyExam: item.psyExam
+              })));
+          })
+          .catch(error => {
+              console.error('Error loading grid2 data:', error);
+          });
+ 		 };
+
+ 		// grid2 데이터 로드
+ 	    loadGrid2Data();
+ 	  });
+
   
   </script>
   <!-- Github buttons -->

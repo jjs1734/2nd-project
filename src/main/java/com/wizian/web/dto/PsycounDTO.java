@@ -1,22 +1,20 @@
 package com.wizian.web.dto;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class PsycounDTO {
-	
-	private String name;
-	private String na;
-	private String sc;
-    private String phone;
-    private String email;
-    private boolean agree;
-    private int time;
-    private String date;
-    private String userId;
-    private String date1;
+    private String key;
+    private String studNo;
+    private String visitResYmd;
+    private String visitResCd;
+    private String conVisitYmd;
+    private String conVisitCd;
+    private String counProCd;
+    private String psyExam;
     
+    // getters and setters
 }
